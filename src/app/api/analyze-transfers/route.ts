@@ -1,36 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
 import transferAnalysisService from '@/services/transferAnalysisService';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
-    const { transferData, userLanguage } = await request.json();
-
+    const { transferData, userLanguage = 'en' } = await request.json();
+    
     if (!transferData) {
       return NextResponse.json(
         { error: 'Transfer data is required' },
         { status: 400 }
       );
     }
-
-    console.log('🔍 Analyzing transfers for:', transferData);
+    
+    console.log('🔍 Transfer analysis request:', transferData);
     console.log('🌍 User language:', userLanguage);
-
-    // Search and analyze transfers
-    const result = await transferAnalysisService.searchAndAnalyzeTransfers(
-      transferData,
-      userLanguage || 'en'
-    );
-
-    console.log('✅ Transfer analysis result:', result);
-
+    
+    // Analyze transfers using transfer analysis service
+    const result = await transferAnalysisService.searchAndAnalyzeTransfers(transferData, userLanguage);
+    
+    console.log('✅ Transfer analysis completed');
+    
     return NextResponse.json(result);
+    
   } catch (error) {
     console.error('❌ Error analyzing transfers:', error);
     return NextResponse.json(
       { 
-        success: false,
-        message: 'Failed to analyze transfers',
-        data: null
+        error: 'Failed to analyze transfers',
+        message: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

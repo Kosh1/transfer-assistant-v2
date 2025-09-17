@@ -1,4 +1,5 @@
 import { LLMResponse, TransferData } from '@/types';
+import transferDataService from './transferDataService';
 
 class LLMService {
   private apiKey: string;
@@ -31,7 +32,7 @@ class LLMService {
       console.log('🌍 Detected user language:', language);
       
       // Process through transfer data service
-      const result = await this.extractTransferDetails(message, this.conversationHistory);
+      const result = await transferDataService.extractTransferDetails(message, this.conversationHistory);
       
       console.log('🔍 LLM Service result:', JSON.stringify(result, null, 2));
       
@@ -218,4 +219,5 @@ Respond in JSON format:
   }
 }
 
-export default new LLMService();
+const llmService = new LLMService();
+export default llmService;

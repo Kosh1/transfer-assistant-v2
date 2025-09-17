@@ -238,9 +238,9 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Star sx={{ fontSize: 16, color: 'warning.main' }} />
                           <Chip 
-                            label={option.rating} 
+                            label={typeof option.rating === 'string' ? option.rating : `${option.rating.score}/5`} 
                             size="small" 
-                            color={getRatingColor(option.rating)}
+                            color={getRatingColor(typeof option.rating === 'string' ? option.rating : option.rating.score.toString())}
                             variant="outlined"
                           />
                         </Box>

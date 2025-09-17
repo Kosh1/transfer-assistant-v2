@@ -1,5 +1,6 @@
 import { TransferData, TransferOption, TransferAnalysisResponse } from '@/types';
 import googleSearchService from './googleSearchService';
+import taxiBookingService from './taxiBookingService';
 
 // Transfer prompts - simplified version
 const TRANSFER_PROMPTS = {
@@ -44,8 +45,8 @@ class TransferAnalysisService {
       console.log('🔍 Starting transfer search and analysis...');
       console.log('🌍 User language received:', userLanguage);
       
-      // Mock transfer options for now - will be replaced with real taxi booking service
-      const searchResults = await this.getMockTransferOptions(transferData);
+      // Get transfer prices from taxi.booking.com
+      const searchResults = await taxiBookingService.searchTransfers(transferData, userLanguage);
       
       if (!searchResults || searchResults.length === 0) {
         return {
@@ -61,7 +62,7 @@ class TransferAnalysisService {
       console.log('🔄 Processing each transfer option individually...');
       
       // First, collect unique suppliers to avoid duplicate searches
-      const uniqueSuppliers = [...new Set(searchResults.map(option => option.supplierName).filter(Boolean))];
+      const uniqueSuppliers = Array.from(new Set(searchResults.map(option => option.supplierName).filter(Boolean)));
       console.log(`📊 Found ${uniqueSuppliers.length} unique suppliers:`, uniqueSuppliers);
       
       // Cache provider data to avoid duplicate searches
@@ -118,20 +119,20 @@ class TransferAnalysisService {
           carDetails: {
             description: option.carDetails?.description || option.carDetails?.modelDescription || 'Standard Vehicle',
             capacity: this.extractCapacity(option),
-            luggage: option.carDetails?.luggage || 2
+            luggage: (option as any).carDetails?.luggage || 2
           },
           price: {
             amount: option.price || 0,
             currency: option.currency || 'EUR',
-            originalAmount: option.originalPrice,
-            discount: option.discount
+            originalAmount: (option as any).originalPrice,
+            discount: (option as any).discount
           },
-          duration: option.duration || 'Not specified',
+          duration: (option.duration || 'Not specified').toString(),
           rating: ratingsData?.bestRating?.rating || null,
           cashback: cashbackCouponData?.cashback || null,
           coupons: cashbackCouponData?.coupons || null,
           website: websiteData?.websiteUrl || null,
-          bookingUrl: option.bookingUrl || '#',
+          bookingUrl: (option as any).bookingUrl || '#',
           analysis: `${ratingText}${cashbackText}`
         };
         
@@ -583,4 +584,5 @@ Language-specific headers:
   }
 }
 
-export default new TransferAnalysisService();
+const transferAnalysisService = new TransferAnalysisService();
+export default transferAnalysisService;

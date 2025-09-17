@@ -274,4 +274,5 @@ class GoogleSearchService {
   }
 }
 
-export default new GoogleSearchService();
+const googleSearchService = new GoogleSearchService();
+export default googleSearchService;
