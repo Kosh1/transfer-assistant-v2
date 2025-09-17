@@ -96,6 +96,12 @@
       "title": "Frequently Asked Questions",
       "helpTitle": "Need Help? We're Here to Assist",
       "helpDescription": "Find answers to common questions about our intelligent transfer assistant service.",
+      "question1": "How do I book a transfer?",
+      "answer1": "Simply tell me your travel details and I'll find the best transfer options for you. You can then book directly through the provider's website.",
+      "question2": "What is included in the price?",
+      "answer2": "The price includes the transfer service, professional driver, and vehicle. Additional services like meet & greet may be included depending on the provider.",
+      "question3": "Can I cancel my booking?",
+      "answer3": "Most providers offer free cancellation up to 24 hours before your transfer. Check the specific cancellation policy for each option.",
       "questions": [
         {
           "question": "How do I book a transfer?",
@@ -213,6 +219,12 @@
       "title": "Часто задаваемые вопросы",
       "helpTitle": "Нужна помощь? Мы здесь, чтобы помочь",
       "helpDescription": "Найдите ответы на часто задаваемые вопросы о нашем интеллектуальном сервисе трансферов.",
+      "question1": "Как забронировать трансфер?",
+      "answer1": "Просто расскажите мне детали вашей поездки, и я найду лучшие варианты трансфера. Затем вы можете забронировать напрямую через сайт поставщика.",
+      "question2": "Что включено в цену?",
+      "answer2": "Цена включает услугу трансфера, профессионального водителя и автомобиль. Дополнительные услуги, такие как встреча и проводы, могут быть включены в зависимости от поставщика.",
+      "question3": "Могу ли я отменить бронирование?",
+      "answer3": "Большинство поставщиков предлагают бесплатную отмену за 24 часа до трансфера. Проверьте конкретную политику отмены для каждого варианта.",
       "questions": [
         {
           "question": "Как забронировать трансфер?",
@@ -328,6 +340,12 @@
       "title": "Questions fréquemment posées",
       "helpTitle": "Besoin d'aide? Nous sommes là pour vous aider",
       "helpDescription": "Trouvez des réponses aux questions courantes sur notre service d'assistant de transfert intelligent.",
+      "question1": "Comment réserver un transfert ?",
+      "answer1": "Dites-moi simplement les détails de votre voyage et je trouverai les meilleures options de transfert. Vous pouvez ensuite réserver directement via le site du fournisseur.",
+      "question2": "Qu'est-ce qui est inclus dans le prix ?",
+      "answer2": "Le prix comprend le service de transfert, le chauffeur professionnel et le véhicule. Des services supplémentaires comme l'accueil et l'assistance peuvent être inclus selon le fournisseur.",
+      "question3": "Puis-je annuler ma réservation ?",
+      "answer3": "La plupart des fournisseurs offrent une annulation gratuite jusqu'à 24 heures avant votre transfert. Vérifiez la politique d'annulation spécifique pour chaque option.",
       "questions": [
         {
           "question": "Comment réserver un transfert ?",
@@ -443,6 +461,12 @@
       "title": "Preguntas frecuentes",
       "helpTitle": "¿Necesitas ayuda? Estamos aquí para ayudarte",
       "helpDescription": "Encuentra respuestas a preguntas comunes sobre nuestro servicio de asistente de transfer inteligente.",
+      "question1": "¿Cómo reservo un transfer?",
+      "answer1": "Simplemente cuéntame los detalles de tu viaje y encontraré las mejores opciones de transfer. Luego puedes reservar directamente a través del sitio web del proveedor.",
+      "question2": "¿Qué está incluido en el precio?",
+      "answer2": "El precio incluye el servicio de transfer, conductor profesional y vehículo. Servicios adicionales como encuentro y despedida pueden estar incluidos dependiendo del proveedor.",
+      "question3": "¿Puedo cancelar mi reserva?",
+      "answer3": "La mayoría de los proveedores ofrecen cancelación gratuita hasta 24 horas antes de tu transfer. Verifica la política de cancelación específica para cada opción.",
       "questions": [
         {
           "question": "¿Cómo reservo un transfer?",
@@ -558,6 +582,12 @@
       "title": "Häufig gestellte Fragen",
       "helpTitle": "Brauchen Sie Hilfe? Wir sind hier, um zu helfen",
       "helpDescription": "Finden Sie Antworten auf häufige Fragen zu unserem intelligenten Transfer-Assistenten-Service.",
+      "question1": "Wie buche ich einen Transfer?",
+      "answer1": "Erzählen Sie mir einfach die Details Ihrer Reise und ich finde die besten Transfer-Optionen. Dann können Sie direkt über die Website des Anbieters buchen.",
+      "question2": "Was ist im Preis enthalten?",
+      "answer2": "Der Preis beinhaltet den Transfer-Service, professionellen Fahrer und Fahrzeug. Zusätzliche Services wie Meet & Greet können je nach Anbieter enthalten sein.",
+      "question3": "Kann ich meine Buchung stornieren?",
+      "answer3": "Die meisten Anbieter bieten kostenlose Stornierung bis 24 Stunden vor Ihrem Transfer. Überprüfen Sie die spezifische Stornierungsrichtlinie für jede Option.",
       "questions": [
         {
           "question": "Wie buche ich einen Transfer?",
@@ -673,6 +703,12 @@
       "title": "Domande frequenti",
       "helpTitle": "Hai bisogno di aiuto? Siamo qui per aiutarti",
       "helpDescription": "Trova risposte alle domande comuni sul nostro servizio di assistente transfer intelligente.",
+      "question1": "Come prenoto un transfer?",
+      "answer1": "Raccontami semplicemente i dettagli del tuo viaggio e troverò le migliori opzioni di transfer. Poi puoi prenotare direttamente tramite il sito web del fornitore.",
+      "question2": "Cosa è incluso nel prezzo?",
+      "answer2": "Il prezzo include il servizio di transfer, autista professionista e veicolo. Servizi aggiuntivi come incontro e saluto possono essere inclusi a seconda del fornitore.",
+      "question3": "Posso cancellare la mia prenotazione?",
+      "answer3": "La maggior parte dei fornitori offre cancellazione gratuita fino a 24 ore prima del tuo transfer. Controlla la politica di cancellazione specifica per ogni opzione.",
       "questions": [
         {
           "question": "Come prenoto un transfer?",
@@ -790,6 +826,12 @@
       "title": "常见问题",
       "helpTitle": "需要帮助？我们在这里为您服务",
       "helpDescription": "找到关于我们智能接送助手服务的常见问题答案。",
+      "question1": "如何预订接送？",
+      "answer1": "只需告诉我您的旅行详情，我会为您找到最佳的接送选项。然后您可以直接通过供应商的网站预订。",
+      "question2": "价格包含什么？",
+      "answer2": "价格包括接送服务、专业司机和车辆。根据供应商的不同，可能还包括接机服务等额外服务。",
+      "question3": "我可以取消预订吗？",
+      "answer3": "大多数供应商提供在接送前24小时免费取消。请查看每个选项的具体取消政策。",
       "questions": [
         {
           "question": "如何预订接送？",
