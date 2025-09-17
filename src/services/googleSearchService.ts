@@ -29,7 +29,7 @@ class GoogleSearchService {
   private apiUrl: string;
 
   constructor() {
-    this.apiKey = process.env.NEXT_PUBLIC_GOOGLE_SEARCH_API_KEY || '';
+    this.apiKey = process.env.REACT_APP_GOOGLE_SEARCH_API_KEY || '';
     this.apiUrl = 'https://google.serper.dev/search';
     
     if (!this.apiKey) {

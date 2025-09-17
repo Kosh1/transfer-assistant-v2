@@ -34,9 +34,9 @@ class TransferAnalysisService {
   private model: string;
 
   constructor() {
-    this.apiKey = process.env.NEXT_PUBLIC_LLM_API_KEY || '';
-    this.apiUrl = process.env.NEXT_PUBLIC_LLM_API_URL || 'https://api.openai.com/v1/chat/completions';
-    this.model = process.env.NEXT_PUBLIC_LLM_MODEL || 'gpt-3.5-turbo';
+    this.apiKey = process.env.REACT_APP_LLM_API_KEY || '';
+    this.apiUrl = process.env.REACT_APP_LLM_API_URL || 'https://api.openai.com/v1/chat/completions';
+    this.model = process.env.REACT_APP_LLM_MODEL || 'gpt-3.5-turbo';
   }
 
   // Search for transfer options and analyze results
