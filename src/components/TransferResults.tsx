@@ -22,7 +22,7 @@ import {
   Euro,
   Language,
 } from '@mui/icons-material';
-import { TransferData, TransferOption } from '@/types';
+import { TransferData, TransferOption } from '../types';
 
 interface TransferResultsProps {
   transferData: TransferData;

@@ -1,4 +1,4 @@
-import { TransferData, TransferOption, TransferAnalysisResponse } from '@/types';
+import { TransferData, TransferOption, TransferAnalysisResponse } from '../types';
 import googleSearchService from './googleSearchService';
 import taxiBookingService from './taxiBookingService';
 

@@ -1,7 +1,7 @@
 // Transfer Data Service - TypeScript version
 // This service handles the collection and validation of transfer booking data
 
-import { TransferData } from '@/types';
+import { TransferData } from '../types';
 import googleSearchService from './googleSearchService';
 
 interface CurrentData {

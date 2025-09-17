@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import llmService from '@/services/llmService';
+import llmService from '../../../services/llmService';
 
 export const dynamic = 'force-dynamic';
 

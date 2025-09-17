@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, SmartToy, Person, Mic } from '@mui/icons-material';
-import { ChatMessage, TransferData, TransferOption } from '@/types';
+import { ChatMessage, TransferData, TransferOption } from '../types';
 
 interface ChatInterfaceProps {
   onDataReceived: (data: {

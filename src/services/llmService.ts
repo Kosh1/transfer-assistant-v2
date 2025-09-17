@@ -1,4 +1,4 @@
-import { LLMResponse, TransferData } from '@/types';
+import { LLMResponse, TransferData } from '../types';
 import transferDataService from './transferDataService';
 
 class LLMService {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import transferAnalysisService from '@/services/transferAnalysisService';
+import transferAnalysisService from '../../../services/transferAnalysisService';
 
 export const dynamic = 'force-dynamic';
 

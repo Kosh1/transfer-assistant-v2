@@ -7,11 +7,11 @@ import {
   Container,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import ChatInterface from '@/components/ChatInterface';
-import TransferResults from '@/components/TransferResults';
-import FAQSection from '@/components/FAQSection';
-import { useTranslation } from '@/hooks/useTranslation';
-import { TransferData, TransferOption } from '@/types';
+import ChatInterface from '../components/ChatInterface';
+import TransferResults from '../components/TransferResults';
+import FAQSection from '../components/FAQSection';
+import { useTranslation } from '../hooks/useTranslation';
+import { TransferData, TransferOption } from '../types';
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();

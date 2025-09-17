@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { ExpandMore } from '@mui/icons-material';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '../hooks/useTranslation';
 
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
