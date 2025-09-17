@@ -503,7 +503,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
                           py: 1.5,
                           borderRadius: 3,
                           '&:hover': {
-                            bgcolor: 'error.dark',
+                            bgcolor: 'error.main',
                           },
                         }}
                       >
