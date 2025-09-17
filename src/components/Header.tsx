@@ -11,8 +11,12 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import { useTranslation } from '../hooks/useTranslation';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header = () => {
+  const { t } = useTranslation();
+  
   return (
     <AppBar 
       position="static" 
@@ -45,7 +49,7 @@ const Header = () => {
                   },
                 }}
               >
-                Transfer Assistant
+{t('header.title')}
               </Typography>
             </Box>
           </motion.div>
@@ -66,7 +70,7 @@ const Header = () => {
                   },
                 }}
               >
-                Privacy
+                {t('header.privacy')}
               </Button>
               <Button
                 variant="outlined"
@@ -79,8 +83,9 @@ const Header = () => {
                   },
                 }}
               >
-                Support
+                {t('header.support')}
               </Button>
+              <LanguageSwitcher />
             </Box>
           </motion.div>
         </Toolbar>
