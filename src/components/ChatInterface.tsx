@@ -397,7 +397,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
           <Paper 
             elevation={3} 
             sx={{ 
-              height: 600,
+              height: 500,
               display: 'flex',
               flexDirection: 'column',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

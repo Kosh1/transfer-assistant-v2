@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { LanguageProvider } from '../hooks/useTranslation'
+import { ThemeProvider } from '@mui/material/styles'
+import { CssBaseline, Box } from '@mui/material'
+import theme from '../theme'
+import Header from '../components/Header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,9 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <LanguageProvider>
+            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+              <Header />
+              {children}
+            </Box>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
