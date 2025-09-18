@@ -45,12 +45,14 @@ class TaxiBookingService {
   private userAgent: string;
 
   constructor() {
-    // Use absolute URLs for server-side requests
-    this.baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
-                   process.env.REACT_APP_VERCEL_URL ? `https://${process.env.REACT_APP_VERCEL_URL}` : 
-                   'http://localhost:3000';
+    // Use proxy service instead of direct Booking.com API
+    this.baseUrl = process.env.PROXY_SERVICE_URL || 
+                   process.env.REACT_APP_PROXY_SERVICE_URL || 
+                   'http://localhost:3001';
     this.apiUrl = `${this.baseUrl}/api/transfers`;
     this.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+    
+    console.log(`🔗 TaxiBookingService initialized with proxy URL: ${this.apiUrl}`);
   }
 
   // Get transfer prices from taxi.booking.com
