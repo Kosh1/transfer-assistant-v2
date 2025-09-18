@@ -141,6 +141,9 @@ class TaxiBookingService {
       console.log('🔗 Backend API URL:', `${this.apiUrl}?${queryParams}`);
       console.log('📋 Query params:', Object.fromEntries(queryParams));
 
+      const startTime = Date.now();
+      console.log(`⏰ Starting backend API request at ${new Date().toISOString()}`);
+
       // Make request to our backend server
       const response = await fetch(`${this.apiUrl}?${queryParams}`, {
         method: 'GET',
@@ -150,12 +153,33 @@ class TaxiBookingService {
         }
       });
 
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      console.log(`⏰ Backend API response received in ${duration}ms`);
+      console.log(`📊 Response status: ${response.status} ${response.statusText}`);
+      console.log(`📊 Response headers:`, Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error(`Backend API error: ${response.status} ${response.statusText}`);
+        console.error(`❌ Backend API error: ${response.status} ${response.statusText}`);
+        
+        // Try to get error details
+        let errorDetails = '';
+        try {
+          const errorText = await response.text();
+          errorDetails = errorText;
+          console.log('📄 Error response body:', errorText);
+        } catch (e) {
+          console.log('📄 Could not read error response body:', e);
+        }
+        
+        throw new Error(`Backend API error: ${response.status} ${response.statusText}. Details: ${errorDetails}`);
       }
 
+      console.log(`📥 Attempting to parse JSON response...`);
       const result = await response.json();
       console.log('✅ Backend response:', result);
+      console.log(`📊 Response data keys:`, Object.keys(result));
+      console.log(`📊 Response data size:`, JSON.stringify(result).length, 'characters');
 
       if (result.success && result.data) {
         // Parse real Booking.com data and return all options
@@ -164,11 +188,13 @@ class TaxiBookingService {
         return transferOptions;
       } else {
         console.log('⚠️ Backend returned no data');
+        console.log('⚠️ Backend response structure:', JSON.stringify(result, null, 2));
         throw new Error(`Backend API error: ${result.error || 'No data received'}`);
       }
       
     } catch (error) {
       console.error('Search API error:', error);
+      console.error('Search API error stack:', error instanceof Error ? error.stack : 'No stack trace');
       throw new Error(`Failed to search transfers: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }

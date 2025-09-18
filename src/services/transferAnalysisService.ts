@@ -41,14 +41,25 @@ class TransferAnalysisService {
 
   // Search for transfer options and analyze results
   async searchAndAnalyzeTransfers(transferData: TransferData, userLanguage: string = 'en'): Promise<TransferAnalysisResponse> {
+    const requestId = Math.random().toString(36).substring(7);
+    console.log(`🔍 [${requestId}] Starting transfer search and analysis...`);
+    console.log(`🌍 [${requestId}] User language received:`, userLanguage);
+    console.log(`📋 [${requestId}] Transfer data:`, JSON.stringify(transferData, null, 2));
+    
     try {
-      console.log('🔍 Starting transfer search and analysis...');
-      console.log('🌍 User language received:', userLanguage);
+      console.log(`🚀 [${requestId}] Calling taxiBookingService.searchTransfers...`);
+      const startTime = Date.now();
       
       // Get transfer prices from taxi.booking.com
       const searchResults = await taxiBookingService.searchTransfers(transferData, userLanguage);
       
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      console.log(`⏰ [${requestId}] taxiBookingService.searchTransfers completed in ${duration}ms`);
+      console.log(`📊 [${requestId}] Search results count:`, searchResults?.length || 0);
+      
       if (!searchResults || searchResults.length === 0) {
+        console.log(`⚠️ [${requestId}] No search results found`);
         return {
           success: false,
           message: 'К сожалению, я ничего не нашла для вашего маршрута. Попробуйте изменить параметры поиска.',
@@ -56,7 +67,7 @@ class TransferAnalysisService {
         };
       }
 
-      console.log(`📊 Found ${searchResults.length} transfer options`);
+      console.log(`📊 [${requestId}] Found ${searchResults.length} transfer options`);
 
       // Process each option individually
       console.log('🔄 Processing each transfer option individually...');

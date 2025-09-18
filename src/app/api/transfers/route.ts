@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  const requestId = Math.random().toString(36).substring(7);
+  console.log(`🚀 [${requestId}] Starting transfers API request`);
+  
   try {
     const { searchParams } = new URL(request.url);
     
@@ -20,8 +23,22 @@ export async function GET(request: NextRequest) {
       language = 'en-gb'
     } = Object.fromEntries(searchParams);
     
+    console.log(`📋 [${requestId}] Request parameters:`, {
+      pickup,
+      dropoff,
+      pickupEstablishment,
+      dropoffEstablishment,
+      pickupType,
+      dropoffType,
+      pickupDateTime,
+      passenger,
+      currency,
+      language
+    });
+    
     // Validate required parameters
     if (!pickup || !dropoff || !pickupDateTime || !passenger) {
+      console.log(`❌ [${requestId}] Missing required parameters`);
       return NextResponse.json({
         error: 'Missing required parameters',
         required: ['pickup', 'dropoff', 'pickupDateTime', 'passenger']
@@ -50,7 +67,11 @@ export async function GET(request: NextRequest) {
     });
     
     const apiUrl = `https://taxis.booking.com/search-results-mfe/rates?${queryParams}`;
-    console.log('🔗 Calling Booking.com API:', apiUrl);
+    console.log(`🔗 [${requestId}] Calling Booking.com API:`, apiUrl);
+    console.log(`📋 [${requestId}] Query parameters:`, Object.fromEntries(queryParams));
+    
+    const startTime = Date.now();
+    console.log(`⏰ [${requestId}] Starting Booking.com API request at ${new Date().toISOString()}`);
     
     // Make request to Booking.com
     const response = await fetch(apiUrl, {
@@ -74,18 +95,26 @@ export async function GET(request: NextRequest) {
       timeout: 10000 // 10 second timeout
     });
     
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    console.log(`⏰ [${requestId}] Booking.com API response received in ${duration}ms`);
+    console.log(`📊 [${requestId}] Response status: ${response.status} ${response.statusText}`);
+    console.log(`📊 [${requestId}] Response headers:`, Object.fromEntries(response.headers.entries()));
+    
     if (!response.ok) {
-      console.error('❌ Booking.com API error:', response.status, response.statusText);
+      console.error(`❌ [${requestId}] Booking.com API error:`, response.status, response.statusText);
       
       // Try to get error details
       let errorDetails = '';
       try {
         const errorText = await response.text();
         errorDetails = errorText;
-        console.log('📄 Error response body:', errorText);
+        console.log(`📄 [${requestId}] Error response body:`, errorText);
       } catch (e) {
-        console.log('📄 Could not read error response body');
+        console.log(`📄 [${requestId}] Could not read error response body:`, e);
       }
+      
+      console.log(`🔄 [${requestId}] Returning error response with fallback`);
       
       // Return error but also provide fallback mock data
       return NextResponse.json({
@@ -95,12 +124,17 @@ export async function GET(request: NextRequest) {
         statusText: response.statusText,
         details: errorDetails,
         fallback: 'mock',
-        message: 'Using mock data due to API error'
+        message: 'Using mock data due to API error',
+        requestId: requestId,
+        duration: duration
       });
     }
     
+    console.log(`📥 [${requestId}] Attempting to parse JSON response...`);
     const data = await response.json();
-    console.log('✅ Successfully received data from Booking.com');
+    console.log(`✅ [${requestId}] Successfully received data from Booking.com`);
+    console.log(`📊 [${requestId}] Response data keys:`, Object.keys(data));
+    console.log(`📊 [${requestId}] Response data size:`, JSON.stringify(data).length, 'characters');
     
     // Return the data
     return NextResponse.json({
@@ -118,15 +152,19 @@ export async function GET(request: NextRequest) {
         passenger,
         currency,
         language
-      }
+      },
+      requestId: requestId,
+      duration: duration
     });
     
   } catch (error) {
-    console.error('💥 Server error:', error);
+    console.error(`💥 [${requestId}] Server error:`, error);
+    console.error(`💥 [${requestId}] Error stack:`, error instanceof Error ? error.stack : 'No stack trace');
     return NextResponse.json({
       error: 'Internal server error',
       message: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      requestId: requestId
     }, { status: 500 });
   }
 }
