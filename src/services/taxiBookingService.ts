@@ -45,9 +45,11 @@ class TaxiBookingService {
   private userAgent: string;
 
   constructor() {
-    // Use relative URLs for Vercel deployment
-    this.baseUrl = process.env.REACT_APP_VERCEL_URL ? `https://${process.env.REACT_APP_VERCEL_URL}` : '';
-    this.apiUrl = '/api/transfers';
+    // Use absolute URLs for server-side requests
+    this.baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
+                   process.env.REACT_APP_VERCEL_URL ? `https://${process.env.REACT_APP_VERCEL_URL}` : 
+                   'http://localhost:3000';
+    this.apiUrl = `${this.baseUrl}/api/transfers`;
     this.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
   }
 

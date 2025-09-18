@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -16,6 +16,11 @@ import { useTranslation } from '../hooks/useTranslation';
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
@@ -38,6 +43,32 @@ const FAQSection: React.FC = () => {
       answer: t('faq.answer3')
     }
   ];
+
+  // Prevent hydration mismatch by not rendering on server
+  if (!isClient) {
+    return (
+      <Box sx={{ py: 6 }}>
+        <Container maxWidth="md">
+          <Typography 
+            variant="h3" 
+            component="h2" 
+            textAlign="center" 
+            gutterBottom 
+            sx={{ 
+              fontWeight: 700,
+              mb: 4,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            {t('faq.title')}
+          </Typography>
+        </Container>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ py: 6 }}>
