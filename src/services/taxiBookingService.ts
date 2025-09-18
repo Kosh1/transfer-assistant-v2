@@ -48,7 +48,7 @@ class TaxiBookingService {
     // Use proxy service instead of direct Booking.com API
     this.baseUrl = process.env.PROXY_SERVICE_URL || 
                    process.env.REACT_APP_PROXY_SERVICE_URL || 
-                   'http://localhost:3001';
+                   'http://185.185.143.91';
     this.apiUrl = `${this.baseUrl}/api/transfers`;
     this.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
     
