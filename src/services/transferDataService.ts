@@ -27,7 +27,7 @@ const TRANSFER_PROMPTS = {
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
 
-You need to collect the following information:
+You MUST collect the following information:
 - from: departure location (must be in Vienna or nearby)
 - to: destination location (must be in Vienna or nearby)
 - passengers: number of passengers (1-8)
@@ -35,13 +35,25 @@ You need to collect the following information:
 - date: travel date (YYYY-MM-DD format)
 - time: travel time (HH:MM format)
 
-If any information is missing, ask for clarification in a friendly way.
-If you have all the information, confirm the details and indicate you're ready to search.
+IMPORTANT: You MUST extract data from the user's message and call the extract_transfer_data function.
+CRITICAL: You must ALWAYS call the extract_transfer_data function with the extracted data. Do not just respond with text.
+If you have enough information to make a booking, set status="complete".
+If information is missing, ask for clarification and set status="collecting".
 
 Always respond in the same language as the user's message.
 
-Use this format for function calls:
-[Call extract_transfer_data with: from="location" to="location" passengers=2 luggage=1 date="2024-01-15" time="14:30" status="complete"]`
+EXAMPLES:
+User: "Првет послезавтра из Вены в Венский аэропорт 2 человека и 2 чемодана. В 17"
+You should extract:
+- from: "Vienna" (Вена)
+- to: "Vienna Airport" (Венский аэропорт)
+- passengers: 2
+- luggage: 2
+- date: "2024-09-20" (calculate after tomorrow from current date)
+- time: "17:00"
+- status: "complete"
+
+You must use the extract_transfer_data function to return the extracted data as JSON.`
 };
 
 class TransferDataService {
