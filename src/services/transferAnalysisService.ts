@@ -143,13 +143,13 @@ class TransferAnalysisService {
             score: ratingsData.bestRating.score,
             count: ratingsData.bestRating.count,
             source: ratingsData.bestRating.source
-          } : null,
+          } : undefined,
           cashback: cashbackCouponData?.cashback?.available ? {
             amount: cashbackCouponData.cashback.amount,
             currency: cashbackCouponData.cashback.currency,
             percentage: cashbackCouponData.cashback.percentage
-          } : null,
-          coupons: cashbackCouponData?.coupons?.codes || null,
+          } : undefined,
+          coupons: cashbackCouponData?.coupons?.codes || undefined,
           website: websiteData?.websiteUrl || null,
           bookingUrl: (option as any).bookingUrl || '#',
           analysis: `${ratingText}${cashbackText}`
