@@ -130,24 +130,6 @@ const TransferResults: React.FC<TransferResultsProps> = ({
         </Card>
       </motion.div>
 
-      {/* AI Analysis */}
-      {transferAnalysis && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <Paper sx={{ p: 3, mb: 4, bgcolor: 'grey.50' }}>
-            <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Language sx={{ color: 'primary.main' }} />
-              AI Analysis
-            </Typography>
-            <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
-              {transferAnalysis}
-            </Typography>
-          </Paper>
-        </motion.div>
-      )}
 
       {/* Transfer Options */}
       <motion.div
@@ -238,11 +220,16 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Star sx={{ fontSize: 16, color: 'warning.main' }} />
                           <Chip 
-                            label={typeof option.rating === 'string' ? option.rating : `${option.rating.score}/5`} 
+                            label={`${option.rating.score}/5`} 
                             size="small" 
-                            color={getRatingColor(typeof option.rating === 'string' ? option.rating : option.rating.score.toString())}
+                            color={getRatingColor(option.rating.score.toString())}
                             variant="outlined"
                           />
+                          {option.rating.count && (
+                            <Typography variant="caption" color="text.secondary">
+                              ({option.rating.count} reviews)
+                            </Typography>
+                          )}
                         </Box>
                       </Box>
                     )}
@@ -251,7 +238,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                     {option.cashback && (
                       <Box sx={{ mb: 2 }}>
                         <Chip 
-                          label={`Cashback: ${option.cashback}`} 
+                          label={`Cashback: ${option.cashback.percentage}%`} 
                           size="small" 
                           color="success" 
                           variant="outlined"
@@ -259,10 +246,10 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       </Box>
                     )}
 
-                    {option.coupons && (
+                    {option.coupons && option.coupons.length > 0 && (
                       <Box sx={{ mb: 2 }}>
                         <Chip 
-                          label={`Coupons: ${option.coupons}`} 
+                          label={`Coupons: ${option.coupons.length} available`} 
                           size="small" 
                           color="info" 
                           variant="outlined"

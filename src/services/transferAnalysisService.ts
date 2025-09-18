@@ -139,9 +139,17 @@ class TransferAnalysisService {
             discount: (option as any).discount
           },
           duration: (option.duration || 'Not specified').toString(),
-          rating: ratingsData?.bestRating?.rating || null,
-          cashback: cashbackCouponData?.cashback || null,
-          coupons: cashbackCouponData?.coupons || null,
+          rating: ratingsData?.bestRating ? {
+            score: ratingsData.bestRating.score,
+            count: ratingsData.bestRating.count,
+            source: ratingsData.bestRating.source
+          } : null,
+          cashback: cashbackCouponData?.cashback?.available ? {
+            amount: cashbackCouponData.cashback.amount,
+            currency: cashbackCouponData.cashback.currency,
+            percentage: cashbackCouponData.cashback.percentage
+          } : null,
+          coupons: cashbackCouponData?.coupons?.codes || null,
           website: websiteData?.websiteUrl || null,
           bookingUrl: (option as any).bookingUrl || '#',
           analysis: `${ratingText}${cashbackText}`
@@ -456,18 +464,83 @@ Language-specific headers:
     try {
       console.log(`🤖 Starting LLM analysis for ratings of: ${supplierName}`);
       
-      // For now, return mock data
-      return {
-        found: true,
-        ratings: [],
-        bestRating: {
-          source: 'Trustpilot',
-          rating: '4.2',
-          ratingCount: 150,
-          url: 'https://trustpilot.com'
-        },
-        summary: 'Хорошие отзывы клиентов'
-      };
+      // Format search results for LLM analysis
+      const markdown = this.formatSupplierRatingsForLLM(supplierName, searchResults);
+      
+      const prompt = `Проанализируй результаты поиска рейтингов для поставщика "${supplierName}" и найди информацию о рейтингах.
+
+${markdown}
+
+ВАЖНО: При анализе учитывай следующие критерии:
+1. Название поставщика в заголовке должно точно соответствовать "${supplierName}"
+2. Результаты должны быть релевантны для региона Вена/Австрия (Vienna/Austria)
+3. Игнорируй результаты для других регионов
+4. ИСПОЛЬЗУЙ ГОТОВЫЕ ПОЛЯ: В результатах поиска уже есть поля "rating" и "ratingCount" - используй их напрямую!
+
+Найди и извлеки:
+1. Рейтинги из поля "rating" (числовые значения от 1 до 5 или от 1 до 10)
+2. Количество отзывов из поля "ratingCount"
+3. Источники рейтингов (Trustpilot, TripAdvisor, Google, Yelp и т.д.)
+4. URL-ы страниц с рейтингами
+
+Ответь в формате JSON:
+{
+  "found": true/false,
+  "ratings": [
+    {
+      "source": "Trustpilot",
+      "rating": 4.2,
+      "ratingCount": 150,
+      "url": "https://...",
+      "description": "Описание"
+    }
+  ],
+  "bestRating": {
+    "source": "Trustpilot",
+    "rating": 4.2,
+    "ratingCount": 150,
+    "url": "https://..."
+  },
+  "summary": "Краткое описание найденных рейтингов на русском языке"
+}
+
+Если рейтинги не найдены, верни:
+{
+  "found": false,
+  "ratings": [],
+  "bestRating": null,
+  "summary": "Рейтинг не найден"
+}`;
+
+      const response = await this.makeLLMRequest([
+        { role: 'user', content: prompt }
+      ]);
+      
+      console.log(`🤖 LLM ratings analysis result for ${supplierName}:`, response);
+      
+      // Parse LLM response
+      try {
+        let analysis;
+        if (typeof response === 'string') {
+          analysis = JSON.parse(response);
+        } else if (response && response.content) {
+          analysis = JSON.parse(response.content);
+        } else {
+          analysis = response;
+        }
+        
+        return analysis;
+        
+      } catch (parseError) {
+        console.error(`❌ Error parsing LLM ratings response for ${supplierName}:`, parseError);
+        return {
+          found: false,
+          ratings: [],
+          bestRating: null,
+          summary: 'Рейтинг не найден'
+        };
+      }
+      
     } catch (error) {
       console.error(`❌ Error analyzing ratings with LLM for ${supplierName}:`, error);
       return {
@@ -484,13 +557,88 @@ Language-specific headers:
     try {
       console.log(`🤖 Starting LLM analysis for cashback/coupons of: ${supplierName}`);
       
-      // For now, return mock data
-      return {
-        found: true,
-        cashback: { available: false, description: "Кэшбек не найден" },
-        coupons: { available: true, discount: "10% Off", description: "Доступны купоны" },
-        summary: "Найдены купоны со скидкой"
-      };
+      // Format search results for LLM analysis
+      const markdown = this.formatSupplierCashbackForLLM(supplierName, searchResults);
+      
+      const prompt = `Проанализируй результаты поиска кэшбека и купонов для поставщика "${supplierName}" и найди информацию о доступных предложениях.
+
+${markdown}
+
+ВАЖНО: При анализе учитывай следующие критерии:
+1. Название поставщика в заголовке должно точно соответствовать "${supplierName}"
+2. Результаты должны быть релевантны для региона Вена/Австрия (Vienna/Austria)
+3. Игнорируй результаты для других регионов
+4. НЕ ПРИДУМЫВАЙ И НЕ ИСПОЛЬЗУЙ ФОЛБЕКИ - если информации нет, скажи что нет
+5. ВНИМАТЕЛЬНО ИЩИ КУПОНЫ: ищи фразы типа "Up to X% Off", "X% discount", "coupon codes", "promo codes"
+6. КРИТИЧЕСКИ ВАЖНО: Если видишь заголовок "Up to X% Off | Coupon Codes" - это КУПОН! Обязательно найди его!
+
+Найди и извлеки информацию о:
+1. Кэшбеке (процент возврата, условия, для кого доступен)
+2. Купонах и скидках (размер скидки, промокоды, условия)
+3. Условиях получения (для новых пользователей, постоянных клиентов и т.д.)
+4. URL-ы страниц с предложениями
+
+Ответь в формате JSON:
+{
+  "found": true/false,
+  "cashback": {
+    "available": true/false,
+    "percentage": "5%",
+    "conditions": "для новых пользователей",
+    "description": "Описание кэшбека"
+  },
+  "coupons": {
+    "available": true/false,
+    "discount": "Up to 40% Off",
+    "code": "PROMO10",
+    "conditions": "при заказе от 50€",
+    "url": "https://...",
+    "description": "Найдено 14 купонов с скидками до 40%",
+    "count": 14,
+    "source": "Groupon"
+  },
+  "summary": "Краткое описание найденных предложений на русском языке"
+}
+
+Если кэшбек и купоны не найдены, верни:
+{
+  "found": false,
+  "cashback": { "available": false, "description": "Кэшбек не найден" },
+  "coupons": { "available": false, "description": "Купоны не найдены" },
+  "summary": "Кэшбек и купоны не найдены"
+}
+
+ПОМНИ: Если в результатах поиска есть заголовок с "Up to X% Off" или "Coupon Codes" - это означает, что купоны НАЙДЕНЫ!`;
+
+      const response = await this.makeLLMRequest([
+        { role: 'user', content: prompt }
+      ]);
+      
+      console.log(`🤖 LLM cashback analysis result for ${supplierName}:`, response);
+      
+      // Parse LLM response
+      try {
+        let analysis;
+        if (typeof response === 'string') {
+          analysis = JSON.parse(response);
+        } else if (response && response.content) {
+          analysis = JSON.parse(response.content);
+        } else {
+          analysis = response;
+        }
+        
+        return analysis;
+        
+      } catch (parseError) {
+        console.error(`❌ Error parsing LLM cashback response for ${supplierName}:`, parseError);
+        return {
+          found: false,
+          cashback: { available: false, description: "Кэшбек не найден" },
+          coupons: { available: false, description: "Купоны не найдены" },
+          summary: "Кэшбек и купоны не найдены"
+        };
+      }
+      
     } catch (error) {
       console.error(`❌ Error analyzing cashback with LLM for ${supplierName}:`, error);
       return {
@@ -549,6 +697,91 @@ Language-specific headers:
     }
     
     return result;
+  }
+
+  // Format supplier ratings for LLM analysis
+  private formatSupplierRatingsForLLM(supplierName: string, searchResults: any): string {
+    if (!searchResults) return `# Результаты поиска рейтингов для ${supplierName}\n\nДанные не найдены.`;
+    
+    let markdown = `# Результаты поиска рейтингов для ${supplierName}\n\n`;
+    
+    if (searchResults.trustpilot) {
+      markdown += `## Trustpilot\n`;
+      markdown += `- Найдено: ${searchResults.trustpilot.found}\n`;
+      if (searchResults.trustpilot.rating) {
+        markdown += `- Рейтинг: ${searchResults.trustpilot.rating}\n`;
+      }
+      if (searchResults.trustpilot.ratingCount) {
+        markdown += `- Количество отзывов: ${searchResults.trustpilot.ratingCount}\n`;
+      }
+      if (searchResults.trustpilot.url) {
+        markdown += `- URL: ${searchResults.trustpilot.url}\n`;
+      }
+      markdown += `\n`;
+    }
+    
+    if (searchResults.tripadvisor) {
+      markdown += `## TripAdvisor\n`;
+      markdown += `- Найдено: ${searchResults.tripadvisor.found}\n`;
+      if (searchResults.tripadvisor.rating) {
+        markdown += `- Рейтинг: ${searchResults.tripadvisor.rating}\n`;
+      }
+      if (searchResults.tripadvisor.ratingCount) {
+        markdown += `- Количество отзывов: ${searchResults.tripadvisor.ratingCount}\n`;
+      }
+      if (searchResults.tripadvisor.url) {
+        markdown += `- URL: ${searchResults.tripadvisor.url}\n`;
+      }
+      markdown += `\n`;
+    }
+    
+    if (searchResults.general) {
+      markdown += `## Общие рейтинги\n`;
+      markdown += `- Найдено: ${searchResults.general.found}\n`;
+      if (searchResults.general.rating) {
+        markdown += `- Рейтинг: ${searchResults.general.rating}\n`;
+      }
+      if (searchResults.general.ratingCount) {
+        markdown += `- Количество отзывов: ${searchResults.general.ratingCount}\n`;
+      }
+      if (searchResults.general.url) {
+        markdown += `- URL: ${searchResults.general.url}\n`;
+      }
+    }
+    
+    return markdown;
+  }
+
+  // Format supplier cashback for LLM analysis
+  private formatSupplierCashbackForLLM(supplierName: string, searchResults: any): string {
+    if (!searchResults) return `# Результаты поиска кэшбека и купонов для ${supplierName}\n\nДанные не найдены.`;
+    
+    let markdown = `# Результаты поиска кэшбека и купонов для ${supplierName}\n\n`;
+    
+    if (searchResults.cashback) {
+      markdown += `## Кэшбек\n`;
+      markdown += `- Найдено: ${searchResults.cashback.found}\n`;
+      if (searchResults.cashback.description) {
+        markdown += `- Описание: ${searchResults.cashback.description}\n`;
+      }
+      if (searchResults.cashback.url) {
+        markdown += `- URL: ${searchResults.cashback.url}\n`;
+      }
+      markdown += `\n`;
+    }
+    
+    if (searchResults.coupon) {
+      markdown += `## Купоны\n`;
+      markdown += `- Найдено: ${searchResults.coupon.found}\n`;
+      if (searchResults.coupon.description) {
+        markdown += `- Описание: ${searchResults.coupon.description}\n`;
+      }
+      if (searchResults.coupon.url) {
+        markdown += `- URL: ${searchResults.coupon.url}\n`;
+      }
+    }
+    
+    return markdown;
   }
 
   // Replace time placeholders in prompts with current time
