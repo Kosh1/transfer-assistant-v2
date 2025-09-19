@@ -44,23 +44,23 @@ const SEOContent: React.FC = () => {
     },
     {
       icon: <Star />,
-      title: t('landing.features.professionalDrivers'),
-      description: t('landing.features.professionalDriversDesc'),
+      title: t('landing.features.providerRatings'),
+      description: t('landing.features.providerRatingsDesc'),
     },
     {
       icon: <AirportShuttle />,
-      title: t('landing.features.meetGreet'),
-      description: t('landing.features.meetGreetDesc'),
+      title: t('landing.features.cashbackOptions'),
+      description: t('landing.features.cashbackOptionsDesc'),
     },
     {
       icon: <Security />,
-      title: t('landing.features.freeCancellation'),
-      description: t('landing.features.freeCancellationDesc'),
+      title: t('landing.features.freeService'),
+      description: t('landing.features.freeServiceDesc'),
     },
     {
       icon: <Support />,
-      title: t('landing.features.realTimeTracking'),
-      description: t('landing.features.realTimeTrackingDesc'),
+      title: t('landing.features.directBooking'),
+      description: t('landing.features.directBookingDesc'),
     },
   ];
 
@@ -75,24 +75,24 @@ const SEOContent: React.FC = () => {
 
   const transferTypes = [
     {
-      title: 'Vienna Airport Transfers',
-      description: 'Professional airport transfers from Vienna Airport to city center and surrounding areas',
-      keywords: ['Vienna airport transfer', 'airport taxi Vienna', 'Vienna airport pickup'],
+      title: 'Vienna Airport Transfer Search',
+      description: 'We search for the cheapest transfer options between Vienna city and Vienna Airport (both directions)',
+      keywords: ['Vienna airport transfer search', 'Vienna airport transfer comparison', 'cheapest Vienna airport transfer'],
     },
     {
-      title: 'City Center Transfers',
-      description: 'Convenient transfers within Vienna city center for business meetings, events, and sightseeing',
-      keywords: ['Vienna city transfer', 'downtown Vienna taxi', 'Vienna business transfer'],
+      title: 'Transfer Price Comparison',
+      description: 'Compare prices from multiple transfer providers to find the best deals and save money',
+      keywords: ['Vienna transfer price comparison', 'transfer price search Vienna', 'cheapest transfer Vienna'],
     },
     {
-      title: 'Long Distance Transfers',
-      description: 'Comfortable transfers to destinations outside Vienna including Salzburg, Graz, and Innsbruck',
-      keywords: ['Vienna to Salzburg transfer', 'long distance Vienna transfer', 'Austria transfers'],
+      title: 'Provider Ratings & Reviews',
+      description: 'See ratings and reviews for each transfer provider to make informed booking decisions',
+      keywords: ['Vienna transfer provider ratings', 'transfer company reviews Vienna', 'best transfer provider Vienna'],
     },
     {
-      title: 'Event Transfers',
-      description: 'Specialized transfers for conferences, weddings, and special events in Vienna',
-      keywords: ['Vienna event transfer', 'wedding transfer Vienna', 'conference transfer Vienna'],
+      title: 'Cashback & Coupon Search',
+      description: 'Find transfer providers offering cashback, discounts, and special coupons for additional savings',
+      keywords: ['Vienna transfer cashback', 'transfer coupons Vienna', 'discount transfer Vienna'],
     },
   ];
 
@@ -259,7 +259,7 @@ const SEOContent: React.FC = () => {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Vienna Transfer Services
+            Vienna Transfer Search Services
           </Typography>
 
           <Grid container spacing={4}>
