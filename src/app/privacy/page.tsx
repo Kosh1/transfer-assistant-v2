@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Box,
@@ -9,9 +11,6 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useTranslation } from '../../hooks/useTranslation';
-import { generateSEOMetadata } from '../../lib/seo';
-
-export const metadata = generateSEOMetadata();
 
 const PrivacyPage: React.FC = () => {
   const { t } = useTranslation();
