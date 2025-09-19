@@ -13,8 +13,15 @@ class LLMService {
     this.model = process.env.REACT_APP_LLM_MODEL || 'gpt-4o-mini';
     this.conversationHistory = [];
     
+    console.log('🔑 LLM Service - API Key exists:', !!this.apiKey);
+    console.log('🔑 LLM Service - API Key length:', this.apiKey?.length);
+    console.log('🔑 LLM Service - API Key starts with:', this.apiKey?.substring(0, 10));
+    console.log('🤖 LLM Service - Model:', this.model);
+    console.log('🌐 LLM Service - API URL:', this.apiUrl);
+    
     if (!this.apiKey) {
       console.error('❌ LLM API key not configured');
+      // Не выбрасываем ошибку в конструкторе, проверяем при использовании
     } else {
       console.log('🤖 LLM Service initialized as coordinator on server');
     }

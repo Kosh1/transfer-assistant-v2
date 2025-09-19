@@ -12,7 +12,7 @@ class TransferAnalysisService {
   constructor() {
     this.apiKey = process.env.REACT_APP_LLM_API_KEY || '';
     this.apiUrl = process.env.REACT_APP_LLM_API_URL || 'https://api.openai.com/v1/chat/completions';
-    this.model = process.env.REACT_APP_LLM_MODEL || 'gpt-3.5-turbo';
+    this.model = process.env.REACT_APP_LLM_MODEL || 'gpt-4o-mini';
   }
 
   // Search for transfer options and analyze results
@@ -483,9 +483,9 @@ ${markdown}
         
       } catch (parseError) {
         console.error(`❌ Error parsing LLM ratings response for ${supplierName}:`, parseError);
-        return {
+      return {
           found: false,
-          ratings: [],
+        ratings: [],
           bestRating: null,
           summary: 'Рейтинг не найден'
         };
@@ -554,12 +554,12 @@ ${markdown}
         
       } catch (parseError) {
         console.error(`❌ Error parsing LLM cashback response for ${supplierName}:`, parseError);
-        return {
+      return {
           found: false,
-          cashback: { available: false, description: "Кэшбек не найден" },
+        cashback: { available: false, description: "Кэшбек не найден" },
           coupons: { available: false, description: "Купоны не найдены" },
           summary: "Кэшбек и купоны не найдены"
-        };
+      };
       }
       
     } catch (error) {
@@ -710,6 +710,12 @@ ${markdown}
 
   // Real LLM API call
   private async makeLLMRequest(messages: Array<{ role: string; content: string }>): Promise<any> {
+    console.log('🔑 API Key exists:', !!this.apiKey);
+    console.log('🔑 API Key length:', this.apiKey?.length);
+    console.log('🔑 API Key starts with:', this.apiKey?.substring(0, 10));
+    console.log('🤖 Model:', this.model);
+    console.log('🌐 API URL:', this.apiUrl);
+    
     if (!this.apiKey) {
       throw new Error('LLM API key not configured');
     }
@@ -721,6 +727,8 @@ ${markdown}
       temperature: 0.7,
     };
 
+    console.log('📤 Request body:', JSON.stringify(requestBody, null, 2));
+
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       headers: {
@@ -730,8 +738,13 @@ ${markdown}
       body: JSON.stringify(requestBody),
     });
 
+    console.log('📥 Response status:', response.status);
+    console.log('📥 Response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
-      throw new Error(`LLM API error: ${response.status}`);
+      const errorText = await response.text();
+      console.error('❌ API Error Response:', errorText);
+      throw new Error(`LLM API error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();

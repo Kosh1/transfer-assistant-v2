@@ -59,52 +59,67 @@ class TransferDataService {
       ];
 
       // Call LLM API
+      console.log('🔑 TransferDataService - API Key exists:', !!this.apiKey);
+      console.log('🔑 TransferDataService - API Key length:', this.apiKey?.length);
+      console.log('🔑 TransferDataService - API Key starts with:', this.apiKey?.substring(0, 10));
+      console.log('🤖 TransferDataService - Model:', this.model);
+      console.log('🌐 TransferDataService - API URL:', this.apiUrl);
+
+      const requestBody = {
+        model: this.model,
+        messages: messages,
+        functions: [
+          {
+            name: 'extract_transfer_data',
+            description: 'Extract and save transfer booking information',
+            parameters: {
+              type: 'object',
+              properties: {
+                from: { type: 'string', description: 'Pickup location' },
+                to: { type: 'string', description: 'Destination location' },
+                passengers: { type: 'number', description: 'Number of passengers' },
+                luggage: { type: 'number', description: 'Number of luggage pieces' },
+                date: { type: 'string', description: 'Travel date in YYYY-MM-DD format' },
+                time: { type: 'string', description: 'Travel time in HH:MM format' },
+                status: { type: 'string', enum: ['collecting', 'complete'], description: 'Data collection status' }
+              },
+              required: ['from', 'to', 'passengers', 'luggage', 'date', 'time', 'status']
+            }
+          },
+          {
+            name: 'search_address_in_google',
+            description: 'Search and validate addresses using Google Search',
+            parameters: {
+              type: 'object',
+              properties: {
+                address: { type: 'string', description: 'Address to search and validate' }
+              },
+              required: ['address']
+            }
+          }
+        ],
+        function_call: 'auto',
+        temperature: 0.1
+      };
+
+      console.log('📤 TransferDataService - Request body:', JSON.stringify(requestBody, null, 2));
+
       const response = await fetch(this.apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model: this.model,
-          messages: messages,
-          functions: [
-            {
-              name: 'extract_transfer_data',
-              description: 'Extract and save transfer booking information',
-              parameters: {
-                type: 'object',
-                properties: {
-                  from: { type: 'string', description: 'Pickup location' },
-                  to: { type: 'string', description: 'Destination location' },
-                  passengers: { type: 'number', description: 'Number of passengers' },
-                  luggage: { type: 'number', description: 'Number of luggage pieces' },
-                  date: { type: 'string', description: 'Travel date in YYYY-MM-DD format' },
-                  time: { type: 'string', description: 'Travel time in HH:MM format' },
-                  status: { type: 'string', enum: ['collecting', 'complete'], description: 'Data collection status' }
-                },
-                required: ['from', 'to', 'passengers', 'luggage', 'date', 'time', 'status']
-              }
-            },
-            {
-              name: 'search_address_in_google',
-              description: 'Search and validate addresses using Google Search',
-              parameters: {
-                type: 'object',
-                properties: {
-                  address: { type: 'string', description: 'Address to search and validate' }
-                },
-                required: ['address']
-              }
-            }
-          ],
-          function_call: 'auto',
-          temperature: 0.1
-        })
+        body: JSON.stringify(requestBody)
       });
 
+      console.log('📥 TransferDataService - Response status:', response.status);
+      console.log('📥 TransferDataService - Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error(`LLM API error: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('❌ TransferDataService - API Error Response:', errorText);
+        throw new Error(`LLM API error: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
