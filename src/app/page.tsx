@@ -10,6 +10,8 @@ import { motion } from 'framer-motion';
 import ChatInterface from '../components/ChatInterface';
 import TransferResults from '../components/TransferResults';
 import FAQSection from '../components/FAQSection';
+import SEOContent from '../components/SEOContent';
+import StructuredData from '../components/StructuredData';
 import { useTranslation } from '../hooks/useTranslation';
 import { TransferData, TransferOption } from '../types';
 
@@ -70,14 +72,16 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* Hero Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        aria-labelledby="hero-title"
-      >
+    <>
+      <StructuredData type="FAQPage" data={{}} />
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        {/* Hero Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          aria-labelledby="hero-title"
+        >
         <Box
           component="header"
           sx={{
@@ -175,7 +179,11 @@ const HomePage: React.FC = () => {
         </Typography>
         <FAQSection />
       </motion.section>
-    </Container>
+
+      {/* SEO Content Section */}
+      <SEOContent />
+      </Container>
+    </>
   );
 };
 

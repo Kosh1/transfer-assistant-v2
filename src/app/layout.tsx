@@ -5,15 +5,89 @@ import { LanguageProvider } from '../hooks/useTranslation'
 import { Box } from '@mui/material'
 import ThemeProvider from '../components/ThemeProvider'
 import Header from '../components/Header'
+import StructuredData from '../components/StructuredData'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Transfer Assistant - Vienna Private Transfers',
-  description: 'AI-powered private transfer assistant for Vienna. Find the best transfer options with real-time price comparison and analysis.',
+  title: 'Vienna Private Transfer Service | AI-Powered Transfer Assistant | Best Prices & Instant Booking',
+  description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.',
+  keywords: [
+    'Vienna private transfer',
+    'Vienna airport transfer',
+    'private transfer Vienna',
+    'Vienna taxi service',
+    'airport transfer Vienna',
+    'Vienna transfer booking',
+    'private car Vienna',
+    'Vienna chauffeur service',
+    'transfer Vienna airport',
+    'Vienna transportation',
+    'AI transfer assistant',
+    'transfer price comparison',
+    'Vienna travel',
+    'Austria transfers'
+  ],
+  authors: [{ name: 'Transfer Assistant Team' }],
+  creator: 'Transfer Assistant',
+  publisher: 'Transfer Assistant',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://transfer-assistant.vercel.app'),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en': '/en',
+      'de': '/de',
+      'ru': '/ru',
+      'fr': '/fr',
+      'es': '/es',
+      'it': '/it',
+      'zh': '/zh',
+    },
+  },
+  openGraph: {
+    title: 'Vienna Private Transfer Service | AI-Powered Transfer Assistant',
+    description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly and book your ride in minutes.',
+    url: 'https://transfer-assistant.vercel.app',
+    siteName: 'Transfer Assistant',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Vienna Private Transfer Service - AI-Powered Assistant',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vienna Private Transfer Service | AI-Powered Assistant',
+    description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices instantly and book in minutes.',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🚗</text></svg>',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({
@@ -23,6 +97,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <StructuredData type="Organization" data={{}} />
+        <StructuredData type="Service" data={{}} />
+        <StructuredData type="WebSite" data={{}} />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           <LanguageProvider>

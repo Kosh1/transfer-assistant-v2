@@ -32,6 +32,11 @@ class GoogleSearchService {
     this.apiKey = process.env.REACT_APP_GOOGLE_SEARCH_API_KEY || '';
     this.apiUrl = 'https://google.serper.dev/search';
     
+    console.log('🔑 Google Search API Key exists:', !!this.apiKey);
+    console.log('🔑 Google Search API Key length:', this.apiKey?.length);
+    console.log('🔑 Google Search API Key starts with:', this.apiKey?.substring(0, 10));
+    console.log('🌐 Google Search API URL:', this.apiUrl);
+    
     if (!this.apiKey) {
       console.error('❌ Google Search API key not configured');
     } else {
@@ -196,20 +201,34 @@ class GoogleSearchService {
       throw new Error('Google Search API key not configured');
     }
 
+    console.log('🔍 Google Search query:', query);
+    console.log('🔑 Google Search API Key exists:', !!this.apiKey);
+    console.log('🔑 Google Search API Key length:', this.apiKey?.length);
+    console.log('🌐 Google Search API URL:', this.apiUrl);
+
+    const requestBody = {
+      q: query,
+      type: 'search',
+      engine: 'google'
+    };
+
+    console.log('📤 Google Search request body:', JSON.stringify(requestBody, null, 2));
+
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       headers: {
         'X-API-KEY': this.apiKey,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        q: query,
-        type: 'search',
-        engine: 'google'
-      })
+      body: JSON.stringify(requestBody)
     });
 
+    console.log('📥 Google Search response status:', response.status);
+    console.log('📥 Google Search response headers:', Object.fromEntries(response.headers.entries()));
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Google Search API Error Response:', errorText);
       throw new Error(`Google Search API error: ${response.statusText}`);
     }
 
