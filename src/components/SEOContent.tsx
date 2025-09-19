@@ -340,40 +340,39 @@ const SEOContent: React.FC = () => {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Why Choose Vienna Private Transfers?
+            Vienna Transfer Search Service
           </Typography>
 
           <Grid container spacing={6}>
             <Grid item xs={12} md={6}>
               <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
-                Professional Vienna Transfer Service
+                How Our Search Service Works
               </Typography>
               <Typography variant="body1" paragraph color="text.secondary">
-                Our AI-powered Vienna transfer service revolutionizes how you book private transfers. 
-                Whether you need airport transfers, city center transportation, or long-distance 
-                transfers, our intelligent assistant compares prices from all major Vienna transfer 
-                providers to find you the best deal.
+                We search for the cheapest transfer providers on the Vienna - Vienna Airport route, 
+                compare their prices, ratings, and cashback options. Our AI-powered service finds 
+                the best deals from multiple providers in just 15 minutes, completely free of charge.
               </Typography>
               <Typography variant="body1" paragraph color="text.secondary">
-                With professional drivers, meet & greet service, and real-time tracking, we ensure 
-                your Vienna transfer experience is seamless and stress-free. Book your Vienna private 
-                transfer today and experience the future of transportation.
+                We don&apos;t provide transfer services ourselves - we only help you find and compare 
+                options from other providers. You then book directly on the provider&apos;s website 
+                for the best prices and service.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
               <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 600 }}>
-                Vienna Airport Transfer Excellence
+                Vienna Airport Transfer Search
               </Typography>
               <Typography variant="body1" paragraph color="text.secondary">
-                Vienna Airport transfers are our specialty. From Vienna International Airport (VIE) 
-                to your hotel in the city center, we provide reliable, comfortable, and affordable 
-                transfer services. Our AI assistant analyzes your specific needs and finds the perfect 
-                transfer option for your Vienna airport journey.
+                Our service specializes in finding the best Vienna Airport transfer options. 
+                We search both directions: from Vienna city to Vienna International Airport (VIE) 
+                and from the airport to Vienna city center. We show you all available options 
+                with their prices, ratings, and special offers.
               </Typography>
               <Typography variant="body1" paragraph color="text.secondary">
-                Whether you&apos;re arriving for business or leisure, our Vienna airport transfer service 
-                ensures you reach your destination safely and on time. Book your Vienna airport transfer 
-                with confidence and enjoy a stress-free arrival in Austria&apos;s beautiful capital.
+                Currently we only cover transfers between Vienna and Vienna Airport. Our free 
+                search service helps you find the cheapest and most reliable transfer options 
+                for your Vienna airport journey.
               </Typography>
             </Grid>
           </Grid>

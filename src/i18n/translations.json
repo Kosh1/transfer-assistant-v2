@@ -31,8 +31,8 @@
       "budget": "Budget"
     },
     "landing": {
-      "title": "Vienna Private Transfer Service | AI-Powered Transfer Assistant | Best Prices & Instant Booking",
-      "subtitle": "Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.",
+      "title": "All private transfer options from Vienna to Vienna Airport and back",
+      "subtitle": "We will find the cheapest providers on the route, their ratings and whether they have cashback or coupons. In 15 minutes. Absolutely free.",
       "searchPlaceholder": "Tell me about your transfer needs...",
       "noResults": "No transfer options found",
       "noResultsDescription": "Try adjusting your search criteria or contact us for assistance.",
@@ -53,14 +53,14 @@
         "realTimeTrackingDesc": "Track your driver's location and estimated arrival time"
       },
       "benefits": {
-        "title": "Vienna Transfer Benefits",
-        "subtitle": "Discover why thousands of travelers choose our Vienna private transfer service",
-        "benefit1": "Save up to 30% compared to traditional taxi services",
-        "benefit2": "Fixed prices with no hidden fees or surge pricing",
-        "benefit3": "24/7 customer support in multiple languages",
-        "benefit4": "Child seats and accessibility options available",
-        "benefit5": "Direct booking with trusted Vienna transfer providers",
-        "benefit6": "Instant confirmation and booking management"
+        "title": "Search Service Benefits",
+        "subtitle": "Discover why thousands of travelers use our Vienna transfer search service",
+        "benefit1": "Find the cheapest transfer options in 15 minutes",
+        "benefit2": "Compare prices from multiple providers instantly",
+        "benefit3": "See provider ratings and cashback options",
+        "benefit4": "Completely free search service",
+        "benefit5": "Direct links to provider websites for booking",
+        "benefit6": "No hidden fees or commissions"
       }
     },
     "transfer": {
@@ -121,29 +121,37 @@
     "faq": {
       "title": "Frequently Asked Questions",
       "helpTitle": "Need Help? We're Here to Assist",
-      "helpDescription": "Find answers to common questions about our intelligent transfer assistant service.",
-      "question1": "How do I book a transfer?",
-      "answer1": "Simply tell me your travel details and I'll find the best transfer options for you. You can then book directly through the provider's website.",
-      "question2": "What is included in the price?",
-      "answer2": "The price includes the transfer service, professional driver, and vehicle. Additional services like meet & greet may be included depending on the provider.",
-      "question3": "Can I cancel my booking?",
-      "answer3": "Most providers offer free cancellation up to 24 hours before your transfer. Check the specific cancellation policy for each option.",
+      "helpDescription": "Find answers to common questions about our transfer search service.",
+      "question1": "How does your service work?",
+      "answer1": "We search for the cheapest transfer providers on the Vienna - Vienna Airport route, show their ratings and cashback options. You then book directly on the provider's website.",
+      "question2": "Do you provide transfer services?",
+      "answer2": "No, we don't provide transfers or drivers. We only help you find and compare transfer options from other providers.",
+      "question3": "Can I book through your platform?",
+      "answer3": "No, you cannot book through us. We only redirect you to the provider's website where you can make your booking.",
+      "question4": "What routes do you cover?",
+      "answer4": "Currently we only search transfers between Vienna city and Vienna Airport (both directions).",
+      "question5": "Is your service free?",
+      "answer5": "Yes, our search service is completely free. We don't charge any fees for finding and comparing transfer options.",
       "questions": [
         {
-          "question": "How do I book a transfer?",
-          "answer": "Simply tell me your travel details and I'll find the best transfer options for you. You can then book directly through the provider's website."
+          "question": "How does your service work?",
+          "answer": "We search for the cheapest transfer providers on the Vienna - Vienna Airport route, show their ratings and cashback options. You then book directly on the provider's website."
         },
         {
-          "question": "What is included in the price?",
-          "answer": "The price includes the transfer service, professional driver, and vehicle. Additional services like meet & greet may be included depending on the provider."
+          "question": "Do you provide transfer services?",
+          "answer": "No, we don't provide transfers or drivers. We only help you find and compare transfer options from other providers."
         },
         {
-          "question": "Can I cancel my booking?",
-          "answer": "Most providers offer free cancellation up to 24 hours before your transfer. Check the specific cancellation policy for each option."
+          "question": "Can I book through your platform?",
+          "answer": "No, you cannot book through us. We only redirect you to the provider's website where you can make your booking."
         },
         {
-          "question": "How do I get cashback?",
-          "answer": "Some providers offer cashback when booking through our platform. Look for the cashback percentage displayed on each option."
+          "question": "What routes do you cover?",
+          "answer": "Currently we only search transfers between Vienna city and Vienna Airport (both directions)."
+        },
+        {
+          "question": "Is your service free?",
+          "answer": "Yes, our search service is completely free. We don't charge any fees for finding and comparing transfer options."
         }
       ]
     }
@@ -180,8 +188,8 @@
       "budget": "Бюджет"
     },
     "landing": {
-      "title": "Частный трансфер Вены | ИИ-помощник трансферов | Лучшие цены и мгновенное бронирование",
-      "subtitle": "Забронируйте лучший частный трансфер в Вене с нашим ИИ-помощником. Сравните цены от всех поставщиков мгновенно, получите анализ в реальном времени и забронируйте поездку за минуты. Профессиональные водители, встреча в аэропорту, бесплатная отмена.",
+      "title": "Все варианты частных трансферов из Вены в Венский аэропорт и обратно",
+      "subtitle": "Мы найдем самых дешевых поставщиков на маршруте, их рейтинги и есть ли у них кэшбек или купоны. За 15 минут. Абсолютно бесплатно.",
       "searchPlaceholder": "Расскажите мне о ваших потребностях в трансфере...",
       "noResults": "Варианты трансфера не найдены",
       "noResultsDescription": "Попробуйте изменить критерии поиска или обратитесь к нам за помощью.",
@@ -202,14 +210,14 @@
         "realTimeTrackingDesc": "Отслеживайте местоположение водителя и предполагаемое время прибытия"
       },
       "benefits": {
-        "title": "Преимущества трансферов в Вене",
-        "subtitle": "Узнайте, почему тысячи путешественников выбирают наш сервис частных трансферов в Вене",
-        "benefit1": "Экономьте до 30% по сравнению с традиционными такси",
-        "benefit2": "Фиксированные цены без скрытых комиссий или повышения цен",
-        "benefit3": "Круглосуточная поддержка клиентов на нескольких языках",
-        "benefit4": "Детские кресла и варианты доступности",
-        "benefit5": "Прямое бронирование с проверенными поставщиками трансферов в Вене",
-        "benefit6": "Мгновенное подтверждение и управление бронированием"
+        "title": "Преимущества сервиса поиска",
+        "subtitle": "Узнайте, почему тысячи путешественников используют наш сервис поиска трансферов в Вене",
+        "benefit1": "Найдем самые дешевые варианты трансферов за 15 минут",
+        "benefit2": "Сравните цены от нескольких поставщиков мгновенно",
+        "benefit3": "Посмотрите рейтинги поставщиков и варианты кэшбека",
+        "benefit4": "Полностью бесплатный сервис поиска",
+        "benefit5": "Прямые ссылки на сайты поставщиков для бронирования",
+        "benefit6": "Никаких скрытых комиссий или сборов"
       }
     },
     "transfer": {
@@ -270,29 +278,37 @@
     "faq": {
       "title": "Часто задаваемые вопросы",
       "helpTitle": "Нужна помощь? Мы здесь, чтобы помочь",
-      "helpDescription": "Найдите ответы на часто задаваемые вопросы о нашем интеллектуальном сервисе трансферов.",
-      "question1": "Как забронировать трансфер?",
-      "answer1": "Просто расскажите мне детали вашей поездки, и я найду лучшие варианты трансфера. Затем вы можете забронировать напрямую через сайт поставщика.",
-      "question2": "Что включено в цену?",
-      "answer2": "Цена включает услугу трансфера, профессионального водителя и автомобиль. Дополнительные услуги, такие как встреча и проводы, могут быть включены в зависимости от поставщика.",
-      "question3": "Могу ли я отменить бронирование?",
-      "answer3": "Большинство поставщиков предлагают бесплатную отмену за 24 часа до трансфера. Проверьте конкретную политику отмены для каждого варианта.",
+      "helpDescription": "Найдите ответы на часто задаваемые вопросы о нашем сервисе поиска трансферов.",
+      "question1": "Как работает ваш сервис?",
+      "answer1": "Мы ищем самых дешевых поставщиков трансферов на маршруте Вена - Венский аэропорт, показываем их рейтинги и варианты кэшбека. Затем вы бронируете напрямую на сайте поставщика.",
+      "question2": "Предоставляете ли вы услуги трансфера?",
+      "answer2": "Нет, мы не предоставляем трансферы или водителей. Мы только помогаем найти и сравнить варианты трансферов от других поставщиков.",
+      "question3": "Можно ли забронировать через вашу платформу?",
+      "answer3": "Нет, через нас нельзя забронировать. Мы только перенаправляем вас на сайт поставщика, где вы можете сделать бронирование.",
+      "question4": "Какие маршруты вы покрываете?",
+      "answer4": "В настоящее время мы ищем трансферы только между Веной и Венским аэропортом (в обе стороны).",
+      "question5": "Ваш сервис бесплатный?",
+      "answer5": "Да, наш сервис поиска полностью бесплатный. Мы не взимаем плату за поиск и сравнение вариантов трансферов.",
       "questions": [
         {
-          "question": "Как забронировать трансфер?",
-          "answer": "Просто расскажите мне детали вашей поездки, и я найду лучшие варианты трансфера. Затем вы можете забронировать напрямую через сайт поставщика."
+          "question": "Как работает ваш сервис?",
+          "answer": "Мы ищем самых дешевых поставщиков трансферов на маршруте Вена - Венский аэропорт, показываем их рейтинги и варианты кэшбека. Затем вы бронируете напрямую на сайте поставщика."
         },
         {
-          "question": "Что включено в цену?",
-          "answer": "Цена включает услугу трансфера, профессионального водителя и автомобиль. Дополнительные услуги, такие как встреча и проводы, могут быть включены в зависимости от поставщика."
+          "question": "Предоставляете ли вы услуги трансфера?",
+          "answer": "Нет, мы не предоставляем трансферы или водителей. Мы только помогаем найти и сравнить варианты трансферов от других поставщиков."
         },
         {
-          "question": "Могу ли я отменить бронирование?",
-          "answer": "Большинство поставщиков предлагают бесплатную отмену за 24 часа до трансфера. Проверьте конкретную политику отмены для каждого варианта."
+          "question": "Можно ли забронировать через вашу платформу?",
+          "answer": "Нет, через нас нельзя забронировать. Мы только перенаправляем вас на сайт поставщика, где вы можете сделать бронирование."
         },
         {
-          "question": "Как получить кэшбек?",
-          "answer": "Некоторые поставщики предлагают кэшбек при бронировании через нашу платформу. Ищите процент кэшбека, отображаемый для каждого варианта."
+          "question": "Какие маршруты вы покрываете?",
+          "answer": "В настоящее время мы ищем трансферы только между Веной и Венским аэропортом (в обе стороны)."
+        },
+        {
+          "question": "Ваш сервис бесплатный?",
+          "answer": "Да, наш сервис поиска полностью бесплатный. Мы не взимаем плату за поиск и сравнение вариантов трансферов."
         }
       ]
     }
@@ -327,8 +343,8 @@
       "budget": "Budget"
     },
     "landing": {
-      "title": "Transfert Privé Vienne : Vienne → Aéroport de Vienne",
-      "subtitle": "Meilleur service de transfert privé à Vienne - Comparez les prix instantanément de tous les fournisseurs et réservez votre trajet en quelques minutes !",
+      "title": "Toutes les options de transfert privé de Vienne vers l'aéroport de Vienne et retour",
+      "subtitle": "Nous trouverons les fournisseurs les moins chers sur l'itinéraire, leurs évaluations et s'ils ont du cashback ou des coupons. En 15 minutes. Absolument gratuit.",
       "searchPlaceholder": "Parlez-moi de vos besoins de transfert...",
       "noResults": "Aucune option de transfert trouvée",
       "noResultsDescription": "Essayez d'ajuster vos critères de recherche ou contactez-nous pour obtenir de l'aide."
@@ -448,8 +464,8 @@
       "budget": "Presupuesto"
     },
     "landing": {
-      "title": "Transfer Privado Viena: Viena → Aeropuerto de Viena",
-      "subtitle": "Mejor servicio de transfer privado en Viena - ¡Compara precios al instante de todos los proveedores y reserva tu viaje en minutos!",
+      "title": "Todas las opciones de transfer privado de Viena al aeropuerto de Viena y regreso",
+      "subtitle": "Encontraremos los proveedores más baratos en la ruta, sus calificaciones y si tienen cashback o cupones. En 15 minutos. Absolutamente gratis.",
       "searchPlaceholder": "Cuéntame sobre tus necesidades de transfer...",
       "noResults": "No se encontraron opciones de transfer",
       "noResultsDescription": "Intenta ajustar tus criterios de búsqueda o contáctanos para obtener ayuda."
@@ -569,8 +585,8 @@
       "budget": "Budget"
     },
     "landing": {
-      "title": "Wien Privater Transfer Service | KI-gestützter Transfer-Assistent | Beste Preise & Sofortbuchung",
-      "subtitle": "Buchen Sie die besten privaten Transfers in Wien mit unserem KI-gestützten Assistenten. Vergleichen Sie sofort Preise von allen Anbietern, erhalten Sie Echtzeit-Analysen und buchen Sie Ihre Fahrt in Minuten. Professionelle Fahrer, Meet & Greet Service, kostenlose Stornierung.",
+      "title": "Alle privaten Transfer-Optionen von Wien zum Flughafen Wien und zurück",
+      "subtitle": "Wir finden die günstigsten Anbieter auf der Route, ihre Bewertungen und ob sie Cashback oder Gutscheine haben. In 15 Minuten. Absolut kostenlos.",
       "searchPlaceholder": "Erzählen Sie mir von Ihren Transfer-Bedürfnissen...",
       "noResults": "Keine Transfer-Optionen gefunden",
       "noResultsDescription": "Versuchen Sie, Ihre Suchkriterien anzupassen oder kontaktieren Sie uns für Hilfe.",
@@ -591,14 +607,14 @@
         "realTimeTrackingDesc": "Verfolgen Sie den Standort Ihres Fahrers und die geschätzte Ankunftszeit"
       },
       "benefits": {
-        "title": "Wien Transfer Vorteile",
-        "subtitle": "Entdecken Sie, warum Tausende von Reisenden unseren Wien Privat-Transfer Service wählen",
-        "benefit1": "Sparen Sie bis zu 30% im Vergleich zu traditionellen Taxi-Services",
-        "benefit2": "Feste Preise ohne versteckte Gebühren oder Preisspitzen",
-        "benefit3": "24/7 Kundensupport in mehreren Sprachen",
-        "benefit4": "Kindersitze und Barrierefreiheits-Optionen verfügbar",
-        "benefit5": "Direktbuchung mit vertrauenswürdigen Wien Transfer Anbietern",
-        "benefit6": "Sofortige Bestätigung und Buchungsverwaltung"
+        "title": "Suchservice Vorteile",
+        "subtitle": "Entdecken Sie, warum Tausende von Reisenden unseren Wien Transfer Suchservice nutzen",
+        "benefit1": "Finden Sie die günstigsten Transfer-Optionen in 15 Minuten",
+        "benefit2": "Vergleichen Sie Preise von mehreren Anbietern sofort",
+        "benefit3": "Sehen Sie Anbieter-Bewertungen und Cashback-Optionen",
+        "benefit4": "Völlig kostenloser Suchservice",
+        "benefit5": "Direkte Links zu Anbieter-Websites für Buchungen",
+        "benefit6": "Keine versteckten Gebühren oder Provisionen"
       }
     },
     "transfer": {
@@ -659,29 +675,37 @@
     "faq": {
       "title": "Häufig gestellte Fragen",
       "helpTitle": "Brauchen Sie Hilfe? Wir sind hier, um zu helfen",
-      "helpDescription": "Finden Sie Antworten auf häufige Fragen zu unserem intelligenten Transfer-Assistenten-Service.",
-      "question1": "Wie buche ich einen Transfer?",
-      "answer1": "Erzählen Sie mir einfach die Details Ihrer Reise und ich finde die besten Transfer-Optionen. Dann können Sie direkt über die Website des Anbieters buchen.",
-      "question2": "Was ist im Preis enthalten?",
-      "answer2": "Der Preis beinhaltet den Transfer-Service, professionellen Fahrer und Fahrzeug. Zusätzliche Services wie Meet & Greet können je nach Anbieter enthalten sein.",
-      "question3": "Kann ich meine Buchung stornieren?",
-      "answer3": "Die meisten Anbieter bieten kostenlose Stornierung bis 24 Stunden vor Ihrem Transfer. Überprüfen Sie die spezifische Stornierungsrichtlinie für jede Option.",
+      "helpDescription": "Finden Sie Antworten auf häufige Fragen zu unserem Transfer-Suchservice.",
+      "question1": "Wie funktioniert Ihr Service?",
+      "answer1": "Wir suchen die günstigsten Transfer-Anbieter auf der Route Wien - Flughafen Wien, zeigen ihre Bewertungen und Cashback-Optionen. Dann buchen Sie direkt auf der Website des Anbieters.",
+      "question2": "Bieten Sie Transfer-Services an?",
+      "answer2": "Nein, wir bieten keine Transfers oder Fahrer an. Wir helfen nur dabei, Transfer-Optionen von anderen Anbietern zu finden und zu vergleichen.",
+      "question3": "Kann ich über Ihre Plattform buchen?",
+      "answer3": "Nein, Sie können nicht über uns buchen. Wir leiten Sie nur zur Website des Anbieters weiter, wo Sie Ihre Buchung vornehmen können.",
+      "question4": "Welche Routen decken Sie ab?",
+      "answer4": "Derzeit suchen wir nur Transfers zwischen Wien Stadt und Flughafen Wien (beide Richtungen).",
+      "question5": "Ist Ihr Service kostenlos?",
+      "answer5": "Ja, unser Suchservice ist völlig kostenlos. Wir erheben keine Gebühren für die Suche und den Vergleich von Transfer-Optionen.",
       "questions": [
         {
-          "question": "Wie buche ich einen Transfer?",
-          "answer": "Erzählen Sie mir einfach die Details Ihrer Reise und ich finde die besten Transfer-Optionen. Dann können Sie direkt über die Website des Anbieters buchen."
+          "question": "Wie funktioniert Ihr Service?",
+          "answer": "Wir suchen die günstigsten Transfer-Anbieter auf der Route Wien - Flughafen Wien, zeigen ihre Bewertungen und Cashback-Optionen. Dann buchen Sie direkt auf der Website des Anbieters."
         },
         {
-          "question": "Was ist im Preis enthalten?",
-          "answer": "Der Preis beinhaltet den Transfer-Service, professionellen Fahrer und Fahrzeug. Zusätzliche Services wie Meet & Greet können je nach Anbieter enthalten sein."
+          "question": "Bieten Sie Transfer-Services an?",
+          "answer": "Nein, wir bieten keine Transfers oder Fahrer an. Wir helfen nur dabei, Transfer-Optionen von anderen Anbietern zu finden und zu vergleichen."
         },
         {
-          "question": "Kann ich meine Buchung stornieren?",
-          "answer": "Die meisten Anbieter bieten kostenlose Stornierung bis 24 Stunden vor Ihrem Transfer. Überprüfen Sie die spezifische Stornierungsrichtlinie für jede Option."
+          "question": "Kann ich über Ihre Plattform buchen?",
+          "answer": "Nein, Sie können nicht über uns buchen. Wir leiten Sie nur zur Website des Anbieters weiter, wo Sie Ihre Buchung vornehmen können."
         },
         {
-          "question": "Wie erhalte ich Cashback?",
-          "answer": "Einige Anbieter bieten Cashback bei Buchung über unsere Plattform. Suchen Sie nach dem für jede Option angezeigten Cashback-Prozentsatz."
+          "question": "Welche Routen decken Sie ab?",
+          "answer": "Derzeit suchen wir nur Transfers zwischen Wien Stadt und Flughafen Wien (beide Richtungen)."
+        },
+        {
+          "question": "Ist Ihr Service kostenlos?",
+          "answer": "Ja, unser Suchservice ist völlig kostenlos. Wir erheben keine Gebühren für die Suche und den Vergleich von Transfer-Optionen."
         }
       ]
     }
@@ -716,8 +740,8 @@
       "budget": "Budget"
     },
     "landing": {
-      "title": "Transfer Privato Vienna: Vienna → Aeroporto di Vienna",
-      "subtitle": "Miglior servizio di transfer privato a Vienna - Confronta i prezzi istantaneamente da tutti i fornitori e prenota il tuo viaggio in minuti!",
+      "title": "Tutte le opzioni di transfer privato da Vienna all'aeroporto di Vienna e ritorno",
+      "subtitle": "Troveremo i fornitori più economici sulla rotta, le loro valutazioni e se hanno cashback o coupon. In 15 minuti. Assolutamente gratuito.",
       "searchPlaceholder": "Raccontami delle tue esigenze di transfer...",
       "noResults": "Nessuna opzione di transfer trovata",
       "noResultsDescription": "Prova ad aggiustare i tuoi criteri di ricerca o contattaci per assistenza."
@@ -839,8 +863,8 @@
       "budget": "预算"
     },
     "landing": {
-      "title": "维也纳私人接送：维也纳 → 维也纳机场",
-      "subtitle": "维也纳最佳私人接送服务 - 即时比较所有供应商的价格，几分钟内预订您的行程！",
+      "title": "维也纳到维也纳机场及返程的所有私人接送选择",
+      "subtitle": "我们将找到路线上最便宜的供应商，他们的评分以及是否有返现或优惠券。15分钟内。完全免费。",
       "searchPlaceholder": "告诉我您的接送需求...",
       "noResults": "未找到接送选项",
       "noResultsDescription": "请尝试调整您的搜索条件或联系我们寻求帮助。"
