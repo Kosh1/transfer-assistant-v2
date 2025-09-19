@@ -118,6 +118,43 @@
       "transferService": "Transfer Service",
       "privacy": "Privacy Policy"
     },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: December 2024",
+      "section1": {
+        "title": "1. Information We Collect",
+        "content": "We collect information you provide directly to us, such as when you use our transfer search service. This may include your search queries, travel preferences, and any information you choose to share with our AI assistant."
+      },
+      "section2": {
+        "title": "2. How We Use Your Information",
+        "content": "We use the information we collect to provide, maintain, and improve our transfer search service, including comparing prices from different providers and presenting you with the best transfer options for your needs."
+      },
+      "section3": {
+        "title": "3. Information Sharing",
+        "content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy. We may share information with transfer providers only when you choose to book through their services."
+      },
+      "section4": {
+        "title": "4. Data Security",
+        "content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure."
+      },
+      "section5": {
+        "title": "5. Cookies and Tracking",
+        "content": "We use cookies and similar technologies to enhance your experience on our website, remember your preferences, and analyze how our service is used. You can control cookie settings through your browser preferences."
+      },
+      "section6": {
+        "title": "6. Third-Party Services",
+        "content": "Our service may contain links to third-party transfer providers. We are not responsible for the privacy practices of these external sites. We encourage you to review their privacy policies before providing any personal information."
+      },
+      "section7": {
+        "title": "7. Your Rights",
+        "content": "You have the right to access, update, or delete your personal information. You may also opt out of certain communications from us. To exercise these rights, please contact us using the information provided below."
+      },
+      "section8": {
+        "title": "8. Changes to This Policy",
+        "content": "We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the 'Last updated' date."
+      },
+      "contact": "If you have any questions about this Privacy Policy, please contact us at privacy@transfer-assistant.com"
+    },
     "faq": {
       "title": "Frequently Asked Questions",
       "helpTitle": "Need Help? We're Here to Assist",
@@ -274,6 +311,43 @@
       "home": "Главная",
       "transferService": "Сервис трансферов",
       "privacy": "Политика конфиденциальности"
+    },
+    "privacy": {
+      "title": "Политика конфиденциальности",
+      "lastUpdated": "Последнее обновление: декабрь 2024",
+      "section1": {
+        "title": "1. Информация, которую мы собираем",
+        "content": "Мы собираем информацию, которую вы предоставляете нам напрямую, например, когда вы используете наш сервис поиска трансферов. Это может включать ваши поисковые запросы, предпочтения в путешествиях и любую информацию, которую вы решите поделиться с нашим ИИ-помощником."
+      },
+      "section2": {
+        "title": "2. Как мы используем вашу информацию",
+        "content": "Мы используем собранную информацию для предоставления, поддержания и улучшения нашего сервиса поиска трансферов, включая сравнение цен от разных поставщиков и представление вам лучших вариантов трансфера для ваших нужд."
+      },
+      "section3": {
+        "title": "3. Обмен информацией",
+        "content": "Мы не продаем, не обмениваем и не передаем вашу личную информацию третьим лицам без вашего согласия, за исключением случаев, описанных в данной политике. Мы можем делиться информацией с поставщиками трансферов только тогда, когда вы решите забронировать через их сервисы."
+      },
+      "section4": {
+        "title": "4. Безопасность данных",
+        "content": "Мы применяем соответствующие меры безопасности для защиты вашей личной информации от несанкционированного доступа, изменения, раскрытия или уничтожения. Однако ни один метод передачи через интернет не является на 100% безопасным."
+      },
+      "section5": {
+        "title": "5. Файлы cookie и отслеживание",
+        "content": "Мы используем файлы cookie и аналогичные технологии для улучшения вашего опыта на нашем веб-сайте, запоминания ваших предпочтений и анализа того, как используется наш сервис. Вы можете контролировать настройки файлов cookie через настройки вашего браузера."
+      },
+      "section6": {
+        "title": "6. Сторонние сервисы",
+        "content": "Наш сервис может содержать ссылки на сторонних поставщиков трансферов. Мы не несем ответственности за практики конфиденциальности этих внешних сайтов. Мы рекомендуем вам ознакомиться с их политиками конфиденциальности перед предоставлением любой личной информации."
+      },
+      "section7": {
+        "title": "7. Ваши права",
+        "content": "Вы имеете право на доступ, обновление или удаление вашей личной информации. Вы также можете отказаться от определенных сообщений от нас. Чтобы воспользоваться этими правами, пожалуйста, свяжитесь с нами, используя информацию, указанную ниже."
+      },
+      "section8": {
+        "title": "8. Изменения в данной политике",
+        "content": "Мы можем обновлять данную политику конфиденциальности время от времени. Мы уведомим вас о любых изменениях, разместив новую политику на этой странице и обновив дату 'Последнего обновления'."
+      },
+      "contact": "Если у вас есть вопросы об этой Политике конфиденциальности, пожалуйста, свяжитесь с нами по адресу privacy@transfer-assistant.com"
     },
     "faq": {
       "title": "Часто задаваемые вопросы",
@@ -671,6 +745,43 @@
       "home": "Startseite",
       "transferService": "Transfer-Service",
       "privacy": "Datenschutzrichtlinie"
+    },
+    "privacy": {
+      "title": "Datenschutzrichtlinie",
+      "lastUpdated": "Zuletzt aktualisiert: Dezember 2024",
+      "section1": {
+        "title": "1. Informationen, die wir sammeln",
+        "content": "Wir sammeln Informationen, die Sie uns direkt zur Verfügung stellen, z.B. wenn Sie unseren Transfer-Suchservice nutzen. Dies kann Ihre Suchanfragen, Reisevorlieben und alle Informationen umfassen, die Sie mit unserem KI-Assistenten teilen möchten."
+      },
+      "section2": {
+        "title": "2. Wie wir Ihre Informationen verwenden",
+        "content": "Wir verwenden die gesammelten Informationen, um unseren Transfer-Suchservice zu bieten, zu warten und zu verbessern, einschließlich des Vergleichs von Preisen verschiedener Anbieter und der Präsentation der besten Transferoptionen für Ihre Bedürfnisse."
+      },
+      "section3": {
+        "title": "3. Informationsaustausch",
+        "content": "Wir verkaufen, handeln oder übertragen Ihre persönlichen Informationen nicht ohne Ihre Zustimmung an Dritte, außer wie in dieser Richtlinie beschrieben. Wir können Informationen nur dann mit Transferanbietern teilen, wenn Sie sich entscheiden, über ihre Dienste zu buchen."
+      },
+      "section4": {
+        "title": "4. Datensicherheit",
+        "content": "Wir implementieren angemessene Sicherheitsmaßnahmen zum Schutz Ihrer persönlichen Informationen vor unbefugtem Zugriff, Änderung, Offenlegung oder Zerstörung. Jedoch ist keine Übertragungsmethode über das Internet zu 100% sicher."
+      },
+      "section5": {
+        "title": "5. Cookies und Tracking",
+        "content": "Wir verwenden Cookies und ähnliche Technologien, um Ihre Erfahrung auf unserer Website zu verbessern, Ihre Präferenzen zu speichern und zu analysieren, wie unser Service genutzt wird. Sie können Cookie-Einstellungen über Ihre Browser-Präferenzen kontrollieren."
+      },
+      "section6": {
+        "title": "6. Drittanbieter-Services",
+        "content": "Unser Service kann Links zu Drittanbieter-Transferanbietern enthalten. Wir sind nicht verantwortlich für die Datenschutzpraktiken dieser externen Websites. Wir empfehlen Ihnen, ihre Datenschutzrichtlinien zu überprüfen, bevor Sie persönliche Informationen bereitstellen."
+      },
+      "section7": {
+        "title": "7. Ihre Rechte",
+        "content": "Sie haben das Recht, auf Ihre persönlichen Informationen zuzugreifen, sie zu aktualisieren oder zu löschen. Sie können sich auch von bestimmten Kommunikationen von uns abmelden. Um diese Rechte auszuüben, kontaktieren Sie uns bitte mit den unten angegebenen Informationen."
+      },
+      "section8": {
+        "title": "8. Änderungen an dieser Richtlinie",
+        "content": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wir werden Sie über Änderungen informieren, indem wir die neue Richtlinie auf dieser Seite veröffentlichen und das Datum der 'Zuletzt aktualisiert' aktualisieren."
+      },
+      "contact": "Wenn Sie Fragen zu dieser Datenschutzrichtlinie haben, kontaktieren Sie uns bitte unter privacy@transfer-assistant.com"
     },
     "faq": {
       "title": "Häufig gestellte Fragen",
