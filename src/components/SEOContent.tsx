@@ -175,13 +175,13 @@ const SEOContent: React.FC = () => {
         </motion.section>
 
         {/* Benefits Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          sx={{ mt: 12 }}
-        >
+        <Box sx={{ mt: 12 }}>
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
           <Typography
             variant="h2"
             component="h2"
@@ -234,16 +234,17 @@ const SEOContent: React.FC = () => {
               </Grid>
             ))}
           </Grid>
-        </motion.section>
+          </motion.section>
+        </Box>
 
         {/* Transfer Types Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          sx={{ mt: 12 }}
-        >
+        <Box sx={{ mt: 12 }}>
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
           <Typography
             variant="h2"
             component="h2"
@@ -314,16 +315,17 @@ const SEOContent: React.FC = () => {
               </Grid>
             ))}
           </Grid>
-        </motion.section>
+          </motion.section>
+        </Box>
 
         {/* SEO Content Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-          sx={{ mt: 12 }}
-        >
+        <Box sx={{ mt: 12 }}>
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
           <Typography
             variant="h2"
             component="h2"
@@ -369,13 +371,14 @@ const SEOContent: React.FC = () => {
                 transfer option for your Vienna airport journey.
               </Typography>
               <Typography variant="body1" paragraph color="text.secondary">
-                Whether you're arriving for business or leisure, our Vienna airport transfer service 
+                Whether you&apos;re arriving for business or leisure, our Vienna airport transfer service 
                 ensures you reach your destination safely and on time. Book your Vienna airport transfer 
-                with confidence and enjoy a stress-free arrival in Austria's beautiful capital.
+                with confidence and enjoy a stress-free arrival in Austria&apos;s beautiful capital.
               </Typography>
             </Grid>
           </Grid>
-        </motion.section>
+          </motion.section>
+        </Box>
       </Container>
     </Box>
   );
