@@ -214,10 +214,13 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       </Box>
                     </Box>
 
-                    {/* Rating */}
-                    {option.rating && (
-                      <Box sx={{ mb: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {/* Rating Section */}
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1, color: 'text.primary' }}>
+                        ⭐ Rating
+                      </Typography>
+                      {option.rating ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                           <Star sx={{ fontSize: 16, color: 'warning.main' }} />
                           <Chip 
                             label={`${option.rating.score}/5`} 
@@ -231,31 +234,52 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             </Typography>
                           )}
                         </Box>
-                      </Box>
-                    )}
+                      ) : (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                          Rating not found
+                        </Typography>
+                      )}
+                    </Box>
 
-                    {/* Features */}
-                    {option.cashback && (
-                      <Box sx={{ mb: 2 }}>
-                        <Chip 
-                          label={`Cashback: ${option.cashback.percentage}%`} 
-                          size="small" 
-                          color="success" 
-                          variant="outlined"
-                        />
-                      </Box>
-                    )}
+                    {/* Cashback & Coupons Section */}
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1, color: 'text.primary' }}>
+                        💰 Offers
+                      </Typography>
+                      
+                      {/* Cashback */}
+                      {option.cashback ? (
+                        <Box sx={{ mb: 1 }}>
+                          <Chip 
+                            label={`Cashback: ${option.cashback.percentage}%`} 
+                            size="small" 
+                            color="success" 
+                            variant="outlined"
+                            sx={{ mr: 1 }}
+                          />
+                        </Box>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
+                          No cashback available
+                        </Typography>
+                      )}
 
-                    {option.coupons && option.coupons.length > 0 && (
-                      <Box sx={{ mb: 2 }}>
-                        <Chip 
-                          label={`Coupons: ${option.coupons.length} available`} 
-                          size="small" 
-                          color="info" 
-                          variant="outlined"
-                        />
-                      </Box>
-                    )}
+                      {/* Coupons */}
+                      {option.coupons && option.coupons.length > 0 ? (
+                        <Box sx={{ mb: 1 }}>
+                          <Chip 
+                            label={`Coupons: ${option.coupons.length} available`} 
+                            size="small" 
+                            color="info" 
+                            variant="outlined"
+                          />
+                        </Box>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                          No coupons available
+                        </Typography>
+                      )}
+                    </Box>
 
                     <Divider sx={{ my: 2 }} />
 

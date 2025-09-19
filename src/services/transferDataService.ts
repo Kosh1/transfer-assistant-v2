@@ -3,6 +3,7 @@
 
 import { TransferData } from '../types';
 import googleSearchService from './googleSearchService';
+import { TRANSFER_DATA_PROMPTS, replaceTimePlaceholders } from '../prompts/transferPrompts';
 
 interface CurrentData {
   from: string | null;
@@ -21,40 +22,6 @@ interface LLMResponse {
   needsClarification: boolean;
 }
 
-// Transfer prompts - simplified version
-const TRANSFER_PROMPTS = {
-  COLLECT_TRANSFER_DATA: `You are a helpful transfer assistant for Vienna. Your job is to collect transfer booking information from users.
-
-Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
-
-You MUST collect the following information:
-- from: departure location (must be in Vienna or nearby)
-- to: destination location (must be in Vienna or nearby)
-- passengers: number of passengers (1-8)
-- luggage: number of luggage pieces (0-10)
-- date: travel date (YYYY-MM-DD format)
-- time: travel time (HH:MM format)
-
-IMPORTANT: You MUST extract data from the user's message and call the extract_transfer_data function.
-CRITICAL: You must ALWAYS call the extract_transfer_data function with the extracted data. Do not just respond with text.
-If you have enough information to make a booking, set status="complete".
-If information is missing, ask for clarification and set status="collecting".
-
-Always respond in the same language as the user's message.
-
-EXAMPLES:
-User: "Првет послезавтра из Вены в Венский аэропорт 2 человека и 2 чемодана. В 17"
-You should extract:
-- from: "Vienna" (Вена)
-- to: "Vienna Airport" (Венский аэропорт)
-- passengers: 2
-- luggage: 2
-- date: "2024-09-20" (calculate after tomorrow from current date)
-- time: "17:00"
-- status: "complete"
-
-You must use the extract_transfer_data function to return the extracted data as JSON.`
-};
 
 class TransferDataService {
   private apiKey: string;
@@ -82,7 +49,7 @@ class TransferDataService {
       console.log('Processing user message:', message);
       
       // Replace placeholders in prompt
-      const prompt = this.replaceTimePlaceholders(TRANSFER_PROMPTS.COLLECT_TRANSFER_DATA);
+      const prompt = replaceTimePlaceholders(TRANSFER_DATA_PROMPTS.COLLECT_TRANSFER_DATA);
       
       // Prepare messages for LLM
       const messages = [
@@ -313,17 +280,6 @@ class TransferDataService {
     }
   }
 
-  private replaceTimePlaceholders(prompt: string): string {
-    const now = new Date();
-    const currentDate = now.toISOString().split('T')[0];
-    const currentTime = now.toTimeString().split(' ')[0];
-    const currentYear = now.getFullYear();
-
-    return prompt
-      .replace(/\{\{CURRENT_DATE\}\}/g, currentDate)
-      .replace(/\{\{CURRENT_TIME\}\}/g, currentTime)
-      .replace(/\{\{CURRENT_YEAR\}\}/g, currentYear.toString());
-  }
 
   getCurrentData(): CurrentData {
     return this.currentData;

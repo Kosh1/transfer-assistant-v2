@@ -1,32 +1,8 @@
 import { TransferData, TransferOption, TransferAnalysisResponse } from '../types';
 import googleSearchService from './googleSearchService';
 import taxiBookingService from './taxiBookingService';
+import { TRANSFER_ANALYSIS_PROMPTS, replaceTimePlaceholders } from '../prompts/transferPrompts';
 
-// Transfer prompts - simplified version
-const TRANSFER_PROMPTS = {
-  ANALYZE_INDIVIDUAL_OPTION: `You are a transfer analysis expert. Analyze each transfer option and provide detailed insights.
-
-Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
-
-For each transfer option, provide analysis in this format:
-
-**Vehicle**
-- Type and capacity
-- Comfort level assessment
-- Key features
-
-**Rating**
-- Trustpilot rating if available
-- TripAdvisor rating if available
-- Overall reputation assessment
-
-**Cashback & Coupons**
-- Available cashback offers
-- Discount coupons and promo codes
-- Special deals and conditions
-
-Be concise but informative. Focus on practical benefits for the customer.`
-};
 
 class TransferAnalysisService {
   private apiKey: string;
@@ -174,7 +150,7 @@ class TransferAnalysisService {
 
       // Generate LLM analysis for each unique supplier
       console.log('🤖 Generating LLM analysis for each unique supplier...');
-      const analysisPrompt = this.replaceTimePlaceholders(TRANSFER_PROMPTS.ANALYZE_INDIVIDUAL_OPTION);
+      const analysisPrompt = replaceTimePlaceholders(TRANSFER_ANALYSIS_PROMPTS.ANALYZE_INDIVIDUAL_OPTION);
       
       // Create language-specific prompts for supplier analysis
       const languagePrompts = {
@@ -467,8 +443,9 @@ Language-specific headers:
       // Format search results for LLM analysis
       const markdown = this.formatSupplierRatingsForLLM(supplierName, searchResults);
       
-      const prompt = `Проанализируй результаты поиска рейтингов для поставщика "${supplierName}" и найди информацию о рейтингах.
+      const prompt = replaceTimePlaceholders(TRANSFER_ANALYSIS_PROMPTS.ANALYZE_RATINGS_JSON) + `
 
+Результаты поиска для "${supplierName}":
 ${markdown}
 
 ВАЖНО: При анализе учитывай следующие критерии:
@@ -483,34 +460,7 @@ ${markdown}
 3. Источники рейтингов (Trustpilot, TripAdvisor, Google, Yelp и т.д.)
 4. URL-ы страниц с рейтингами
 
-Ответь в формате JSON:
-{
-  "found": true/false,
-  "ratings": [
-    {
-      "source": "Trustpilot",
-      "rating": 4.2,
-      "ratingCount": 150,
-      "url": "https://...",
-      "description": "Описание"
-    }
-  ],
-  "bestRating": {
-    "source": "Trustpilot",
-    "rating": 4.2,
-    "ratingCount": 150,
-    "url": "https://..."
-  },
-  "summary": "Краткое описание найденных рейтингов на русском языке"
-}
-
-Если рейтинги не найдены, верни:
-{
-  "found": false,
-  "ratings": [],
-  "bestRating": null,
-  "summary": "Рейтинг не найден"
-}`;
+Верни ТОЛЬКО JSON объект в указанном формате.`;
 
       const response = await this.makeLLMRequest([
         { role: 'user', content: prompt }
@@ -560,8 +510,9 @@ ${markdown}
       // Format search results for LLM analysis
       const markdown = this.formatSupplierCashbackForLLM(supplierName, searchResults);
       
-      const prompt = `Проанализируй результаты поиска кэшбека и купонов для поставщика "${supplierName}" и найди информацию о доступных предложениях.
+      const prompt = replaceTimePlaceholders(TRANSFER_ANALYSIS_PROMPTS.ANALYZE_CASHBACK_JSON) + `
 
+Результаты поиска для "${supplierName}":
 ${markdown}
 
 ВАЖНО: При анализе учитывай следующие критерии:
@@ -578,35 +529,7 @@ ${markdown}
 3. Условиях получения (для новых пользователей, постоянных клиентов и т.д.)
 4. URL-ы страниц с предложениями
 
-Ответь в формате JSON:
-{
-  "found": true/false,
-  "cashback": {
-    "available": true/false,
-    "percentage": "5%",
-    "conditions": "для новых пользователей",
-    "description": "Описание кэшбека"
-  },
-  "coupons": {
-    "available": true/false,
-    "discount": "Up to 40% Off",
-    "code": "PROMO10",
-    "conditions": "при заказе от 50€",
-    "url": "https://...",
-    "description": "Найдено 14 купонов с скидками до 40%",
-    "count": 14,
-    "source": "Groupon"
-  },
-  "summary": "Краткое описание найденных предложений на русском языке"
-}
-
-Если кэшбек и купоны не найдены, верни:
-{
-  "found": false,
-  "cashback": { "available": false, "description": "Кэшбек не найден" },
-  "coupons": { "available": false, "description": "Купоны не найдены" },
-  "summary": "Кэшбек и купоны не найдены"
-}
+Верни ТОЛЬКО JSON объект в указанном формате.
 
 ПОМНИ: Если в результатах поиска есть заголовок с "Up to X% Off" или "Coupon Codes" - это означает, что купоны НАЙДЕНЫ!`;
 
@@ -784,18 +707,6 @@ ${markdown}
     return markdown;
   }
 
-  // Replace time placeholders in prompts with current time
-  private replaceTimePlaceholders(prompt: string): string {
-    const now = new Date();
-    const currentDate = now.toISOString().split('T')[0]; // YYYY-MM-DD
-    const currentTime = now.toTimeString().split(' ')[0]; // HH:MM:SS
-    const currentYear = now.getFullYear().toString();
-    
-    return prompt
-      .replace(/\{\{CURRENT_DATE\}\}/g, currentDate)
-      .replace(/\{\{CURRENT_TIME\}\}/g, currentTime)
-      .replace(/\{\{CURRENT_YEAR\}\}/g, currentYear);
-  }
 
   // Real LLM API call
   private async makeLLMRequest(messages: Array<{ role: string; content: string }>): Promise<any> {
