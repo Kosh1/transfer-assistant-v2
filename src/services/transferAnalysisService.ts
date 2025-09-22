@@ -68,15 +68,31 @@ class TransferAnalysisService {
           this.getSupplierWebsite(supplierName)
         ]);
         
+        console.log(`📊 === DETAILED RAW DATA FOR ${supplierName} ===`);
+        console.log(`📊 Ratings search results:`, JSON.stringify(ratingsSearchResults, null, 2));
+        console.log(`📊 Cashback search results:`, JSON.stringify(cashbackSearchResults, null, 2));
+        console.log(`📊 Website data:`, JSON.stringify(websiteData, null, 2));
+        console.log(`📊 === END DETAILED RAW DATA FOR ${supplierName} ===`);
+        
         // Analyze ratings with LLM (combining all rating searches for this supplier)
         const ratingsAnalysis = await this.analyzeSupplierRatingsWithLLM(supplierName, ratingsSearchResults);
+        console.log(`📊 === RATINGS ANALYSIS FOR ${supplierName} ===`);
+        console.log(JSON.stringify(ratingsAnalysis, null, 2));
+        console.log(`📊 === END RATINGS ANALYSIS FOR ${supplierName} ===`);
         
         // Analyze cashback/coupons with LLM (combining all cashback searches for this supplier)
         const cashbackAnalysis = await this.analyzeSupplierCashbackWithLLM(supplierName, cashbackSearchResults);
+        console.log(`📊 === CASHBACK ANALYSIS FOR ${supplierName} ===`);
+        console.log(JSON.stringify(cashbackAnalysis, null, 2));
+        console.log(`📊 === END CASHBACK ANALYSIS FOR ${supplierName} ===`);
         
         // Generate consistent text descriptions for this supplier
         const ratingText = this.generateRatingText(ratingsAnalysis);
         const cashbackText = this.generateCashbackText(cashbackAnalysis);
+        
+        console.log(`📊 Generated texts for ${supplierName}:`);
+        console.log(`  - Rating text: ${ratingText}`);
+        console.log(`  - Cashback text: ${cashbackText}`);
         
         providerDataCache[supplierName] = {
           ratings: ratingsAnalysis,
@@ -99,6 +115,11 @@ class TransferAnalysisService {
         const websiteData = cachedData.website;
         const ratingText = cachedData.ratingText;
         const cashbackText = cachedData.cashbackText;
+        
+        console.log(`📊 Using cached data for ${option.supplierName}:`);
+        console.log(`  - Ratings found: ${ratingsData?.found || false}`);
+        console.log(`  - Cashback found: ${cashbackCouponData?.found || false}`);
+        console.log(`  - Website found: ${websiteData?.found || false}`);
         
         const processedOption: TransferOption = {
           rank: index + 1,
@@ -131,7 +152,7 @@ class TransferAnalysisService {
           analysis: `${ratingText}${cashbackText}`
         };
         
-        console.log(`  ✅ Processed: ${processedOption.provider} - €${processedOption.price.amount} - Rating: ${processedOption.rating || 'Not found'}`);
+        console.log(`  ✅ Processed: ${processedOption.provider} - €${processedOption.price.amount} - Rating: ${processedOption.rating || 'Not found'} - Cashback: ${processedOption.cashback || 'Not found'} - Coupons: ${processedOption.coupons || 'Not found'}`);
         return processedOption;
       }));
 
@@ -440,6 +461,20 @@ Language-specific headers:
     try {
       console.log(`🤖 Starting LLM analysis for ratings of: ${supplierName}`);
       
+      // Check if we have any search results
+      if (!searchResults || 
+          (!searchResults.trustpilot?.organic?.length && 
+           !searchResults.tripadvisor?.organic?.length && 
+           !searchResults.general?.organic?.length)) {
+        console.log(`⚠️ No search results available for ratings of: ${supplierName}`);
+        return {
+          found: false,
+          ratings: [],
+          bestRating: null,
+          summary: 'Рейтинг не найден - нет данных для анализа'
+        };
+      }
+      
       // Format search results for LLM analysis
       const markdown = this.formatSupplierRatingsForLLM(supplierName, searchResults);
       
@@ -506,6 +541,19 @@ ${markdown}
   private async analyzeSupplierCashbackWithLLM(supplierName: string, searchResults: any): Promise<any> {
     try {
       console.log(`🤖 Starting LLM analysis for cashback/coupons of: ${supplierName}`);
+      
+      // Check if we have any search results
+      if (!searchResults || 
+          (!searchResults.cashback?.organic?.length && 
+           !searchResults.coupon?.organic?.length)) {
+        console.log(`⚠️ No search results available for cashback/coupons of: ${supplierName}`);
+        return {
+          found: false,
+          cashback: { available: false, description: "Кэшбек не найден - нет данных для анализа" },
+          coupons: { available: false, description: "Купоны не найдены - нет данных для анализа" },
+          summary: "Кэшбек и купоны не найдены - нет данных для анализа"
+        };
+      }
       
       // Format search results for LLM analysis
       const markdown = this.formatSupplierCashbackForLLM(supplierName, searchResults);
@@ -628,48 +676,49 @@ ${markdown}
     
     let markdown = `# Результаты поиска рейтингов для ${supplierName}\n\n`;
     
-    if (searchResults.trustpilot) {
+    // Format Trustpilot results
+    if (searchResults.trustpilot && searchResults.trustpilot.organic) {
       markdown += `## Trustpilot\n`;
-      markdown += `- Найдено: ${searchResults.trustpilot.found}\n`;
-      if (searchResults.trustpilot.rating) {
-        markdown += `- Рейтинг: ${searchResults.trustpilot.rating}\n`;
-      }
-      if (searchResults.trustpilot.ratingCount) {
-        markdown += `- Количество отзывов: ${searchResults.trustpilot.ratingCount}\n`;
-      }
-      if (searchResults.trustpilot.url) {
-        markdown += `- URL: ${searchResults.trustpilot.url}\n`;
-      }
-      markdown += `\n`;
+      markdown += `- Найдено результатов: ${searchResults.trustpilot.organic.length}\n`;
+      searchResults.trustpilot.organic.slice(0, 3).forEach((result: any, index: number) => {
+        markdown += `### Результат ${index + 1}:\n`;
+        markdown += `- Заголовок: ${result.title}\n`;
+        markdown += `- URL: ${result.link}\n`;
+        markdown += `- Описание: ${result.snippet}\n`;
+        if (result.rating) markdown += `- Рейтинг: ${result.rating}\n`;
+        if (result.ratingCount) markdown += `- Количество отзывов: ${result.ratingCount}\n`;
+        markdown += `\n`;
+      });
     }
     
-    if (searchResults.tripadvisor) {
+    // Format TripAdvisor results
+    if (searchResults.tripadvisor && searchResults.tripadvisor.organic) {
       markdown += `## TripAdvisor\n`;
-      markdown += `- Найдено: ${searchResults.tripadvisor.found}\n`;
-      if (searchResults.tripadvisor.rating) {
-        markdown += `- Рейтинг: ${searchResults.tripadvisor.rating}\n`;
-      }
-      if (searchResults.tripadvisor.ratingCount) {
-        markdown += `- Количество отзывов: ${searchResults.tripadvisor.ratingCount}\n`;
-      }
-      if (searchResults.tripadvisor.url) {
-        markdown += `- URL: ${searchResults.tripadvisor.url}\n`;
-      }
-      markdown += `\n`;
+      markdown += `- Найдено результатов: ${searchResults.tripadvisor.organic.length}\n`;
+      searchResults.tripadvisor.organic.slice(0, 3).forEach((result: any, index: number) => {
+        markdown += `### Результат ${index + 1}:\n`;
+        markdown += `- Заголовок: ${result.title}\n`;
+        markdown += `- URL: ${result.link}\n`;
+        markdown += `- Описание: ${result.snippet}\n`;
+        if (result.rating) markdown += `- Рейтинг: ${result.rating}\n`;
+        if (result.ratingCount) markdown += `- Количество отзывов: ${result.ratingCount}\n`;
+        markdown += `\n`;
+      });
     }
     
-    if (searchResults.general) {
+    // Format general rating results
+    if (searchResults.general && searchResults.general.organic) {
       markdown += `## Общие рейтинги\n`;
-      markdown += `- Найдено: ${searchResults.general.found}\n`;
-      if (searchResults.general.rating) {
-        markdown += `- Рейтинг: ${searchResults.general.rating}\n`;
-      }
-      if (searchResults.general.ratingCount) {
-        markdown += `- Количество отзывов: ${searchResults.general.ratingCount}\n`;
-      }
-      if (searchResults.general.url) {
-        markdown += `- URL: ${searchResults.general.url}\n`;
-      }
+      markdown += `- Найдено результатов: ${searchResults.general.organic.length}\n`;
+      searchResults.general.organic.slice(0, 3).forEach((result: any, index: number) => {
+        markdown += `### Результат ${index + 1}:\n`;
+        markdown += `- Заголовок: ${result.title}\n`;
+        markdown += `- URL: ${result.link}\n`;
+        markdown += `- Описание: ${result.snippet}\n`;
+        if (result.rating) markdown += `- Рейтинг: ${result.rating}\n`;
+        if (result.ratingCount) markdown += `- Количество отзывов: ${result.ratingCount}\n`;
+        markdown += `\n`;
+      });
     }
     
     return markdown;
@@ -681,27 +730,34 @@ ${markdown}
     
     let markdown = `# Результаты поиска кэшбека и купонов для ${supplierName}\n\n`;
     
-    if (searchResults.cashback) {
+    // Format cashback results
+    if (searchResults.cashback && searchResults.cashback.organic) {
       markdown += `## Кэшбек\n`;
-      markdown += `- Найдено: ${searchResults.cashback.found}\n`;
-      if (searchResults.cashback.description) {
-        markdown += `- Описание: ${searchResults.cashback.description}\n`;
-      }
-      if (searchResults.cashback.url) {
-        markdown += `- URL: ${searchResults.cashback.url}\n`;
-      }
-      markdown += `\n`;
+      markdown += `- Найдено результатов: ${searchResults.cashback.organic.length}\n`;
+      searchResults.cashback.organic.slice(0, 3).forEach((result: any, index: number) => {
+        markdown += `### Результат ${index + 1}:\n`;
+        markdown += `- Заголовок: ${result.title}\n`;
+        markdown += `- URL: ${result.link}\n`;
+        markdown += `- Описание: ${result.snippet}\n`;
+        if (result.rating) markdown += `- Рейтинг: ${result.rating}\n`;
+        if (result.ratingCount) markdown += `- Количество отзывов: ${result.ratingCount}\n`;
+        markdown += `\n`;
+      });
     }
     
-    if (searchResults.coupon) {
+    // Format coupon results
+    if (searchResults.coupon && searchResults.coupon.organic) {
       markdown += `## Купоны\n`;
-      markdown += `- Найдено: ${searchResults.coupon.found}\n`;
-      if (searchResults.coupon.description) {
-        markdown += `- Описание: ${searchResults.coupon.description}\n`;
-      }
-      if (searchResults.coupon.url) {
-        markdown += `- URL: ${searchResults.coupon.url}\n`;
-      }
+      markdown += `- Найдено результатов: ${searchResults.coupon.organic.length}\n`;
+      searchResults.coupon.organic.slice(0, 3).forEach((result: any, index: number) => {
+        markdown += `### Результат ${index + 1}:\n`;
+        markdown += `- Заголовок: ${result.title}\n`;
+        markdown += `- URL: ${result.link}\n`;
+        markdown += `- Описание: ${result.snippet}\n`;
+        if (result.rating) markdown += `- Рейтинг: ${result.rating}\n`;
+        if (result.ratingCount) markdown += `- Количество отзывов: ${result.ratingCount}\n`;
+        markdown += `\n`;
+      });
     }
     
     return markdown;

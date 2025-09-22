@@ -29,13 +29,23 @@ class GoogleSearchService {
   private apiUrl: string;
 
   constructor() {
+    // Детальное логирование переменных окружения
+    console.log('🔍 === GOOGLE SEARCH SERVICE INITIALIZATION ===');
+    console.log('🔑 All env vars with GOOGLE:', Object.keys(process.env).filter(key => key.includes('GOOGLE')));
+    console.log('🔑 REACT_APP_GOOGLE_SEARCH_API_KEY value:', process.env.REACT_APP_GOOGLE_SEARCH_API_KEY);
+    console.log('🔑 NEXT_PUBLIC_GOOGLE_SEARCH_API_KEY value:', process.env.NEXT_PUBLIC_GOOGLE_SEARCH_API_KEY);
+    console.log('🔑 All env vars with REACT_APP:', Object.keys(process.env).filter(key => key.startsWith('REACT_APP_')));
+    console.log('🔑 All env vars with NEXT_PUBLIC:', Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_')));
+    
     this.apiKey = process.env.REACT_APP_GOOGLE_SEARCH_API_KEY || '';
     this.apiUrl = 'https://google.serper.dev/search';
     
     console.log('🔑 Google Search API Key exists:', !!this.apiKey);
     console.log('🔑 Google Search API Key length:', this.apiKey?.length);
     console.log('🔑 Google Search API Key starts with:', this.apiKey?.substring(0, 10));
+    console.log('🔑 Google Search API Key ends with:', this.apiKey?.substring(this.apiKey.length - 10));
     console.log('🌐 Google Search API URL:', this.apiUrl);
+    console.log('🔍 === END GOOGLE SEARCH SERVICE INITIALIZATION ===');
     
     if (!this.apiKey) {
       console.error('❌ Google Search API key not configured');
@@ -229,10 +239,21 @@ class GoogleSearchService {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ Google Search API Error Response:', errorText);
+      
+      // Handle specific error cases
+      if (response.status === 400 && errorText.includes('Not enough credits')) {
+        console.error('💳 Google Search API: Not enough credits. Please top up your account.');
+        return { organic: [] }; // Return empty results instead of throwing
+      }
+      
       throw new Error(`Google Search API error: ${response.statusText}`);
     }
 
-    return await response.json();
+    const responseData = await response.json();
+    console.log('📥 Google Search response data:', JSON.stringify(responseData, null, 2));
+    console.log('📊 Google Search organic results count:', responseData.organic?.length || 0);
+    
+    return responseData;
   }
 
   private parseSearchResults(searchResults: SearchResponse, address: string): {
