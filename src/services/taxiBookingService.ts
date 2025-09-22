@@ -208,12 +208,13 @@ class TaxiBookingService {
     const locationLower = location.toLowerCase().trim();
     
     const locationMap: Record<string, string> = {
-      // Major Airports
+      // Major Airports - MUST come before city matches to avoid conflicts
       'vienna airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
       'vienna international airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
       'schwechat airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
       'венский аэропорт': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
       'аэропорт вены': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'аэропорт': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ', // Generic airport reference
       
       // Handle Google Search results format
       'vienna airport, austria': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
@@ -234,9 +235,10 @@ class TaxiBookingService {
       'grenoble airport': 'ChIJf1xyMojaikcRwz1R6tX-knU',
       'gnb': 'ChIJf1xyMojaikcRwz1R6tX-knU',
       
-      // Major Cities
+      // Major Cities - Vienna city center (MUST come after airport matches)
       'vienna city center': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
       'vienna city': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'vienna': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0', // Vienna city center
       'вена': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
       'венна': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
       'wien': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
@@ -286,9 +288,10 @@ class TaxiBookingService {
       return locationMap[locationLower];
     }
     
-    // Try partial matches for Google Search results
+    // Try partial matches for Google Search results, but be more specific
     for (const [key, value] of Object.entries(locationMap)) {
-      if (locationLower.includes(key) || key.includes(locationLower)) {
+      // Only match if the location contains the key
+      if (locationLower.includes(key)) {
         return value;
       }
     }
