@@ -139,8 +139,10 @@ class TransferAnalysisService {
           rating: ratingsData?.bestRating ? {
             score: ratingsData.bestRating.score,
             count: ratingsData.bestRating.count,
-            source: ratingsData.bestRating.source
+            source: ratingsData.bestRating.source,
+            url: ratingsData.bestRating.url
           } : undefined,
+          allRatings: ratingsData?.ratings || undefined,
           cashback: cashbackCouponData?.cashback?.available ? {
             amount: cashbackCouponData.cashback.amount,
             currency: cashbackCouponData.cashback.currency,

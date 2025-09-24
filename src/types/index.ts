@@ -32,6 +32,12 @@ export interface TransferOption {
     source: string;
     url?: string; // URL источника рейтинга
   };
+  allRatings?: {
+    score: number;
+    count: number;
+    source: string;
+    url?: string;
+  }[]; // Все найденные рейтинги
   cashback?: {
     amount: number;
     currency: string;

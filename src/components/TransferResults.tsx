@@ -281,6 +281,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                           <Tooltip
                             title={
                               <Box sx={{ p: 1 }}>
+                                {/* Основной рейтинг */}
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                                   <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                                     {getRatingSourceInfo(option.rating.source).icon} {getRatingSourceInfo(option.rating.source).name}
@@ -309,6 +310,38 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                     }
                                   </Typography>
                                 )}
+                                
+                                {/* Дополнительные рейтинги */}
+                                {option.allRatings && option.allRatings.length > 1 && (
+                                  <>
+                                    <Divider sx={{ my: 1 }} />
+                                    <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
+                                      {userLanguage === 'ru' 
+                                        ? `Другие рейтинги (${option.allRatings.length - 1}):`
+                                        : `Other ratings (${option.allRatings.length - 1}):`
+                                      }
+                                    </Typography>
+                                    {option.allRatings
+                                      .filter(r => r.source !== option.rating?.source)
+                                      .map((rating, index) => (
+                                        <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                                          <Typography variant="caption" sx={{ minWidth: 60 }}>
+                                            {getRatingSourceInfo(rating.source).icon} {rating.source}:
+                                          </Typography>
+                                          <Typography variant="caption" sx={{ fontWeight: 500 }}>
+                                            {rating.score}/5
+                                          </Typography>
+                                          {rating.count && (
+                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                              ({rating.count})
+                                            </Typography>
+                                          )}
+                                        </Box>
+                                      ))
+                                    }
+                                  </>
+                                )}
+                                
                                 {option.rating.url ? (
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                                     <OpenInNew sx={{ fontSize: 12 }} />
@@ -344,7 +377,11 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             }}
                           >
                             <Chip 
-                              label={`${option.rating.score}/5`} 
+                              label={
+                                option.allRatings && option.allRatings.length > 1
+                                  ? `${option.rating.score}/5 +${option.allRatings.length - 1}`
+                                  : `${option.rating.score}/5`
+                              }
                               size="small" 
                               color={getRatingColor(option.rating.score.toString())}
                               variant="outlined"
