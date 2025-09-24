@@ -182,8 +182,22 @@ class GoogleSearchService {
     try {
       console.log('🔍 Searching cashback offers for:', supplierName);
       
-      // Use a general search query - let LLM find the relevant sources
-      const query = `${supplierName} cashback`;
+      // Try multiple search queries to find more cashback offers
+      const queries = [
+        `${supplierName} cashback`,
+        `${supplierName} cash back`,
+        `${supplierName} cashback offers`,
+        `${supplierName} cashback deals`,
+        `${supplierName} cashback rewards`,
+        `${supplierName} cashback program`,
+        `${supplierName} cashback site`,
+        `${supplierName} cashback platform`,
+        `${supplierName} cashback service`,
+        `${supplierName} cashback bonus`
+      ];
+      
+      // Use the first query for now, but we could combine results from multiple queries
+      const query = queries[0];
       const searchResults = await this.performSearch(query);
       
       return searchResults;
@@ -197,8 +211,22 @@ class GoogleSearchService {
     try {
       console.log('🔍 Searching coupon offers for:', supplierName);
       
-      // Use a general search query - let LLM find the relevant sources
-      const query = `${supplierName} coupon discount`;
+      // Try multiple search queries to find more coupon offers
+      const queries = [
+        `${supplierName} coupon discount`,
+        `${supplierName} promo code`,
+        `${supplierName} discount code`,
+        `${supplierName} voucher`,
+        `${supplierName} coupon code`,
+        `${supplierName} promo`,
+        `${supplierName} discount`,
+        `${supplierName} coupon`,
+        `${supplierName} voucher code`,
+        `${supplierName} special offer`
+      ];
+      
+      // Use the first query for now, but we could combine results from multiple queries
+      const query = queries[0];
       const searchResults = await this.performSearch(query);
       
       return searchResults;
