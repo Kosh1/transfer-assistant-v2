@@ -60,7 +60,7 @@ class TransferAnalysisService {
         summaryNotFound: '未找到返现和优惠券 - 无分析数据'
       }
     };
-    return texts[userLanguage] || texts['en'];
+    return texts[userLanguage as keyof typeof texts] || texts['en'];
   }
 
   // Search for transfer options and analyze results
