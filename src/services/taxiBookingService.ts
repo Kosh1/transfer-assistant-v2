@@ -150,14 +150,20 @@ class TaxiBookingService {
       const startTime = Date.now();
       console.log(`⏰ Starting backend API request at ${new Date().toISOString()}`);
 
-      // Make request to our backend server
+      // Make request to our backend server with timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
       const response = await fetch(`${this.apiUrl}?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': this.userAgent
-        }
+        },
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -201,6 +207,12 @@ class TaxiBookingService {
     } catch (error) {
       console.error('Search API error:', error);
       console.error('Search API error stack:', error instanceof Error ? error.stack : 'No stack trace');
+      
+      // Handle timeout specifically
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout: The transfer search took too long. Please try again.');
+      }
+      
       throw new Error(`Failed to search transfers: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -403,8 +415,8 @@ class TaxiBookingService {
       
       console.log(`📊 Found ${transferOptions.length} transfer options from Booking.com`);
       
-      // Transform Booking.com data to our format with async car descriptions
-      const transformedOptions: TransferOption[] = await Promise.all(transferOptions.map(async (option, index) => {
+      // Transform Booking.com data to our format (without LLM descriptions for speed)
+      const transformedOptions: TransferOption[] = transferOptions.map((option, index) => {
         // Extract car details - try multiple possible fields
         const carDetails = option.carDetails || {};
         let description = carDetails.description || option.description || option.vehicleType || option.carType || 'Standard Vehicle';
@@ -413,16 +425,10 @@ class TaxiBookingService {
         // Extract car example (actual model name)
         const carExample = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || 'Standard Model';
         
-        // Generate car description using LLM
+        // Generate simple car description based on model name (fast, no LLM call)
         let carDescription = 'Standard Vehicle';
-        try {
-          if (carExample && carExample !== 'Standard Model') {
-            carDescription = await llmService.generateCarDescription(carExample, userLanguage);
-            console.log(`🚗 Generated car description for ${carExample}: ${carDescription}`);
-          }
-        } catch (error) {
-          console.error(`❌ Failed to generate car description for ${carExample}:`, error);
-          carDescription = 'Standard Vehicle';
+        if (carExample && carExample !== 'Standard Model') {
+          carDescription = this.generateSimpleCarDescription(carExample, userLanguage);
         }
         
         // If we have a vehicle type, use it as description
@@ -477,7 +483,7 @@ class TaxiBookingService {
           vehicleCategory: vehicleCategory,
           selfLink: option.link || option.bookingLink || option.bookingUrl || `https://example.com/book/${option.supplierID || index}`
         };
-      }));
+      });
       
       console.log('✅ Transformed Booking.com data:', transformedOptions.length, 'options');
       console.log('💰 Price range:', Math.min(...transformedOptions.map(o => o.price)), '-', Math.max(...transformedOptions.map(o => o.price)), 'EUR');
@@ -653,6 +659,46 @@ class TaxiBookingService {
     };
     
     return languageMap[userLanguage] || 'en-gb';
+  }
+
+  // Generate simple car description without LLM (fast)
+  private generateSimpleCarDescription(carModel: string, userLanguage: string): string {
+    const model = carModel.toLowerCase();
+    
+    // Simple pattern matching for common car types
+    if (model.includes('bmw') || model.includes('mercedes') || model.includes('audi') || model.includes('lexus')) {
+      return userLanguage === 'ru' ? 'премиум седан' : 
+             userLanguage === 'de' ? 'Premium Limousine' :
+             userLanguage === 'fr' ? 'berline premium' :
+             'premium sedan';
+    }
+    
+    if (model.includes('minivan') || model.includes('v-class') || model.includes('sprinter')) {
+      return userLanguage === 'ru' ? 'большой минивен' :
+             userLanguage === 'de' ? 'großer Minivan' :
+             userLanguage === 'fr' ? 'grand monospace' :
+             'large minivan';
+    }
+    
+    if (model.includes('passat') || model.includes('octavia') || model.includes('golf')) {
+      return userLanguage === 'ru' ? 'семейный седан' :
+             userLanguage === 'de' ? 'Familienlimousine' :
+             userLanguage === 'fr' ? 'berline familiale' :
+             'family sedan';
+    }
+    
+    if (model.includes('taxi') || model.includes('standard')) {
+      return userLanguage === 'ru' ? 'обычная легковая' :
+             userLanguage === 'de' ? 'Standard-Fahrzeug' :
+             userLanguage === 'fr' ? 'véhicule standard' :
+             'standard vehicle';
+    }
+    
+    // Default fallback
+    return userLanguage === 'ru' ? 'легковая машина' :
+           userLanguage === 'de' ? 'Pkw' :
+           userLanguage === 'fr' ? 'voiture' :
+           'car';
   }
 
   // Format date and time for API in ISO format
