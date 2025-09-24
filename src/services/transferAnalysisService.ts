@@ -148,7 +148,19 @@ class TransferAnalysisService {
             currency: cashbackCouponData.cashback.currency,
             percentage: cashbackCouponData.cashback.percentage
           } : undefined,
+          allCashback: cashbackCouponData?.cashback?.available ? [{
+            amount: cashbackCouponData.cashback.amount,
+            currency: cashbackCouponData.cashback.currency,
+            percentage: cashbackCouponData.cashback.percentage,
+            description: cashbackCouponData.cashback.description
+          }] : undefined,
           coupons: cashbackCouponData?.coupons?.codes || undefined,
+          allCoupons: cashbackCouponData?.coupons?.codes ? cashbackCouponData.coupons.codes.map((code: string) => ({
+            code: code,
+            discount: cashbackCouponData.coupons.discount || 'Скидка',
+            description: cashbackCouponData.coupons.description,
+            conditions: cashbackCouponData.coupons.conditions
+          })) : undefined,
           website: websiteData?.websiteUrl || null,
           bookingUrl: (option as any).bookingUrl || '#',
           analysis: `${ratingText}${cashbackText}`

@@ -43,7 +43,19 @@ export interface TransferOption {
     currency: string;
     percentage: number;
   };
+  allCashback?: {
+    amount: number;
+    currency: string;
+    percentage: number;
+    description?: string;
+  }[]; // Все найденные кэшбек предложения
   coupons?: string[];
+  allCoupons?: {
+    code: string;
+    discount: string;
+    description?: string;
+    conditions?: string;
+  }[]; // Все найденные купоны с деталями
   website?: string;
   bookingUrl: string;
   analysis?: string;

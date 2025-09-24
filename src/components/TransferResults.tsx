@@ -419,33 +419,128 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       {/* Cashback */}
                       {option.cashback ? (
                         <Box sx={{ mb: 1 }}>
-                          <Chip 
-                            label={`Cashback: ${option.cashback.percentage}%`} 
-                            size="small" 
-                            color="success" 
-                            variant="outlined"
-                            sx={{ mr: 1 }}
-                          />
+                          <Tooltip
+                            title={
+                              <Box sx={{ p: 1 }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                  💰 {userLanguage === 'ru' ? 'Кэшбек предложения' : 'Cashback Offers'}
+                                </Typography>
+                                {option.allCashback && option.allCashback.length > 0 ? (
+                                  option.allCashback.map((cashback, index) => (
+                                    <Box key={index} sx={{ mb: 1 }}>
+                                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                        {cashback.percentage}% {userLanguage === 'ru' ? 'кэшбек' : 'cashback'}
+                                      </Typography>
+                                      {cashback.description && (
+                                        <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+                                          {cashback.description}
+                                        </Typography>
+                                      )}
+                                    </Box>
+                                  ))
+                                ) : (
+                                  <Typography variant="body2">
+                                    {option.cashback.percentage}% {userLanguage === 'ru' ? 'кэшбек' : 'cashback'}
+                                  </Typography>
+                                )}
+                              </Box>
+                            }
+                            arrow
+                            placement="top"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  maxWidth: 300,
+                                  bgcolor: 'grey.900',
+                                  '& .MuiTooltip-arrow': {
+                                    color: 'grey.900',
+                                  },
+                                },
+                              },
+                            }}
+                          >
+                            <Chip 
+                              label={
+                                option.allCashback && option.allCashback.length > 1
+                                  ? `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage}% +${option.allCashback.length - 1}`
+                                  : `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage}%`
+                              }
+                              size="small" 
+                              color="success" 
+                              variant="outlined"
+                              sx={{ mr: 1 }}
+                            />
+                          </Tooltip>
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
-                          No cashback available
+                          {userLanguage === 'ru' ? 'Кэшбек недоступен' : 'No cashback available'}
                         </Typography>
                       )}
 
                       {/* Coupons */}
                       {option.coupons && option.coupons.length > 0 ? (
                         <Box sx={{ mb: 1 }}>
-                          <Chip 
-                            label={`Coupons: ${option.coupons.length} available`} 
-                            size="small" 
-                            color="info" 
-                            variant="outlined"
-                          />
+                          <Tooltip
+                            title={
+                              <Box sx={{ p: 1 }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                  🎫 {userLanguage === 'ru' ? 'Купоны и скидки' : 'Coupons & Discounts'}
+                                </Typography>
+                                {option.allCoupons && option.allCoupons.length > 0 ? (
+                                  option.allCoupons.map((coupon, index) => (
+                                    <Box key={index} sx={{ mb: 1 }}>
+                                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                        {coupon.code}: {coupon.discount}
+                                      </Typography>
+                                      {coupon.description && (
+                                        <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
+                                          {coupon.description}
+                                        </Typography>
+                                      )}
+                                      {coupon.conditions && (
+                                        <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontStyle: 'italic' }}>
+                                          {userLanguage === 'ru' ? 'Условия' : 'Conditions'}: {coupon.conditions}
+                                        </Typography>
+                                      )}
+                                    </Box>
+                                  ))
+                                ) : (
+                                  <Typography variant="body2">
+                                    {option.coupons.length} {userLanguage === 'ru' ? 'купонов доступно' : 'coupons available'}
+                                  </Typography>
+                                )}
+                              </Box>
+                            }
+                            arrow
+                            placement="top"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  maxWidth: 300,
+                                  bgcolor: 'grey.900',
+                                  '& .MuiTooltip-arrow': {
+                                    color: 'grey.900',
+                                  },
+                                },
+                              },
+                            }}
+                          >
+                            <Chip 
+                              label={
+                                option.allCoupons && option.allCoupons.length > 1
+                                  ? `${userLanguage === 'ru' ? 'Купоны' : 'Coupons'}: ${option.coupons.length} +${option.allCoupons.length - option.coupons.length}`
+                                  : `${userLanguage === 'ru' ? 'Купоны' : 'Coupons'}: ${option.coupons.length} ${userLanguage === 'ru' ? 'доступно' : 'available'}`
+                              }
+                              size="small" 
+                              color="info" 
+                              variant="outlined"
+                            />
+                          </Tooltip>
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                          No coupons available
+                          {userLanguage === 'ru' ? 'Купоны недоступны' : 'No coupons available'}
                         </Typography>
                       )}
                     </Box>
