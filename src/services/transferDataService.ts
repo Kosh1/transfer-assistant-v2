@@ -145,7 +145,41 @@ class TransferDataService {
         } else if (llmMessage.function_call.name === 'search_address_in_google') {
           const args = JSON.parse(llmMessage.function_call.arguments);
           const searchResult = await googleSearchService.searchAddress(args.address);
-          // Continue with the original message processing
+          
+          // Return validation result to user
+          if (!searchResult.isInVienna) {
+            return {
+              response: `I found that "${args.address}" is not in Vienna. We only provide transfers within Vienna and Vienna Airport. ${searchResult.clarification || 'Please provide a Vienna address or landmark.'}`,
+              extractedData: {
+                from: this.currentData.from || undefined,
+                to: this.currentData.to || undefined,
+                passengers: this.currentData.passengers || undefined,
+                luggage: this.currentData.luggage || undefined,
+                date: this.currentData.date || undefined,
+                time: this.currentData.time || undefined,
+                language: 'en',
+                isComplete: this.currentData.status === 'complete'
+              },
+              searchResults: null,
+              needsClarification: true
+            };
+          } else {
+            return {
+              response: `Great! I confirmed that "${args.address}" is in Vienna. Please provide the rest of your transfer details.`,
+              extractedData: {
+                from: this.currentData.from || undefined,
+                to: this.currentData.to || undefined,
+                passengers: this.currentData.passengers || undefined,
+                luggage: this.currentData.luggage || undefined,
+                date: this.currentData.date || undefined,
+                time: this.currentData.time || undefined,
+                language: 'en',
+                isComplete: this.currentData.status === 'complete'
+              },
+              searchResults: null,
+              needsClarification: true
+            };
+          }
         }
       } else {
         console.log('❌ No function call found in LLM response');
@@ -237,6 +271,43 @@ class TransferDataService {
   private async proceedToSearch(): Promise<LLMResponse> {
     try {
       console.log('🚀 All data collected, proceeding to search...');
+      
+      // Validate addresses before searching
+      console.log('🔍 Validating addresses before search...');
+      const fromValidation = await googleSearchService.searchAddress(this.currentData.from || '');
+      const toValidation = await googleSearchService.searchAddress(this.currentData.to || '');
+      
+      console.log('🔍 From address validation:', fromValidation);
+      console.log('🔍 To address validation:', toValidation);
+      
+      // Check if both addresses are in Vienna
+      if (!fromValidation.isInVienna || !toValidation.isInVienna) {
+        const invalidAddresses = [];
+        if (!fromValidation.isInVienna) {
+          invalidAddresses.push(`"${this.currentData.from}" (${fromValidation.clarification || 'not in Vienna'})`);
+        }
+        if (!toValidation.isInVienna) {
+          invalidAddresses.push(`"${this.currentData.to}" (${toValidation.clarification || 'not in Vienna'})`);
+        }
+        
+        return {
+          response: `I found that the following addresses are not in Vienna: ${invalidAddresses.join(', ')}. We only provide transfers within Vienna and Vienna Airport. Please provide Vienna addresses or landmarks for your transfer.`,
+          extractedData: {
+            from: this.currentData.from || undefined,
+            to: this.currentData.to || undefined,
+            passengers: this.currentData.passengers || undefined,
+            luggage: this.currentData.luggage || undefined,
+            date: this.currentData.date || undefined,
+            time: this.currentData.time || undefined,
+            language: 'en',
+            isComplete: false
+          },
+          searchResults: null,
+          needsClarification: true
+        };
+      }
+      
+      console.log('✅ Both addresses are in Vienna, proceeding to search...');
       
       // Import transfer analysis service
       const transferAnalysisService = await import('./transferAnalysisService');
