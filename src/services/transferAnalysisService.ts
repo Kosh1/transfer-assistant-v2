@@ -1,7 +1,7 @@
 import { TransferData, TransferOption, TransferAnalysisResponse } from '../types';
 import googleSearchService from './googleSearchService';
 import taxiBookingService from './taxiBookingService';
-import { TRANSFER_ANALYSIS_PROMPTS, replaceTimePlaceholders } from '../prompts/transferPrompts';
+import { TRANSFER_ANALYSIS_PROMPTS, replaceTimePlaceholders, getLanguageSpecificPrompts } from '../prompts/transferPrompts';
 
 
 class TransferAnalysisService {
@@ -13,6 +13,54 @@ class TransferAnalysisService {
     this.apiKey = process.env.REACT_APP_LLM_API_KEY || '';
     this.apiUrl = process.env.REACT_APP_LLM_API_URL || 'https://api.openai.com/v1/chat/completions';
     this.model = process.env.REACT_APP_LLM_MODEL || 'gpt-4o-mini';
+  }
+
+  private getNotFoundTexts(userLanguage: string) {
+    const texts = {
+      'en': {
+        ratingNotFound: 'Rating not found - no data for analysis',
+        cashbackNotFound: 'Cashback not found - no data for analysis',
+        couponsNotFound: 'Coupons not found - no data for analysis',
+        summaryNotFound: 'Cashback and coupons not found - no data for analysis'
+      },
+      'ru': {
+        ratingNotFound: 'Рейтинг не найден - нет данных для анализа',
+        cashbackNotFound: 'Кэшбек не найден - нет данных для анализа',
+        couponsNotFound: 'Купоны не найдены - нет данных для анализа',
+        summaryNotFound: 'Кэшбек и купоны не найдены - нет данных для анализа'
+      },
+      'fr': {
+        ratingNotFound: 'Note non trouvée - aucune donnée pour l\'analyse',
+        cashbackNotFound: 'Cashback non trouvé - aucune donnée pour l\'analyse',
+        couponsNotFound: 'Coupons non trouvés - aucune donnée pour l\'analyse',
+        summaryNotFound: 'Cashback et coupons non trouvés - aucune donnée pour l\'analyse'
+      },
+      'es': {
+        ratingNotFound: 'Calificación no encontrada - sin datos para análisis',
+        cashbackNotFound: 'Cashback no encontrado - sin datos para análisis',
+        couponsNotFound: 'Cupones no encontrados - sin datos para análisis',
+        summaryNotFound: 'Cashback y cupones no encontrados - sin datos para análisis'
+      },
+      'de': {
+        ratingNotFound: 'Bewertung nicht gefunden - keine Daten für Analyse',
+        cashbackNotFound: 'Cashback nicht gefunden - keine Daten für Analyse',
+        couponsNotFound: 'Gutscheine nicht gefunden - keine Daten für Analyse',
+        summaryNotFound: 'Cashback und Gutscheine nicht gefunden - keine Daten für Analyse'
+      },
+      'it': {
+        ratingNotFound: 'Valutazione non trovata - nessun dato per l\'analisi',
+        cashbackNotFound: 'Cashback non trovato - nessun dato per l\'analisi',
+        couponsNotFound: 'Coupon non trovati - nessun dato per l\'analisi',
+        summaryNotFound: 'Cashback e coupon non trovati - nessun dato per l\'analisi'
+      },
+      'zh': {
+        ratingNotFound: '未找到评分 - 无分析数据',
+        cashbackNotFound: '未找到返现 - 无分析数据',
+        couponsNotFound: '未找到优惠券 - 无分析数据',
+        summaryNotFound: '未找到返现和优惠券 - 无分析数据'
+      }
+    };
+    return texts[userLanguage] || texts['en'];
   }
 
   // Search for transfer options and analyze results
@@ -75,13 +123,13 @@ class TransferAnalysisService {
         console.log(`📊 === END DETAILED RAW DATA FOR ${supplierName} ===`);
         
         // Analyze ratings with LLM (combining all rating searches for this supplier)
-        const ratingsAnalysis = await this.analyzeSupplierRatingsWithLLM(supplierName, ratingsSearchResults);
+        const ratingsAnalysis = await this.analyzeSupplierRatingsWithLLM(supplierName, ratingsSearchResults, userLanguage);
         console.log(`📊 === RATINGS ANALYSIS FOR ${supplierName} ===`);
         console.log(JSON.stringify(ratingsAnalysis, null, 2));
         console.log(`📊 === END RATINGS ANALYSIS FOR ${supplierName} ===`);
         
         // Analyze cashback/coupons with LLM (combining all cashback searches for this supplier)
-        const cashbackAnalysis = await this.analyzeSupplierCashbackWithLLM(supplierName, cashbackSearchResults);
+        const cashbackAnalysis = await this.analyzeSupplierCashbackWithLLM(supplierName, cashbackSearchResults, userLanguage);
         console.log(`📊 === CASHBACK ANALYSIS FOR ${supplierName} ===`);
         console.log(JSON.stringify(cashbackAnalysis, null, 2));
         console.log(`📊 === END CASHBACK ANALYSIS FOR ${supplierName} ===`);
@@ -471,7 +519,7 @@ Language-specific headers:
   }
 
   // Analyze ratings for one supplier with LLM
-  private async analyzeSupplierRatingsWithLLM(supplierName: string, searchResults: any): Promise<any> {
+  private async analyzeSupplierRatingsWithLLM(supplierName: string, searchResults: any, userLanguage: string = 'en'): Promise<any> {
     try {
       console.log(`🤖 Starting LLM analysis for ratings of: ${supplierName}`);
       
@@ -481,18 +529,20 @@ Language-specific headers:
            !searchResults.tripadvisor?.organic?.length && 
            !searchResults.general?.organic?.length)) {
         console.log(`⚠️ No search results available for ratings of: ${supplierName}`);
+        const notFoundTexts = this.getNotFoundTexts(userLanguage);
         return {
           found: false,
           ratings: [],
           bestRating: null,
-          summary: 'Рейтинг не найден - нет данных для анализа'
+          summary: notFoundTexts.ratingNotFound
         };
       }
       
       // Format search results for LLM analysis
       const markdown = this.formatSupplierRatingsForLLM(supplierName, searchResults);
       
-      const prompt = replaceTimePlaceholders(TRANSFER_ANALYSIS_PROMPTS.ANALYZE_RATINGS_JSON) + `
+      const languagePrompts = getLanguageSpecificPrompts(userLanguage);
+      const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_RATINGS_JSON) + `
 
 Результаты поиска для "${supplierName}":
 ${markdown}
@@ -532,27 +582,29 @@ ${markdown}
         
       } catch (parseError) {
         console.error(`❌ Error parsing LLM ratings response for ${supplierName}:`, parseError);
-      return {
+        const notFoundTexts = this.getNotFoundTexts(userLanguage);
+        return {
           found: false,
-        ratings: [],
+          ratings: [],
           bestRating: null,
-          summary: 'Рейтинг не найден'
+          summary: notFoundTexts.ratingNotFound
         };
       }
       
     } catch (error) {
       console.error(`❌ Error analyzing ratings with LLM for ${supplierName}:`, error);
+      const notFoundTexts = this.getNotFoundTexts(userLanguage);
       return {
         found: false,
         ratings: [],
         bestRating: null,
-        summary: 'Рейтинг не найден'
+        summary: notFoundTexts.ratingNotFound
       };
     }
   }
 
   // Analyze cashback/coupons for one supplier with LLM
-  private async analyzeSupplierCashbackWithLLM(supplierName: string, searchResults: any): Promise<any> {
+  private async analyzeSupplierCashbackWithLLM(supplierName: string, searchResults: any, userLanguage: string = 'en'): Promise<any> {
     try {
       console.log(`🤖 Starting LLM analysis for cashback/coupons of: ${supplierName}`);
       
@@ -561,18 +613,20 @@ ${markdown}
           (!searchResults.cashback?.organic?.length && 
            !searchResults.coupon?.organic?.length)) {
         console.log(`⚠️ No search results available for cashback/coupons of: ${supplierName}`);
+        const notFoundTexts = this.getNotFoundTexts(userLanguage);
         return {
           found: false,
-          cashback: { available: false, description: "Кэшбек не найден - нет данных для анализа" },
-          coupons: { available: false, description: "Купоны не найдены - нет данных для анализа" },
-          summary: "Кэшбек и купоны не найдены - нет данных для анализа"
+          cashback: { available: false, description: notFoundTexts.cashbackNotFound },
+          coupons: { available: false, description: notFoundTexts.couponsNotFound },
+          summary: notFoundTexts.summaryNotFound
         };
       }
       
       // Format search results for LLM analysis
       const markdown = this.formatSupplierCashbackForLLM(supplierName, searchResults);
       
-      const prompt = replaceTimePlaceholders(TRANSFER_ANALYSIS_PROMPTS.ANALYZE_CASHBACK_JSON) + `
+      const languagePrompts = getLanguageSpecificPrompts(userLanguage);
+      const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_CASHBACK_JSON) + `
 
 Результаты поиска для "${supplierName}":
 ${markdown}
@@ -617,21 +671,23 @@ ${markdown}
         
       } catch (parseError) {
         console.error(`❌ Error parsing LLM cashback response for ${supplierName}:`, parseError);
-      return {
+        const notFoundTexts = this.getNotFoundTexts(userLanguage);
+        return {
           found: false,
-        cashback: { available: false, description: "Кэшбек не найден" },
-          coupons: { available: false, description: "Купоны не найдены" },
-          summary: "Кэшбек и купоны не найдены"
-      };
+          cashback: { available: false, description: notFoundTexts.cashbackNotFound },
+          coupons: { available: false, description: notFoundTexts.couponsNotFound },
+          summary: notFoundTexts.summaryNotFound
+        };
       }
       
     } catch (error) {
       console.error(`❌ Error analyzing cashback with LLM for ${supplierName}:`, error);
+      const notFoundTexts = this.getNotFoundTexts(userLanguage);
       return {
         found: false,
-        cashback: { available: false, description: "Кэшбек не найден" },
-        coupons: { available: false, description: "Купоны не найдены" },
-        summary: "Кэшбек и купоны не найдены"
+        cashback: { available: false, description: notFoundTexts.cashbackNotFound },
+        coupons: { available: false, description: notFoundTexts.couponsNotFound },
+        summary: notFoundTexts.summaryNotFound
       };
     }
   }

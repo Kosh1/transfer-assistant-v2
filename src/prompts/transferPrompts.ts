@@ -167,3 +167,153 @@ export function replaceTimePlaceholders(prompt: string): string {
     .replace(/\{\{CURRENT_TIME\}\}/g, currentTime)
     .replace(/\{\{CURRENT_YEAR\}\}/g, currentYear.toString());
 }
+
+// Функция для генерации промптов с учетом языка
+export function getLanguageSpecificPrompts(userLanguage: string = 'en') {
+  const languageMap: { [key: string]: string } = {
+    'en': 'English',
+    'ru': 'Russian',
+    'fr': 'French',
+    'es': 'Spanish',
+    'de': 'German',
+    'it': 'Italian',
+    'zh': 'Chinese'
+  };
+
+  const languageName = languageMap[userLanguage] || 'English';
+  
+  const notFoundTexts = {
+    'en': {
+      ratingNotFound: 'Rating not found',
+      cashbackNotFound: 'Cashback not found',
+      couponsNotFound: 'Coupons not found',
+      summaryNotFound: 'Cashback and coupons not found'
+    },
+    'ru': {
+      ratingNotFound: 'Рейтинг не найден',
+      cashbackNotFound: 'Кэшбек не найден',
+      couponsNotFound: 'Купоны не найдены',
+      summaryNotFound: 'Кэшбек и купоны не найдены'
+    },
+    'fr': {
+      ratingNotFound: 'Note non trouvée',
+      cashbackNotFound: 'Cashback non trouvé',
+      couponsNotFound: 'Coupons non trouvés',
+      summaryNotFound: 'Cashback et coupons non trouvés'
+    },
+    'es': {
+      ratingNotFound: 'Calificación no encontrada',
+      cashbackNotFound: 'Cashback no encontrado',
+      couponsNotFound: 'Cupones no encontrados',
+      summaryNotFound: 'Cashback y cupones no encontrados'
+    },
+    'de': {
+      ratingNotFound: 'Bewertung nicht gefunden',
+      cashbackNotFound: 'Cashback nicht gefunden',
+      couponsNotFound: 'Gutscheine nicht gefunden',
+      summaryNotFound: 'Cashback und Gutscheine nicht gefunden'
+    },
+    'it': {
+      ratingNotFound: 'Valutazione non trovata',
+      cashbackNotFound: 'Cashback non trovato',
+      couponsNotFound: 'Coupon non trovati',
+      summaryNotFound: 'Cashback e coupon non trovati'
+    },
+    'zh': {
+      ratingNotFound: '未找到评分',
+      cashbackNotFound: '未找到返现',
+      couponsNotFound: '未找到优惠券',
+      summaryNotFound: '未找到返现和优惠券'
+    }
+  };
+
+  const texts = notFoundTexts[userLanguage as keyof typeof notFoundTexts] || notFoundTexts['en'];
+
+  return {
+    ANALYZE_RATINGS_JSON: `You are a rating analysis expert. Analyze search results for transfer provider ratings and extract structured data.
+
+Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+
+Analyze the provided search results and extract rating information. Return ONLY a JSON object in this exact format:
+
+{
+  "found": true/false,
+  "ratings": [
+    {
+      "source": "Trustpilot/TripAdvisor/Google/etc",
+      "score": 4.2,
+      "count": 150,
+      "url": "https://...",
+      "description": "Brief description"
+    }
+  ],
+  "bestRating": {
+    "source": "Trustpilot",
+    "score": 4.2,
+    "count": 150,
+    "url": "https://..."
+  },
+  "summary": "Brief summary in ${languageName}"
+}
+
+IMPORTANT: When selecting the bestRating, use this priority order:
+1. Trustpilot (highest priority)
+2. TripAdvisor (second priority)  
+3. All other sources (Google, Booking.com, etc.)
+
+If multiple ratings are found, always prefer Trustpilot over TripAdvisor, and TripAdvisor over other sources, regardless of score.
+
+If no ratings found, return:
+{
+  "found": false,
+  "ratings": [],
+  "bestRating": null,
+  "summary": "${texts.ratingNotFound}"
+}`,
+
+    ANALYZE_CASHBACK_JSON: `You are a cashback and coupon analysis expert. Analyze search results for transfer provider offers and extract structured data.
+
+Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+
+Analyze the provided search results and extract cashback/coupon information. Return ONLY a JSON object in this exact format:
+
+{
+  "found": true/false,
+  "cashback": {
+    "available": true/false,
+    "percentage": "5%",
+    "amount": 2.5,
+    "currency": "EUR",
+    "conditions": "for new users",
+    "description": "Brief description"
+  },
+  "coupons": {
+    "available": true/false,
+    "codes": ["PROMO10", "SAVE20"],
+    "discount": "Up to 40% Off",
+    "count": 14,
+    "conditions": "min order 50€",
+    "url": "https://...",
+    "description": "Brief description"
+  },
+  "summary": "Brief summary in ${languageName}"
+}
+
+IMPORTANT ANALYSIS RULES:
+1. Look for ANY mention of cashback, even if it's not Vienna-specific
+2. Look for ANY mention of coupons, promo codes, discounts, or vouchers
+3. Don't require Vienna-specific results - global offers are valid
+4. Analyze ALL search results carefully - look for any cashback or discount offers
+5. Extract percentage values and discount amounts from titles and descriptions
+6. Look for any platform that offers cashback or coupons for this provider
+7. Be thorough in analyzing all available information
+
+If no offers found, return:
+{
+  "found": false,
+  "cashback": { "available": false, "description": "${texts.cashbackNotFound}" },
+  "coupons": { "available": false, "codes": [], "description": "${texts.couponsNotFound}" },
+  "summary": "${texts.summaryNotFound}"
+}`
+  };
+}

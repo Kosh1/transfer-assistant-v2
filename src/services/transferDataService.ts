@@ -13,6 +13,7 @@ interface CurrentData {
   date: string | null;
   time: string | null;
   status: 'collecting' | 'complete';
+  language: string;
 }
 
 interface LLMResponse {
@@ -40,13 +41,19 @@ class TransferDataService {
       luggage: null,
       date: null,
       time: null,
-      status: 'collecting'
+      status: 'collecting',
+      language: 'en'
     };
   }
 
   async extractTransferDetails(message: string, conversationHistory: Array<{ role: string; content: string }> = []): Promise<LLMResponse> {
     try {
       console.log('Processing user message:', message);
+      
+      // Detect language from message
+      const detectedLanguage = this.detectLanguage(message);
+      this.currentData.language = detectedLanguage;
+      console.log('🌍 Detected language:', detectedLanguage);
       
       // Replace placeholders in prompt
       const prompt = replaceTimePlaceholders(TRANSFER_DATA_PROMPTS.COLLECT_TRANSFER_DATA);
@@ -157,7 +164,7 @@ class TransferDataService {
                 luggage: this.currentData.luggage || undefined,
                 date: this.currentData.date || undefined,
                 time: this.currentData.time || undefined,
-                language: 'en',
+                language: this.currentData.language,
                 isComplete: this.currentData.status === 'complete'
               },
               searchResults: null,
@@ -173,7 +180,7 @@ class TransferDataService {
                 luggage: this.currentData.luggage || undefined,
                 date: this.currentData.date || undefined,
                 time: this.currentData.time || undefined,
-                language: 'en',
+                language: this.currentData.language,
                 isComplete: this.currentData.status === 'complete'
               },
               searchResults: null,
@@ -241,7 +248,7 @@ class TransferDataService {
           luggage: this.currentData.luggage || undefined,
           date: this.currentData.date || undefined,
           time: this.currentData.time || undefined,
-          language: 'en',
+          language: this.currentData.language,
           isComplete: this.currentData.status === 'complete'
         },
         searchResults: null,
@@ -259,7 +266,7 @@ class TransferDataService {
           luggage: this.currentData.luggage || undefined,
           date: this.currentData.date || undefined,
           time: this.currentData.time || undefined,
-          language: 'en',
+          language: this.currentData.language,
           isComplete: this.currentData.status === 'complete'
         },
         searchResults: null,
@@ -299,7 +306,7 @@ class TransferDataService {
             luggage: this.currentData.luggage || undefined,
             date: this.currentData.date || undefined,
             time: this.currentData.time || undefined,
-            language: 'en',
+            language: this.currentData.language,
             isComplete: false
           },
           searchResults: null,
@@ -320,10 +327,10 @@ class TransferDataService {
         luggage: this.currentData.luggage || 1,
         date: this.currentData.date || '',
         time: this.currentData.time || '',
-        language: 'en',
+        language: this.currentData.language,
         isComplete: this.currentData.status === 'complete'
       };
-      const searchResults = await transferAnalysisService.default.searchAndAnalyzeTransfers(transferData, 'ru');
+      const searchResults = await transferAnalysisService.default.searchAndAnalyzeTransfers(transferData, this.currentData.language);
       
       console.log('🔍 TransferDataService searchResults:', JSON.stringify(searchResults, null, 2));
       
@@ -336,7 +343,7 @@ class TransferDataService {
           luggage: this.currentData.luggage || undefined,
           date: this.currentData.date || undefined,
           time: this.currentData.time || undefined,
-          language: 'en',
+          language: this.currentData.language,
           isComplete: this.currentData.status === 'complete'
         },
         searchResults: searchResults,
@@ -357,7 +364,7 @@ class TransferDataService {
           luggage: this.currentData.luggage || undefined,
           date: this.currentData.date || undefined,
           time: this.currentData.time || undefined,
-          language: 'en',
+          language: this.currentData.language,
           isComplete: this.currentData.status === 'complete'
         },
         searchResults: null,
@@ -366,6 +373,27 @@ class TransferDataService {
     }
   }
 
+
+  private detectLanguage(message: string): string {
+    // Simple language detection based on common words
+    const russianWords = ['привет', 'здравствуйте', 'спасибо', 'пожалуйста', 'да', 'нет', 'хорошо', 'плохо'];
+    const frenchWords = ['bonjour', 'merci', 'oui', 'non', 'bien', 'mal', 'excusez', 'pardon'];
+    const spanishWords = ['hola', 'gracias', 'sí', 'no', 'bien', 'mal', 'perdón', 'disculpe'];
+    const germanWords = ['hallo', 'danke', 'ja', 'nein', 'gut', 'schlecht', 'entschuldigung'];
+    const italianWords = ['ciao', 'grazie', 'sì', 'no', 'bene', 'male', 'scusi', 'mi dispiace'];
+    const chineseWords = ['你好', '谢谢', '是', '不', '好', '坏', '对不起', '抱歉'];
+    
+    const lowerMessage = message.toLowerCase();
+    
+    if (russianWords.some(word => lowerMessage.includes(word))) return 'ru';
+    if (frenchWords.some(word => lowerMessage.includes(word))) return 'fr';
+    if (spanishWords.some(word => lowerMessage.includes(word))) return 'es';
+    if (germanWords.some(word => lowerMessage.includes(word))) return 'de';
+    if (italianWords.some(word => lowerMessage.includes(word))) return 'it';
+    if (chineseWords.some(word => lowerMessage.includes(word))) return 'zh';
+    
+    return 'en'; // Default to English
+  }
 
   getCurrentData(): CurrentData {
     return this.currentData;
@@ -379,7 +407,8 @@ class TransferDataService {
       luggage: null,
       date: null,
       time: null,
-      status: 'collecting'
+      status: 'collecting',
+      language: 'en'
     };
   }
 }
