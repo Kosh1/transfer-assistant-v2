@@ -378,9 +378,24 @@ Language-specific headers:
 
     } catch (error) {
       console.error('Error searching and analyzing transfers:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to search for transfers';
+      if (error instanceof Error) {
+        if (error.message.includes('timeout')) {
+          errorMessage = 'Transfer search timed out. Please try again with a simpler request.';
+        } else if (error.message.includes('500')) {
+          errorMessage = 'Transfer service is temporarily unavailable. Please try again later.';
+        } else if (error.message.includes('network')) {
+          errorMessage = 'Network error occurred. Please check your connection and try again.';
+        } else {
+          errorMessage = `Transfer search failed: ${error.message}`;
+        }
+      }
+      
       return {
         success: false,
-        message: `Failed to search for transfers: ${error}`,
+        message: errorMessage,
         data: null
       };
     }

@@ -16,7 +16,7 @@ module.exports = {
       RATE_LIMIT_MAX_REQUESTS: 100,
       CACHE_TTL_SECONDS: 300,
       CACHE_MAX_KEYS: 1000,
-      BOOKING_TIMEOUT_MS: 10000,
+      BOOKING_TIMEOUT_MS: 30000,
       LOG_LEVEL: 'info'
     },
     error_file: './logs/err.log',
