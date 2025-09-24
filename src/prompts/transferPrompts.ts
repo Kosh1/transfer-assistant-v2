@@ -137,6 +137,15 @@ Analyze the provided search results and extract cashback/coupon information. Ret
   "summary": "Brief summary in Russian"
 }
 
+IMPORTANT ANALYSIS RULES:
+1. Look for ANY mention of cashback, even if it's not Vienna-specific
+2. Look for ANY mention of coupons, promo codes, discounts, or vouchers
+3. Don't require Vienna-specific results - global offers are valid
+4. Analyze ALL search results carefully - look for any cashback or discount offers
+5. Extract percentage values and discount amounts from titles and descriptions
+6. Look for any platform that offers cashback or coupons for this provider
+7. Be thorough in analyzing all available information
+
 If no offers found, return:
 {
   "found": false,

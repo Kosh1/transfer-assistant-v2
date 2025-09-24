@@ -182,7 +182,8 @@ class GoogleSearchService {
     try {
       console.log('🔍 Searching cashback offers for:', supplierName);
       
-      const query = `${supplierName} cashback Vienna Austria`;
+      // Use a general search query - let LLM find the relevant sources
+      const query = `${supplierName} cashback`;
       const searchResults = await this.performSearch(query);
       
       return searchResults;
@@ -196,7 +197,8 @@ class GoogleSearchService {
     try {
       console.log('🔍 Searching coupon offers for:', supplierName);
       
-      const query = `${supplierName} coupon discount Vienna Austria`;
+      // Use a general search query - let LLM find the relevant sources
+      const query = `${supplierName} coupon discount`;
       const searchResults = await this.performSearch(query);
       
       return searchResults;
