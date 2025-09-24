@@ -144,20 +144,20 @@ class TransferAnalysisService {
           } : undefined,
           allRatings: ratingsData?.ratings || undefined,
           cashback: cashbackCouponData?.cashback?.available ? {
-            amount: cashbackCouponData.cashback.amount || 0,
-            currency: cashbackCouponData.cashback.currency || 'EUR',
-            percentage: cashbackCouponData.cashback.percentage || '0%'
+            amount: cashbackCouponData.cashback.amount,
+            currency: cashbackCouponData.cashback.currency,
+            percentage: cashbackCouponData.cashback.percentage
           } : undefined,
           allCashback: cashbackCouponData?.cashback?.available ? [{
-            amount: cashbackCouponData.cashback.amount || 0,
-            currency: cashbackCouponData.cashback.currency || 'EUR',
-            percentage: cashbackCouponData.cashback.percentage || '0%',
+            amount: cashbackCouponData.cashback.amount,
+            currency: cashbackCouponData.cashback.currency,
+            percentage: cashbackCouponData.cashback.percentage,
             description: cashbackCouponData.cashback.description
           }] : undefined,
           coupons: cashbackCouponData?.coupons?.codes || undefined,
           allCoupons: cashbackCouponData?.coupons?.codes ? cashbackCouponData.coupons.codes.map((code: string) => ({
             code: code,
-            discount: cashbackCouponData.coupons.discount || 'Discount',
+            discount: cashbackCouponData.coupons.discount,
             description: cashbackCouponData.coupons.description,
             conditions: cashbackCouponData.coupons.conditions
           })) : undefined,

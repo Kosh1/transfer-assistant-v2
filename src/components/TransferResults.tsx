@@ -61,39 +61,189 @@ const TransferResults: React.FC<TransferResultsProps> = ({
     return 'error';
   };
 
+  const getTranslation = (key: string, params: Record<string, string> = {}) => {
+    const translations: { [key: string]: { [lang: string]: string } } = {
+      'ratingBasedOn': {
+        'en': `Based on ${params.count} reviews`,
+        'ru': `Основано на ${params.count} отзывах`,
+        'fr': `Basé sur ${params.count} avis`,
+        'es': `Basado en ${params.count} reseñas`,
+        'de': `Basierend auf ${params.count} Bewertungen`,
+        'it': `Basato su ${params.count} recensioni`,
+        'zh': `基于 ${params.count} 条评论`
+      },
+      'otherRatings': {
+        'en': `Other ratings (${params.count}):`,
+        'ru': `Другие рейтинги (${params.count}):`,
+        'fr': `Autres notes (${params.count}):`,
+        'es': `Otras calificaciones (${params.count}):`,
+        'de': `Andere Bewertungen (${params.count}):`,
+        'it': `Altre valutazioni (${params.count}):`,
+        'zh': `其他评分 (${params.count}):`
+      },
+      'clickToVisit': {
+        'en': 'Click to visit source',
+        'ru': 'Нажмите для перехода к источнику',
+        'fr': 'Cliquez pour visiter la source',
+        'es': 'Haga clic para visitar la fuente',
+        'de': 'Klicken Sie, um die Quelle zu besuchen',
+        'it': 'Clicca per visitare la fonte',
+        'zh': '点击访问来源'
+      },
+      'source': {
+        'en': `Source: ${params.source}`,
+        'ru': `Источник: ${params.source}`,
+        'fr': `Source: ${params.source}`,
+        'es': `Fuente: ${params.source}`,
+        'de': `Quelle: ${params.source}`,
+        'it': `Fonte: ${params.source}`,
+        'zh': `来源: ${params.source}`
+      },
+      'ratingFrom': {
+        'en': `Rating from ${params.source}`,
+        'ru': `Рейтинг с ${params.source}`,
+        'fr': `Note de ${params.source}`,
+        'es': `Calificación de ${params.source}`,
+        'de': `Bewertung von ${params.source}`,
+        'it': `Valutazione da ${params.source}`,
+        'zh': `来自 ${params.source} 的评分`
+      },
+      'top': {
+        'en': 'Top',
+        'ru': 'Топ',
+        'fr': 'Top',
+        'es': 'Top',
+        'de': 'Top',
+        'it': 'Top',
+        'zh': '顶级'
+      },
+      'high': {
+        'en': 'High',
+        'ru': 'Высокий',
+        'fr': 'Élevé',
+        'es': 'Alto',
+        'de': 'Hoch',
+        'it': 'Alto',
+        'zh': '高'
+      },
+      'cashbackOffers': {
+        'en': 'Cashback Offers',
+        'ru': 'Кэшбек предложения',
+        'fr': 'Offres de cashback',
+        'es': 'Ofertas de cashback',
+        'de': 'Cashback-Angebote',
+        'it': 'Offerte di cashback',
+        'zh': '返现优惠'
+      },
+      'cashback': {
+        'en': 'cashback',
+        'ru': 'кэшбек',
+        'fr': 'cashback',
+        'es': 'cashback',
+        'de': 'Cashback',
+        'it': 'cashback',
+        'zh': '返现'
+      },
+      'cashbackLabel': {
+        'en': 'Cashback',
+        'ru': 'Кэшбек',
+        'fr': 'Cashback',
+        'es': 'Cashback',
+        'de': 'Cashback',
+        'it': 'Cashback',
+        'zh': '返现'
+      },
+      'noCashback': {
+        'en': 'No cashback available',
+        'ru': 'Кэшбек недоступен',
+        'fr': 'Aucun cashback disponible',
+        'es': 'No hay cashback disponible',
+        'de': 'Kein Cashback verfügbar',
+        'it': 'Nessun cashback disponibile',
+        'zh': '无返现可用'
+      },
+      'couponsDiscounts': {
+        'en': 'Coupons & Discounts',
+        'ru': 'Купоны и скидки',
+        'fr': 'Coupons et réductions',
+        'es': 'Cupones y descuentos',
+        'de': 'Gutscheine und Rabatte',
+        'it': 'Coupon e sconti',
+        'zh': '优惠券和折扣'
+      },
+      'coupons': {
+        'en': 'Coupons',
+        'ru': 'Купоны',
+        'fr': 'Coupons',
+        'es': 'Cupones',
+        'de': 'Gutscheine',
+        'it': 'Coupon',
+        'zh': '优惠券'
+      },
+      'available': {
+        'en': 'available',
+        'ru': 'доступно',
+        'fr': 'disponible',
+        'es': 'disponible',
+        'de': 'verfügbar',
+        'it': 'disponibile',
+        'zh': '可用'
+      },
+      'noCoupons': {
+        'en': 'No coupons available',
+        'ru': 'Купоны недоступны',
+        'fr': 'Aucun coupon disponible',
+        'es': 'No hay cupones disponibles',
+        'de': 'Keine Gutscheine verfügbar',
+        'it': 'Nessun coupon disponibile',
+        'zh': '无优惠券可用'
+      },
+      'conditions': {
+        'en': 'Conditions',
+        'ru': 'Условия',
+        'fr': 'Conditions',
+        'es': 'Condiciones',
+        'de': 'Bedingungen',
+        'it': 'Condizioni',
+        'zh': '条件'
+      },
+      'ratingNotFound': {
+        'en': 'Rating not found',
+        'ru': 'Рейтинг не найден',
+        'fr': 'Note non trouvée',
+        'es': 'Calificación no encontrada',
+        'de': 'Bewertung nicht gefunden',
+        'it': 'Valutazione non trovata',
+        'zh': '未找到评分'
+      }
+    };
+
+    return translations[key]?.[userLanguage] || translations[key]?.['en'] || key;
+  };
+
   const getRatingSourceInfo = (source: string) => {
-    const isRussian = userLanguage === 'ru';
-    
     const sourceMap: { [key: string]: { name: string; description: string; icon: string; priority: number } } = {
       'Trustpilot': {
         name: 'Trustpilot',
-        description: isRussian 
-          ? 'Отзывы клиентов на Trustpilot - независимой платформе отзывов'
-          : 'Customer reviews on Trustpilot - independent review platform',
+        description: getTranslation('ratingFrom', { source: 'Trustpilot' }),
         icon: '🟢',
         priority: 1
       },
       'TripAdvisor': {
         name: 'TripAdvisor',
-        description: isRussian 
-          ? 'Рейтинг на TripAdvisor - крупнейшей платформе путешествий'
-          : 'Rating on TripAdvisor - world\'s largest travel platform',
+        description: getTranslation('ratingFrom', { source: 'TripAdvisor' }),
         icon: '🟡',
         priority: 2
       },
       'Google': {
         name: 'Google Reviews',
-        description: isRussian 
-          ? 'Отзывы в Google - рейтинг на основе отзывов в Google Maps'
-          : 'Google Reviews - rating based on Google Maps reviews',
+        description: getTranslation('ratingFrom', { source: 'Google' }),
         icon: '🔵',
         priority: 3
       },
       'Booking.com': {
         name: 'Booking.com',
-        description: isRussian 
-          ? 'Рейтинг на Booking.com - отзывы гостей о трансферах'
-          : 'Rating on Booking.com - guest reviews for transfers',
+        description: getTranslation('ratingFrom', { source: 'Booking.com' }),
         icon: '🟡',
         priority: 3
       }
@@ -101,9 +251,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
     
     return sourceMap[source] || {
       name: source,
-      description: isRussian 
-        ? `Рейтинг с ${source}`
-        : `Rating from ${source}`,
+      description: getTranslation('ratingFrom', { source }),
       icon: '⭐',
       priority: 4
     };
@@ -289,8 +437,8 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                   {getRatingSourceInfo(option.rating.source).priority <= 2 && (
                                     <Chip 
                                       label={getRatingSourceInfo(option.rating.source).priority === 1 
-                                        ? (userLanguage === 'ru' ? 'Топ' : 'Top')
-                                        : (userLanguage === 'ru' ? 'Высокий' : 'High')
+                                        ? getTranslation('top')
+                                        : getTranslation('high')
                                       } 
                                       size="small" 
                                       color={getRatingSourceInfo(option.rating.source).priority === 1 ? 'success' : 'primary'}
@@ -304,10 +452,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                 </Typography>
                                 {option.rating.count && (
                                   <Typography variant="caption" sx={{ display: 'block', mb: 1 }}>
-                                    {userLanguage === 'ru' 
-                                      ? `Основано на ${option.rating.count} отзывах`
-                                      : `Based on ${option.rating.count} reviews`
-                                    }
+                                    {getTranslation('ratingBasedOn', { count: option.rating.count.toString() })}
                                   </Typography>
                                 )}
                                 
@@ -316,10 +461,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                   <>
                                     <Divider sx={{ my: 1 }} />
                                     <Typography variant="caption" sx={{ fontWeight: 600, display: 'block', mb: 1 }}>
-                                      {userLanguage === 'ru' 
-                                        ? `Другие рейтинги (${option.allRatings.length - 1}):`
-                                        : `Other ratings (${option.allRatings.length - 1}):`
-                                      }
+                                      {getTranslation('otherRatings', { count: (option.allRatings.length - 1).toString() })}
                                     </Typography>
                                     {option.allRatings
                                       .filter(r => r.source !== option.rating?.source)
@@ -346,18 +488,12 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                                     <OpenInNew sx={{ fontSize: 12 }} />
                                     <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                                      {userLanguage === 'ru' 
-                                        ? 'Нажмите для перехода к источнику'
-                                        : 'Click to visit source'
-                                      }
+                                      {getTranslation('clickToVisit')}
                                     </Typography>
                                   </Box>
                                 ) : (
                                   <Typography variant="caption" sx={{ display: 'block', fontStyle: 'italic', mt: 1 }}>
-                                    {userLanguage === 'ru' 
-                                      ? `Источник: ${option.rating.source}`
-                                      : `Source: ${option.rating.source}`
-                                    }
+                                    {getTranslation('source', { source: option.rating.source })}
                                   </Typography>
                                 )}
                               </Box>
@@ -405,7 +541,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                          Rating not found
+                          {getTranslation('ratingNotFound')}
                         </Typography>
                       )}
                     </Box>
@@ -423,13 +559,13 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             title={
                               <Box sx={{ p: 1 }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                                  💰 {userLanguage === 'ru' ? 'Кэшбек предложения' : 'Cashback Offers'}
+                                  💰 {getTranslation('cashbackOffers')}
                                 </Typography>
                                 {option.allCashback && option.allCashback.length > 0 ? (
                                   option.allCashback.map((cashback, index) => (
                                     <Box key={index} sx={{ mb: 1 }}>
                                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                        {cashback.percentage || '0%'} {userLanguage === 'ru' ? 'кэшбек' : 'cashback'}
+                                        {cashback.percentage} {getTranslation('cashback')}
                                       </Typography>
                                       {cashback.description && (
                                         <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
@@ -462,8 +598,8 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             <Chip 
                               label={
                                 option.allCashback && option.allCashback.length > 1
-                                  ? `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage || '0%'} +${option.allCashback.length - 1}`
-                                  : `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage || '0%'}`
+                                  ? `${getTranslation('cashbackLabel')}: ${option.cashback.percentage} +${option.allCashback.length - 1}`
+                                  : `${getTranslation('cashbackLabel')}: ${option.cashback.percentage}`
                               }
                               size="small" 
                               color="success" 
@@ -474,7 +610,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
-                          {userLanguage === 'ru' ? 'Кэшбек недоступен' : 'No cashback available'}
+                          {getTranslation('noCashback')}
                         </Typography>
                       )}
 
@@ -485,7 +621,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             title={
                               <Box sx={{ p: 1 }}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                                  🎫 {userLanguage === 'ru' ? 'Купоны и скидки' : 'Coupons & Discounts'}
+                                  🎫 {getTranslation('couponsDiscounts')}
                                 </Typography>
                                 {option.allCoupons && option.allCoupons.length > 0 ? (
                                   option.allCoupons.map((coupon, index) => (
@@ -500,14 +636,14 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                       )}
                                       {coupon.conditions && (
                                         <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary', fontStyle: 'italic' }}>
-                                          {userLanguage === 'ru' ? 'Условия' : 'Conditions'}: {coupon.conditions}
+                                          {getTranslation('conditions')}: {coupon.conditions}
                                         </Typography>
                                       )}
                                     </Box>
                                   ))
                                 ) : (
                                   <Typography variant="body2">
-                                    {option.coupons.length} {userLanguage === 'ru' ? 'купонов доступно' : 'coupons available'}
+                                    {option.coupons.length} {getTranslation('coupons')} {getTranslation('available')}
                                   </Typography>
                                 )}
                               </Box>
@@ -529,8 +665,8 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             <Chip 
                               label={
                                 option.allCoupons && option.allCoupons.length > 1
-                                  ? `${userLanguage === 'ru' ? 'Купоны' : 'Coupons'}: ${option.coupons.length} +${option.allCoupons.length - option.coupons.length}`
-                                  : `${userLanguage === 'ru' ? 'Купоны' : 'Coupons'}: ${option.coupons.length} ${userLanguage === 'ru' ? 'доступно' : 'available'}`
+                                  ? `${getTranslation('coupons')}: ${option.coupons.length} +${option.allCoupons.length - option.coupons.length}`
+                                  : `${getTranslation('coupons')}: ${option.coupons.length} ${getTranslation('available')}`
                               }
                               size="small" 
                               color="info" 
@@ -540,7 +676,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                          {userLanguage === 'ru' ? 'Купоны недоступны' : 'No coupons available'}
+                          {getTranslation('noCoupons')}
                         </Typography>
                       )}
                     </Box>
