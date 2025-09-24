@@ -429,7 +429,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                   option.allCashback.map((cashback, index) => (
                                     <Box key={index} sx={{ mb: 1 }}>
                                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                        {cashback.percentage}% {userLanguage === 'ru' ? 'кэшбек' : 'cashback'}
+                                        {cashback.percentage || '0%'} {userLanguage === 'ru' ? 'кэшбек' : 'cashback'}
                                       </Typography>
                                       {cashback.description && (
                                         <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
@@ -462,8 +462,8 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             <Chip 
                               label={
                                 option.allCashback && option.allCashback.length > 1
-                                  ? `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage}% +${option.allCashback.length - 1}`
-                                  : `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage}%`
+                                  ? `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage || '0%'} +${option.allCashback.length - 1}`
+                                  : `${userLanguage === 'ru' ? 'Кэшбек' : 'Cashback'}: ${option.cashback.percentage || '0%'}`
                               }
                               size="small" 
                               color="success" 
