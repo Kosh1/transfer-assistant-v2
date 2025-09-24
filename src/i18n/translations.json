@@ -28,7 +28,9 @@
       "standard": "Standard",
       "economy": "Economy",
       "luxury": "Luxury",
-      "budget": "Budget"
+      "budget": "Budget",
+      "carExample": "Example",
+      "carDescription": "Vehicle Type"
     },
     "landing": {
       "title": "All private transfer options from Vienna to Vienna Airport and back",
@@ -222,7 +224,9 @@
       "standard": "Стандарт",
       "economy": "Эконом",
       "luxury": "Люкс",
-      "budget": "Бюджет"
+      "budget": "Бюджет",
+      "carExample": "Пример",
+      "carDescription": "Тип автомобиля"
     },
     "landing": {
       "title": "Все варианты частных трансферов из Вены в Венский аэропорт и обратно",
@@ -656,7 +660,9 @@
       "standard": "Standard",
       "economy": "Economy",
       "luxury": "Luxus",
-      "budget": "Budget"
+      "budget": "Budget",
+      "carExample": "Beispiel",
+      "carDescription": "Fahrzeugtyp"
     },
     "landing": {
       "title": "Alle privaten Transfer-Optionen von Wien zum Flughafen Wien und zurück",

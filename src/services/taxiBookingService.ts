@@ -1,6 +1,8 @@
 // Taxi Booking Service for taxi.booking.com - TypeScript version
 // This service fetches transfer prices and options
 
+import llmService from './llmService';
+
 interface TransferSearchParams {
   from: string;
   to: string;
@@ -17,6 +19,8 @@ interface TransferOption {
   carDetails: {
     description: string;
     modelDescription: string;
+    carExample?: string;
+    carDescription?: string;
   };
   maxPassenger: number;
   bags: number;
@@ -185,7 +189,7 @@ class TaxiBookingService {
 
       if (result.success && result.data) {
         // Parse real Booking.com data and return all options
-        const transferOptions = this.parseBookingData(result.data, params);
+        const transferOptions = await this.parseBookingData(result.data, params, userLanguage);
         console.log(`🚕 Found ${transferOptions.length} transfer options from Booking.com`);
         return transferOptions;
       } else {
@@ -365,7 +369,7 @@ class TaxiBookingService {
   }
 
   // Parse real Booking.com API data
-  private parseBookingData(bookingData: any, params: TransferSearchParams): TransferOption[] {
+  private async parseBookingData(bookingData: any, params: TransferSearchParams, userLanguage: string = 'en'): Promise<TransferOption[]> {
     try {
       console.log('🔍 Parsing real Booking.com data:', bookingData);
       
@@ -399,12 +403,27 @@ class TaxiBookingService {
       
       console.log(`📊 Found ${transferOptions.length} transfer options from Booking.com`);
       
-      // Transform Booking.com data to our format
-      const transformedOptions: TransferOption[] = transferOptions.map((option, index) => {
+      // Transform Booking.com data to our format with async car descriptions
+      const transformedOptions: TransferOption[] = await Promise.all(transferOptions.map(async (option, index) => {
         // Extract car details - try multiple possible fields
         const carDetails = option.carDetails || {};
         let description = carDetails.description || option.description || option.vehicleType || option.carType || 'Standard Vehicle';
         let modelDescription = carDetails.modelDescription || carDetails.model || option.model || option.vehicleModel || 'Standard Model';
+        
+        // Extract car example (actual model name)
+        const carExample = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || 'Standard Model';
+        
+        // Generate car description using LLM
+        let carDescription = 'Standard Vehicle';
+        try {
+          if (carExample && carExample !== 'Standard Model') {
+            carDescription = await llmService.generateCarDescription(carExample, userLanguage);
+            console.log(`🚗 Generated car description for ${carExample}: ${carDescription}`);
+          }
+        } catch (error) {
+          console.error(`❌ Failed to generate car description for ${carExample}:`, error);
+          carDescription = 'Standard Vehicle';
+        }
         
         // If we have a vehicle type, use it as description
         if (option.vehicleType && !description.includes(option.vehicleType)) {
@@ -441,7 +460,9 @@ class TaxiBookingService {
           supplierCategory: supplierCategory,
           carDetails: {
             description: description,
-            modelDescription: modelDescription
+            modelDescription: modelDescription,
+            carExample: carExample,
+            carDescription: carDescription
           },
           maxPassenger: maxPassenger,
           bags: bags,
@@ -456,7 +477,7 @@ class TaxiBookingService {
           vehicleCategory: vehicleCategory,
           selfLink: option.link || option.bookingLink || option.bookingUrl || `https://example.com/book/${option.supplierID || index}`
         };
-      });
+      }));
       
       console.log('✅ Transformed Booking.com data:', transformedOptions.length, 'options');
       console.log('💰 Price range:', Math.min(...transformedOptions.map(o => o.price)), '-', Math.max(...transformedOptions.map(o => o.price)), 'EUR');

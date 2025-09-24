@@ -375,6 +375,16 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         <Typography variant="body2" color="text.secondary">
                           {option.carDetails.description}
                         </Typography>
+                        {option.carDetails.carExample && (
+                          <Typography variant="body2" color="primary.main" sx={{ fontWeight: 500, mt: 0.5 }}>
+                            {getTranslation('carExample')}: {option.carDetails.carExample}
+                          </Typography>
+                        )}
+                        {option.carDetails.carDescription && option.carDetails.carDescription !== 'Standard Vehicle' && (
+                          <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                            {option.carDetails.carDescription}
+                          </Typography>
+                        )}
                       </Box>
                       <Chip 
                         label={`#${option.rank}`} 

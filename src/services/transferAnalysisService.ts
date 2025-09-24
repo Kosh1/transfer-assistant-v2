@@ -175,7 +175,9 @@ class TransferAnalysisService {
           carDetails: {
             description: option.carDetails?.description || option.carDetails?.modelDescription || 'Standard Vehicle',
             capacity: this.extractCapacity(option),
-            luggage: (option as any).carDetails?.luggage || 2
+            luggage: (option as any).carDetails?.luggage || 2,
+            carExample: option.carDetails?.carExample,
+            carDescription: option.carDetails?.carDescription
           },
           price: {
             amount: option.price || 0,

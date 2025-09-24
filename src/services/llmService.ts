@@ -224,6 +224,53 @@ Respond in JSON format:
   clearHistory(): void {
     this.conversationHistory = [];
   }
+
+  async generateCarDescription(carModel: string, userLanguage: string = 'en'): Promise<string> {
+    try {
+      if (!this.apiKey) {
+        return 'Standard Vehicle';
+      }
+
+      const systemPrompt = `You are a car expert. Based on the car model provided, give a brief 2-3 word description of the vehicle type in the user's language.
+
+Examples:
+- "Skoda Octavia" -> "обычная легковая" (ru) / "regular sedan" (en) / "berline normale" (fr)
+- "BMW 5 Series" -> "премиум седан" (ru) / "premium sedan" (en) / "berline premium" (fr)
+- "Mercedes V-Class" -> "большой минивен" (ru) / "large minivan" (en) / "grand monospace" (fr)
+- "VW Passat" -> "семейный седан" (ru) / "family sedan" (en) / "berline familiale" (fr)
+
+Respond with ONLY the description, no additional text.`;
+
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Car model: ${carModel}. Language: ${userLanguage}. Describe this car type briefly.` }
+          ],
+          temperature: 0.3,
+          max_tokens: 50
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      const description = result.choices[0]?.message?.content?.trim();
+      
+      return description || 'Standard Vehicle';
+    } catch (error) {
+      console.error('Car description generation error:', error);
+      return 'Standard Vehicle';
+    }
+  }
 }
 
 const llmService = new LLMService();

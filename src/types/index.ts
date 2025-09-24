@@ -18,6 +18,8 @@ export interface TransferOption {
     description: string;
     capacity: number;
     luggage: number;
+    carExample?: string;
+    carDescription?: string;
   };
   price: {
     amount: number;
