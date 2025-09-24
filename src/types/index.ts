@@ -30,6 +30,7 @@ export interface TransferOption {
     score: number;
     count: number;
     source: string;
+    url?: string; // URL источника рейтинга
   };
   cashback?: {
     amount: number;

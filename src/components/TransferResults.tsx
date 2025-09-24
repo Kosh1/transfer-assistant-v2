@@ -11,6 +11,7 @@ import {
   Button,
   Divider,
   Paper,
+  Tooltip,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import {
@@ -21,6 +22,7 @@ import {
   Star,
   Euro,
   Language,
+  OpenInNew,
 } from '@mui/icons-material';
 import { TransferData, TransferOption } from '../types';
 
@@ -57,6 +59,43 @@ const TransferResults: React.FC<TransferResultsProps> = ({
     if (numRating >= 4.0) return 'primary';
     if (numRating >= 3.0) return 'warning';
     return 'error';
+  };
+
+  const getRatingSourceInfo = (source: string) => {
+    const sourceMap: { [key: string]: { name: string; description: string; icon: string } } = {
+      'Trustpilot': {
+        name: 'Trustpilot',
+        description: 'Отзывы клиентов на Trustpilot - независимой платформе отзывов',
+        icon: '🟢'
+      },
+      'TripAdvisor': {
+        name: 'TripAdvisor',
+        description: 'Рейтинг на TripAdvisor - крупнейшей платформе путешествий',
+        icon: '🟡'
+      },
+      'Google': {
+        name: 'Google Reviews',
+        description: 'Отзывы в Google - рейтинг на основе отзывов в Google Maps',
+        icon: '🔵'
+      },
+      'Booking.com': {
+        name: 'Booking.com',
+        description: 'Рейтинг на Booking.com - отзывы гостей о трансферах',
+        icon: '🟡'
+      }
+    };
+    
+    return sourceMap[source] || {
+      name: source,
+      description: 'Рейтинг из внешнего источника',
+      icon: '⭐'
+    };
+  };
+
+  const handleRatingClick = (rating: any) => {
+    if (rating?.url) {
+      window.open(rating.url, '_blank');
+    }
   };
 
   return (
@@ -222,12 +261,65 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       {option.rating ? (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                           <Star sx={{ fontSize: 16, color: 'warning.main' }} />
-                          <Chip 
-                            label={`${option.rating.score}/5`} 
-                            size="small" 
-                            color={getRatingColor(option.rating.score.toString())}
-                            variant="outlined"
-                          />
+                          <Tooltip
+                            title={
+                              <Box sx={{ p: 1 }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                                  {getRatingSourceInfo(option.rating.source).icon} {getRatingSourceInfo(option.rating.source).name}
+                                </Typography>
+                                <Typography variant="body2" sx={{ mb: 1 }}>
+                                  {getRatingSourceInfo(option.rating.source).description}
+                                </Typography>
+                                {option.rating.count && (
+                                  <Typography variant="caption" sx={{ display: 'block', mb: 1 }}>
+                                    Основано на {option.rating.count} отзывах
+                                  </Typography>
+                                )}
+                                {option.rating.url ? (
+                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
+                                    <OpenInNew sx={{ fontSize: 12 }} />
+                                    <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
+                                      Нажмите для перехода к источнику
+                                    </Typography>
+                                  </Box>
+                                ) : (
+                                  <Typography variant="caption" sx={{ display: 'block', fontStyle: 'italic', mt: 1 }}>
+                                    Источник: {option.rating.source}
+                                  </Typography>
+                                )}
+                              </Box>
+                            }
+                            arrow
+                            placement="top"
+                            componentsProps={{
+                              tooltip: {
+                                sx: {
+                                  maxWidth: 300,
+                                  bgcolor: 'grey.900',
+                                  '& .MuiTooltip-arrow': {
+                                    color: 'grey.900',
+                                  },
+                                },
+                              },
+                            }}
+                          >
+                            <Chip 
+                              label={`${option.rating.score}/5`} 
+                              size="small" 
+                              color={getRatingColor(option.rating.score.toString())}
+                              variant="outlined"
+                              clickable
+                              onClick={() => handleRatingClick(option.rating)}
+                              sx={{
+                                cursor: option.rating?.url ? 'pointer' : 'default',
+                                '&:hover': option.rating?.url ? {
+                                  transform: 'scale(1.05)',
+                                  transition: 'transform 0.2s ease-in-out',
+                                } : {},
+                                opacity: option.rating?.url ? 1 : 0.8,
+                              }}
+                            />
+                          </Tooltip>
                           {option.rating.count && (
                             <Typography variant="caption" color="text.secondary">
                               ({option.rating.count} reviews)
