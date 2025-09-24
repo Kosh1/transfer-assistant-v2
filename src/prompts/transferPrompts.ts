@@ -94,6 +94,13 @@ Analyze the provided search results and extract rating information. Return ONLY 
   "summary": "Brief summary in Russian"
 }
 
+IMPORTANT: When selecting the bestRating, use this priority order:
+1. Trustpilot (highest priority)
+2. TripAdvisor (second priority)  
+3. All other sources (Google, Booking.com, etc.)
+
+If multiple ratings are found, always prefer Trustpilot over TripAdvisor, and TripAdvisor over other sources, regardless of score.
+
 If no ratings found, return:
 {
   "found": false,

@@ -62,33 +62,50 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   };
 
   const getRatingSourceInfo = (source: string) => {
-    const sourceMap: { [key: string]: { name: string; description: string; icon: string } } = {
+    const isRussian = userLanguage === 'ru';
+    
+    const sourceMap: { [key: string]: { name: string; description: string; icon: string; priority: number } } = {
       'Trustpilot': {
         name: 'Trustpilot',
-        description: 'Отзывы клиентов на Trustpilot - независимой платформе отзывов',
-        icon: '🟢'
+        description: isRussian 
+          ? 'Отзывы клиентов на Trustpilot - независимой платформе отзывов'
+          : 'Customer reviews on Trustpilot - independent review platform',
+        icon: '🟢',
+        priority: 1
       },
       'TripAdvisor': {
         name: 'TripAdvisor',
-        description: 'Рейтинг на TripAdvisor - крупнейшей платформе путешествий',
-        icon: '🟡'
+        description: isRussian 
+          ? 'Рейтинг на TripAdvisor - крупнейшей платформе путешествий'
+          : 'Rating on TripAdvisor - world\'s largest travel platform',
+        icon: '🟡',
+        priority: 2
       },
       'Google': {
         name: 'Google Reviews',
-        description: 'Отзывы в Google - рейтинг на основе отзывов в Google Maps',
-        icon: '🔵'
+        description: isRussian 
+          ? 'Отзывы в Google - рейтинг на основе отзывов в Google Maps'
+          : 'Google Reviews - rating based on Google Maps reviews',
+        icon: '🔵',
+        priority: 3
       },
       'Booking.com': {
         name: 'Booking.com',
-        description: 'Рейтинг на Booking.com - отзывы гостей о трансферах',
-        icon: '🟡'
+        description: isRussian 
+          ? 'Рейтинг на Booking.com - отзывы гостей о трансферах'
+          : 'Rating on Booking.com - guest reviews for transfers',
+        icon: '🟡',
+        priority: 3
       }
     };
     
     return sourceMap[source] || {
       name: source,
-      description: 'Рейтинг из внешнего источника',
-      icon: '⭐'
+      description: isRussian 
+        ? `Рейтинг с ${source}`
+        : `Rating from ${source}`,
+      icon: '⭐',
+      priority: 4
     };
   };
 
@@ -264,27 +281,50 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                           <Tooltip
                             title={
                               <Box sx={{ p: 1 }}>
-                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                                  {getRatingSourceInfo(option.rating.source).icon} {getRatingSourceInfo(option.rating.source).name}
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                    {getRatingSourceInfo(option.rating.source).icon} {getRatingSourceInfo(option.rating.source).name}
+                                  </Typography>
+                                  {getRatingSourceInfo(option.rating.source).priority <= 2 && (
+                                    <Chip 
+                                      label={getRatingSourceInfo(option.rating.source).priority === 1 
+                                        ? (userLanguage === 'ru' ? 'Топ' : 'Top')
+                                        : (userLanguage === 'ru' ? 'Высокий' : 'High')
+                                      } 
+                                      size="small" 
+                                      color={getRatingSourceInfo(option.rating.source).priority === 1 ? 'success' : 'primary'}
+                                      variant="outlined"
+                                      sx={{ fontSize: '0.7rem', height: 20 }}
+                                    />
+                                  )}
+                                </Box>
                                 <Typography variant="body2" sx={{ mb: 1 }}>
                                   {getRatingSourceInfo(option.rating.source).description}
                                 </Typography>
                                 {option.rating.count && (
                                   <Typography variant="caption" sx={{ display: 'block', mb: 1 }}>
-                                    Основано на {option.rating.count} отзывах
+                                    {userLanguage === 'ru' 
+                                      ? `Основано на ${option.rating.count} отзывах`
+                                      : `Based on ${option.rating.count} reviews`
+                                    }
                                   </Typography>
                                 )}
                                 {option.rating.url ? (
                                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                                     <OpenInNew sx={{ fontSize: 12 }} />
                                     <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                                      Нажмите для перехода к источнику
+                                      {userLanguage === 'ru' 
+                                        ? 'Нажмите для перехода к источнику'
+                                        : 'Click to visit source'
+                                      }
                                     </Typography>
                                   </Box>
                                 ) : (
                                   <Typography variant="caption" sx={{ display: 'block', fontStyle: 'italic', mt: 1 }}>
-                                    Источник: {option.rating.source}
+                                    {userLanguage === 'ru' 
+                                      ? `Источник: ${option.rating.source}`
+                                      : `Source: ${option.rating.source}`
+                                    }
                                   </Typography>
                                 )}
                               </Box>
