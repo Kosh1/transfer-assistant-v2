@@ -189,7 +189,7 @@ class TaxiBookingService {
 
       if (result.success && result.data) {
         // Parse real Booking.com data and return all options
-        const transferOptions = await this.parseBookingData(result.data, params, userLanguage);
+        const transferOptions = await this.parseBookingData(result.data, params, userLanguage || 'en');
         console.log(`🚕 Found ${transferOptions.length} transfer options from Booking.com`);
         return transferOptions;
       } else {
@@ -369,7 +369,7 @@ class TaxiBookingService {
   }
 
   // Parse real Booking.com API data
-  private async parseBookingData(bookingData: any, params: TransferSearchParams, userLanguage: string = 'en'): Promise<TransferOption[]> {
+  private async parseBookingData(bookingData: any, params: TransferSearchParams, userLanguage: string): Promise<TransferOption[]> {
     try {
       console.log('🔍 Parsing real Booking.com data:', bookingData);
       

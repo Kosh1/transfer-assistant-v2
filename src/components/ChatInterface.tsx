@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, SmartToy, Person, Mic } from '@mui/icons-material';
 import { ChatMessage, TransferData, TransferOption } from '../types';
+import { useTranslation } from '../hooks/useTranslation';
 
 interface ChatInterfaceProps {
   onDataReceived: (data: {
@@ -33,6 +34,7 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
+  const { language } = useTranslation();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -167,7 +169,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
               ...result.extractedData,
               transferOptions: transferResults.data,
               transferAnalysis: transferResults.message,
-              userLanguage: result.userLanguage
+              userLanguage: language
             });
             
             // Don't return message to chat - results will be shown in TransferResults component
@@ -179,7 +181,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
               ...extractedData, 
               ...result.extractedData,
               transferOptions: null,
-              transferAnalysis: noDataMessage
+              transferAnalysis: noDataMessage,
+              userLanguage: language
             });
             
             // Return the "nothing found" message to chat
@@ -206,7 +209,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         },
         body: JSON.stringify({ 
           transferData: transferData,
-          userLanguage: 'en'
+          userLanguage: language
         })
       });
 
