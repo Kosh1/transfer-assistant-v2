@@ -288,15 +288,54 @@ class GoogleSearchService {
       };
     }
     
-    // Check if any result mentions Vienna
-    const hasViennaMention = results.some(result => 
-      viennaIndicators.some(indicator => 
-        result.title.toLowerCase().includes(indicator) ||
-        result.snippet.toLowerCase().includes(indicator)
-      )
-    );
+    // Check for explicit Vienna location indicators in results
+    // Look for results that clearly indicate the address is in Vienna
+    const hasViennaLocation = results.some(result => {
+      const titleLower = result.title.toLowerCase();
+      const snippetLower = result.snippet.toLowerCase();
+      
+      // Check if the result explicitly mentions Vienna as the location
+      const hasViennaInTitle = viennaIndicators.some(indicator => 
+        titleLower.includes(indicator)
+      );
+      
+      const hasViennaInSnippet = viennaIndicators.some(indicator => 
+        snippetLower.includes(indicator)
+      );
+      
+      // Additional validation: check if the result is about Vienna locations
+      const isViennaLocation = snippetLower.includes('vienna') || 
+                              snippetLower.includes('wien') ||
+                              titleLower.includes('vienna') ||
+                              titleLower.includes('wien');
+      
+      // Only consider it valid if Vienna is mentioned in the right context
+      return (hasViennaInTitle || hasViennaInSnippet) && isViennaLocation;
+    });
     
-    if (hasViennaMention) {
+    // Additional check: look for non-Vienna indicators
+    const hasNonViennaIndicators = results.some(result => {
+      const titleLower = result.title.toLowerCase();
+      const snippetLower = result.snippet.toLowerCase();
+      
+      // Check for Munich, Berlin, Paris, etc.
+      const nonViennaCities = ['munich', 'münchen', 'berlin', 'paris', 'london', 'rome', 'madrid'];
+      return nonViennaCities.some(city => 
+        titleLower.includes(city) || snippetLower.includes(city)
+      );
+    });
+    
+    // If we find non-Vienna indicators, it's definitely not in Vienna
+    if (hasNonViennaIndicators) {
+      return {
+        isValid: false,
+        location: null,
+        confidence: 'high',
+        clarification: 'This location is not in Vienna. Please provide a Vienna address or landmark.'
+      };
+    }
+    
+    if (hasViennaLocation) {
       return {
         isValid: true,
         location: 'Vienna, Austria',
