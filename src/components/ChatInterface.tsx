@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, SmartToy, Person, Mic } from '@mui/icons-material';
 import { ChatMessage, TransferData, TransferOption } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
+import { ChatSessionService } from '../services/chatSessionService';
 
 interface ChatInterfaceProps {
   onDataReceived: (data: {
@@ -58,6 +59,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const [showClearHistory, setShowClearHistory] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [userId] = useState('anonymous'); // В реальном приложении получать из auth
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +70,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         behavior: "smooth",
         block: "end"
       });
+    }
+  };
+
+  // Функция для загрузки истории чата
+  const loadChatHistory = async (sessionId: string) => {
+    try {
+      const response = await fetch(`/api/chat-history?sessionId=${sessionId}&userId=${userId}`);
+      if (!response.ok) {
+      throw new Error('Failed to load chat history');
+      }
+      
+      const { messages: historyMessages } = await response.json();
+      
+      const formattedMessages: ChatMessage[] = historyMessages.map((msg: any) => ({
+        id: msg.id,
+        type: msg.sender_type,
+        content: msg.content,
+        timestamp: new Date(msg.created_at)
+      }));
+      
+      setMessages(formattedMessages);
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+      setError('Failed to load chat history');
     }
   };
 
@@ -86,6 +113,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       setTransferOptions(null);
       setTransferAnalysis(null);
       setShowClearHistory(false);
+      setSessionId(null); // Сброс сессии при очистке
+      localStorage.removeItem('chatSessionId'); // Очистка localStorage
     } catch (err) {
       console.error('Failed to clear history:', err);
       setError('Failed to clear conversation history');
@@ -107,6 +136,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Загрузка истории чата при наличии sessionId в URL или localStorage
+  useEffect(() => {
+    const loadSessionFromStorage = async () => {
+      try {
+        // Проверяем localStorage для sessionId
+        const savedSessionId = localStorage.getItem('chatSessionId');
+        if (savedSessionId && !sessionId) {
+          setSessionId(savedSessionId);
+          await loadChatHistory(savedSessionId);
+        }
+      } catch (error) {
+        console.error('Failed to load session from storage:', error);
+      }
+    };
+
+    loadSessionFromStorage();
+  }, []);
+
+  // Сохранение sessionId в localStorage
+  useEffect(() => {
+    if (sessionId) {
+      localStorage.setItem('chatSessionId', sessionId);
+    }
+  }, [sessionId]);
+
   // Scroll to results when they appear
   useEffect(() => {
     if (transferData && transferOptions && transferAnalysis && resultsRef.current) {
@@ -117,7 +171,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   }, [transferData, transferOptions, transferAnalysis]);
 
   // LLM processing function
-  const processWithLLM = async (userMessage: string) => {
+  const processWithLLM = async (userMessage: string, currentSessionId?: string) => {
     setIsProcessing(true);
     setError('');
     
@@ -130,7 +184,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         },
         body: JSON.stringify({ 
           message: userMessage,
-          userLanguage: language 
+          userLanguage: language,
+          sessionId: currentSessionId,
+          userId: userId
         })
       });
 
@@ -139,6 +195,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       }
 
       const result = await response.json();
+      
+      // Сохраняем sessionId если он был создан
+      if (result.sessionId && !sessionId) {
+        setSessionId(result.sessionId);
+      }
       
       // Check if we need clarification for addresses or passengers/luggage
       if (result.needsClarification) {
@@ -262,8 +323,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       // Save user message to chat
       await addUserMessage(userMessage);
       
-      // Process with LLM
-      const llmResponse = await processWithLLM(userMessage);
+      // Process with LLM (теперь с sessionId)
+      const llmResponse = await processWithLLM(userMessage, sessionId || undefined);
       
       // Only add assistant response to chat if there's a message to show
       if (llmResponse) {
