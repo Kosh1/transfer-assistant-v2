@@ -162,7 +162,7 @@ Respond in JSON format:
 
       // Create FormData for multipart upload
       const formData = new FormData();
-      const audioBlob = new Blob([audioBuffer], { type: 'audio/webm' });
+      const audioBlob = new Blob([audioBuffer.buffer], { type: 'audio/webm' });
       formData.append('file', audioBlob, 'audio.webm');
       formData.append('model', 'whisper-1');
       formData.append('language', 'auto');
