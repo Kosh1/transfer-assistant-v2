@@ -78,25 +78,37 @@ export class ChatSessionService {
   // Добавление сообщения в сессию
   async addMessage(sessionId: string, content: string, senderType: 'user' | 'assistant'): Promise<string> {
     console.log('💬 Adding message to session:', sessionId, 'Type:', senderType)
+    console.log('👤 User ID:', this.userId)
+    console.log('📝 Content length:', content.length)
     
-    const { data, error } = await supabase
-      .from('chat_messages')
-      .insert({
+    try {
+      const insertData = {
         session_id: sessionId,
         user_id: this.userId,
         sender_type: senderType,
-        content
-      })
-      .select('id')
-      .single()
+        content: content
+      };
+      
+      console.log('📤 Insert data:', insertData);
+      
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .insert(insertData)
+        .select('id')
+        .single()
 
-    if (error) {
-      console.error('Error adding message:', error)
-      throw new Error('Failed to add message')
+      if (error) {
+        console.error('❌ Error adding message:', error)
+        console.error('❌ Error details:', JSON.stringify(error, null, 2))
+        throw new Error('Failed to add message')
+      }
+
+      console.log('✅ Message added successfully:', data.id)
+      return data.id
+    } catch (err) {
+      console.error('❌ Exception in addMessage:', err)
+      throw err
     }
-
-    console.log('✅ Message added:', data.id)
-    return data.id
   }
 
   // Получение сообщений сессии
