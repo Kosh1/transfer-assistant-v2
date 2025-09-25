@@ -228,7 +228,7 @@ Respond in JSON format:
   async generateCarDescription(carModel: string, userLanguage: string = 'en'): Promise<string> {
     try {
       if (!this.apiKey) {
-        return 'Standard Vehicle';
+        return '';
       }
 
       const systemPrompt = `You are a car expert. Based on the car model provided, give a brief 2-3 word description of the vehicle type in the user's language.
@@ -265,10 +265,10 @@ Respond with ONLY the description, no additional text.`;
       const result = await response.json();
       const description = result.choices[0]?.message?.content?.trim();
       
-      return description || 'Standard Vehicle';
+      return description || '';
     } catch (error) {
       console.error('Car description generation error:', error);
-      return 'Standard Vehicle';
+      return '';
     }
   }
 }

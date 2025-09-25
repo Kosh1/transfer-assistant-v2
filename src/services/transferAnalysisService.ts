@@ -173,7 +173,7 @@ class TransferAnalysisService {
           rank: index + 1,
           provider: option.supplierName || 'Unknown Provider',
           carDetails: {
-            description: option.carDetails?.description || option.carDetails?.modelDescription || 'Standard Vehicle',
+            description: option.carDetails?.description || option.carDetails?.modelDescription || '',
             capacity: this.extractCapacity(option),
             luggage: (option as any).carDetails?.luggage || 2,
             carExample: option.carDetails?.carExample,

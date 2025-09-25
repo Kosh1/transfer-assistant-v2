@@ -436,22 +436,22 @@ class TaxiBookingService {
       const transformedOptions: TransferOption[] = await Promise.all(transferOptions.map(async (option, index) => {
         // Extract car details - try multiple possible fields
         const carDetails = option.carDetails || {};
-        let description = carDetails.description || option.description || option.vehicleType || option.carType || 'Standard Vehicle';
-        let modelDescription = carDetails.modelDescription || carDetails.model || option.model || option.vehicleModel || 'Standard Model';
+        let description = carDetails.description || option.description || option.vehicleType || option.carType || '';
+        let modelDescription = carDetails.modelDescription || carDetails.model || option.model || option.vehicleModel || '';
         
         // Extract car example (actual model name with "or similar")
-        const baseModel = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || 'Standard Model';
-        const carExample = baseModel === 'Standard Model' ? 'Standard Model' : `${baseModel} or similar`;
+        const baseModel = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || '';
+        const carExample = baseModel ? `${baseModel} or similar` : '';
         
         // Generate car description using LLM (but with timeout)
-        let carDescription = 'Standard Vehicle';
-        if (carExample && carExample !== 'Standard Model') {
+        let carDescription = '';
+        if (carExample) {
           try {
             // Use a quick LLM call with timeout
             carDescription = await this.generateCarDescriptionWithTimeout(carExample, userLanguage);
           } catch (error) {
             console.error(`❌ Failed to generate car description for ${carExample}:`, error);
-            carDescription = 'Standard Vehicle';
+            carDescription = '';
           }
         }
         
@@ -474,7 +474,7 @@ class TaxiBookingService {
         
         // Extract supplier information
         const supplierName = option.supplierName || option.name || option.provider || option.company || 'Unknown Supplier';
-        const supplierCategory = option.supplierCategory || option.category || option.serviceLevel || 'Standard';
+        const supplierCategory = option.supplierCategory || option.category || option.serviceLevel || '';
         
         // Extract additional features
         const meetAndGreet = option.meetAndGreet || option.meetAndGreetService || false;
@@ -734,10 +734,10 @@ Respond with ONLY the description, no additional text.`
       const result = await response.json();
       const description = result.choices[0]?.message?.content?.trim();
       
-      return description || 'Standard Vehicle';
+      return description || '';
     } catch (error) {
       console.error('LLM car description generation error:', error);
-      return 'Standard Vehicle';
+      return '';
     }
   }
 
