@@ -114,7 +114,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       setTransferAnalysis(null);
       setShowClearHistory(false);
       setSessionId(null); // Сброс сессии при очистке
-      localStorage.removeItem('chatSessionId'); // Очистка localStorage
     } catch (err) {
       console.error('Failed to clear history:', err);
       setError('Failed to clear conversation history');
@@ -136,30 +135,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Загрузка истории чата при наличии sessionId в URL или localStorage
+  // Очистка localStorage при загрузке страницы для предотвращения восстановления сессии
   useEffect(() => {
-    const loadSessionFromStorage = async () => {
-      try {
-        // Проверяем localStorage для sessionId
-        const savedSessionId = localStorage.getItem('chatSessionId');
-        if (savedSessionId && !sessionId) {
-          setSessionId(savedSessionId);
-          await loadChatHistory(savedSessionId);
-        }
-      } catch (error) {
-        console.error('Failed to load session from storage:', error);
-      }
-    };
-
-    loadSessionFromStorage();
+    // Очищаем localStorage при загрузке страницы
+    localStorage.removeItem('chatSessionId');
+    // Сбрасываем все состояние к начальным значениям
+    setSessionId(null);
+    setExtractedData({});
+    setTransferData(null);
+    setTransferOptions(null);
+    setTransferAnalysis(null);
   }, []);
 
-  // Сохранение sessionId в localStorage
-  useEffect(() => {
-    if (sessionId) {
-      localStorage.setItem('chatSessionId', sessionId);
-    }
-  }, [sessionId]);
+  // Убрано сохранение sessionId в localStorage для предотвращения восстановления сессии
 
   // Scroll to results when they appear
   useEffect(() => {
