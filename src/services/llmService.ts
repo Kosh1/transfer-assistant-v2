@@ -156,6 +156,11 @@ Respond in JSON format:
 
   async transcribeAudio(audioBuffer: Buffer): Promise<{ text: string }> {
     try {
+      console.log('🎤 Starting audio transcription...');
+      console.log('🔑 API Key exists:', !!this.apiKey);
+      console.log('🔑 API Key length:', this.apiKey?.length);
+      console.log('📊 Audio buffer size:', audioBuffer.length, 'bytes');
+      
       if (!this.apiKey) {
         throw new Error('LLM API key not configured');
       }
@@ -164,10 +169,14 @@ Respond in JSON format:
       const formData = new FormData();
       const uint8Array = new Uint8Array(audioBuffer);
       const audioBlob = new Blob([uint8Array], { type: 'audio/webm' });
+      console.log('📦 Audio blob size:', audioBlob.size, 'bytes');
+      console.log('📦 Audio blob type:', audioBlob.type);
+      
       formData.append('file', audioBlob, 'audio.webm');
       formData.append('model', 'whisper-1');
       formData.append('language', 'auto');
 
+      console.log('🚀 Sending request to OpenAI Whisper API...');
       const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
         method: 'POST',
         headers: {
@@ -177,16 +186,20 @@ Respond in JSON format:
         body: formData
       });
 
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('OpenAI Whisper API error:', errorText);
+        console.error('❌ OpenAI Whisper API error:', errorText);
         throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
+      console.log('✅ Transcription result:', result);
       return { text: result.text };
     } catch (error) {
-      console.error('Audio transcription error:', error);
+      console.error('❌ Audio transcription error:', error);
       throw error;
     }
   }
