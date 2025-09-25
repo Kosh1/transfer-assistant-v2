@@ -135,9 +135,9 @@ class TaxiBookingService {
       }
     }
     
-    // All retries failed, return fallback data
-    console.log('🔄 All retries failed, returning fallback data...');
-    return this.getFallbackTransferOptions(params, userLanguage || 'en');
+    // All retries failed, throw error
+    console.log('🔄 All retries failed');
+    throw new Error(`Transfer search failed after ${maxRetries} attempts: ${lastError?.message || 'Unknown error'}`);
   }
 
   // Perform the actual transfer search
@@ -432,20 +432,27 @@ class TaxiBookingService {
       
       console.log(`📊 Found ${transferOptions.length} transfer options from Booking.com`);
       
-      // Transform Booking.com data to our format (without LLM descriptions for speed)
-      const transformedOptions: TransferOption[] = transferOptions.map((option, index) => {
+      // Transform Booking.com data to our format with LLM descriptions
+      const transformedOptions: TransferOption[] = await Promise.all(transferOptions.map(async (option, index) => {
         // Extract car details - try multiple possible fields
         const carDetails = option.carDetails || {};
         let description = carDetails.description || option.description || option.vehicleType || option.carType || 'Standard Vehicle';
         let modelDescription = carDetails.modelDescription || carDetails.model || option.model || option.vehicleModel || 'Standard Model';
         
-        // Extract car example (actual model name)
-        const carExample = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || 'Standard Model';
+        // Extract car example (actual model name with "or similar")
+        const baseModel = carDetails.model || option.model || option.vehicleModel || modelDescription.split(' or similar')[0] || 'Standard Model';
+        const carExample = baseModel === 'Standard Model' ? 'Standard Model' : `${baseModel} or similar`;
         
-        // Generate simple car description based on model name (fast, no LLM call)
+        // Generate car description using LLM (but with timeout)
         let carDescription = 'Standard Vehicle';
         if (carExample && carExample !== 'Standard Model') {
-          carDescription = this.generateSimpleCarDescription(carExample, userLanguage);
+          try {
+            // Use a quick LLM call with timeout
+            carDescription = await this.generateCarDescriptionWithTimeout(carExample, userLanguage);
+          } catch (error) {
+            console.error(`❌ Failed to generate car description for ${carExample}:`, error);
+            carDescription = 'Standard Vehicle';
+          }
         }
         
         // If we have a vehicle type, use it as description
@@ -500,7 +507,7 @@ class TaxiBookingService {
           vehicleCategory: vehicleCategory,
           selfLink: option.link || option.bookingLink || option.bookingUrl || `https://example.com/book/${option.supplierID || index}`
         };
-      });
+      }));
       
       console.log('✅ Transformed Booking.com data:', transformedOptions.length, 'options');
       console.log('💰 Price range:', Math.min(...transformedOptions.map(o => o.price)), '-', Math.max(...transformedOptions.map(o => o.price)), 'EUR');
@@ -678,124 +685,60 @@ class TaxiBookingService {
     return languageMap[userLanguage] || 'en-gb';
   }
 
-  // Get fallback transfer options when API fails
-  private getFallbackTransferOptions(params: TransferSearchParams, userLanguage: string): TransferOption[] {
-    console.log('🔄 Generating fallback transfer options...');
-    
-    const fallbackOptions: TransferOption[] = [
-      {
-        supplierID: 'fallback-1',
-        supplierName: 'Vienna Transfer Service',
-        supplierCategory: 'Standard',
-        carDetails: {
-          description: 'Standard Vehicle',
-          modelDescription: 'VW Passat or similar',
-          carExample: 'VW Passat',
-          carDescription: this.generateSimpleCarDescription('VW Passat', userLanguage)
+
+  // Generate car description using LLM with timeout
+  private async generateCarDescriptionWithTimeout(carModel: string, userLanguage: string): Promise<string> {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      
+      const response = await fetch(process.env.REACT_APP_LLM_API_URL || 'https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_LLM_API_KEY}`,
+          'Content-Type': 'application/json',
         },
-        maxPassenger: params.passengers,
-        bags: params.luggage,
-        price: 45.00,
-        originalPrice: 45.00,
-        currency: 'EUR',
-        duration: 25,
-        meetAndGreet: true,
-        drivingDistance: 18.5,
-        isShared: false,
-        isPremium: false,
-        vehicleCategory: 'standard',
-        selfLink: 'https://example.com/book/fallback-1'
-      },
-      {
-        supplierID: 'fallback-2',
-        supplierName: 'Premium Vienna Transfers',
-        supplierCategory: 'Premium',
-        carDetails: {
-          description: 'Premium Vehicle',
-          modelDescription: 'BMW 5 Series or similar',
-          carExample: 'BMW 5 Series',
-          carDescription: this.generateSimpleCarDescription('BMW 5 Series', userLanguage)
-        },
-        maxPassenger: params.passengers,
-        bags: params.luggage,
-        price: 65.00,
-        originalPrice: 65.00,
-        currency: 'EUR',
-        duration: 22,
-        meetAndGreet: true,
-        drivingDistance: 18.5,
-        isShared: false,
-        isPremium: true,
-        vehicleCategory: 'premium',
-        selfLink: 'https://example.com/book/fallback-2'
-      },
-      {
-        supplierID: 'fallback-3',
-        supplierName: 'Economy Transfer Co',
-        supplierCategory: 'Economy',
-        carDetails: {
-          description: 'Economy Vehicle',
-          modelDescription: 'Skoda Octavia or similar',
-          carExample: 'Skoda Octavia',
-          carDescription: this.generateSimpleCarDescription('Skoda Octavia', userLanguage)
-        },
-        maxPassenger: params.passengers,
-        bags: params.luggage,
-        price: 35.00,
-        originalPrice: 35.00,
-        currency: 'EUR',
-        duration: 28,
-        meetAndGreet: false,
-        drivingDistance: 18.5,
-        isShared: false,
-        isPremium: false,
-        vehicleCategory: 'economy',
-        selfLink: 'https://example.com/book/fallback-3'
+        signal: controller.signal,
+        body: JSON.stringify({
+          model: process.env.REACT_APP_LLM_MODEL || 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a car expert. Based on the car model provided, give a brief 2-3 word description of the vehicle type in the user's language.
+
+Examples:
+- "Skoda Octavia" -> "обычная легковая" (ru) / "regular sedan" (en) / "berline normale" (fr)
+- "BMW 5 Series" -> "премиум седан" (ru) / "premium sedan" (en) / "berline premium" (fr)
+- "Mercedes V-Class" -> "большой минивен" (ru) / "large minivan" (en) / "grand monospace" (fr)
+- "Ford Tourneo" -> "большой минивен" (ru) / "large minivan" (en) / "grand monospace" (fr)
+- "VW Passat" -> "семейный седан" (ru) / "family sedan" (en) / "berline familiale" (fr)
+
+Respond with ONLY the description, no additional text.`
+            },
+            {
+              role: 'user',
+              content: `Car model: ${carModel}. Language: ${userLanguage}. Describe this car type briefly.`
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 20
+        })
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`LLM API error: ${response.statusText}`);
       }
-    ];
-
-    console.log(`✅ Generated ${fallbackOptions.length} fallback options`);
-    return fallbackOptions;
-  }
-
-  // Generate simple car description without LLM (fast)
-  private generateSimpleCarDescription(carModel: string, userLanguage: string): string {
-    const model = carModel.toLowerCase();
-    
-    // Simple pattern matching for common car types
-    if (model.includes('bmw') || model.includes('mercedes') || model.includes('audi') || model.includes('lexus')) {
-      return userLanguage === 'ru' ? 'премиум седан' : 
-             userLanguage === 'de' ? 'Premium Limousine' :
-             userLanguage === 'fr' ? 'berline premium' :
-             'premium sedan';
+      
+      const result = await response.json();
+      const description = result.choices[0]?.message?.content?.trim();
+      
+      return description || 'Standard Vehicle';
+    } catch (error) {
+      console.error('LLM car description generation error:', error);
+      return 'Standard Vehicle';
     }
-    
-    if (model.includes('minivan') || model.includes('v-class') || model.includes('sprinter')) {
-      return userLanguage === 'ru' ? 'большой минивен' :
-             userLanguage === 'de' ? 'großer Minivan' :
-             userLanguage === 'fr' ? 'grand monospace' :
-             'large minivan';
-    }
-    
-    if (model.includes('passat') || model.includes('octavia') || model.includes('golf')) {
-      return userLanguage === 'ru' ? 'семейный седан' :
-             userLanguage === 'de' ? 'Familienlimousine' :
-             userLanguage === 'fr' ? 'berline familiale' :
-             'family sedan';
-    }
-    
-    if (model.includes('taxi') || model.includes('standard')) {
-      return userLanguage === 'ru' ? 'обычная легковая' :
-             userLanguage === 'de' ? 'Standard-Fahrzeug' :
-             userLanguage === 'fr' ? 'véhicule standard' :
-             'standard vehicle';
-    }
-    
-    // Default fallback
-    return userLanguage === 'ru' ? 'легковая машина' :
-           userLanguage === 'de' ? 'Pkw' :
-           userLanguage === 'fr' ? 'voiture' :
-           'car';
   }
 
   // Format date and time for API in ISO format

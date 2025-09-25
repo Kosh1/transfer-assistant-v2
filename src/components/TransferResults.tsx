@@ -372,9 +372,11 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                         <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
                           {option.provider}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {option.carDetails.description}
-                        </Typography>
+                        {option.carDetails.description && option.carDetails.description !== 'Standard Vehicle' && (
+                          <Typography variant="body2" color="text.secondary">
+                            {option.carDetails.description}
+                          </Typography>
+                        )}
                         {option.carDetails.carExample && (
                           <Typography variant="body2" color="primary.main" sx={{ fontWeight: 500, mt: 0.5 }}>
                             {getTranslation('carExample')}: {option.carDetails.carExample}
