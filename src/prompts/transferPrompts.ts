@@ -5,6 +5,7 @@ export const TRANSFER_DATA_PROMPTS = {
   COLLECT_TRANSFER_DATA: `You are a helpful transfer assistant for Vienna. Your job is to collect transfer booking information from users.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 You need to collect the following information:
 - from: departure location (MUST be in Vienna or Vienna Airport)
@@ -48,6 +49,7 @@ export const TRANSFER_ANALYSIS_PROMPTS = {
   ANALYZE_INDIVIDUAL_OPTION: `You are a transfer analysis expert. Analyze each transfer option and provide detailed insights.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 For each transfer option, provide analysis in this format:
 
@@ -71,6 +73,7 @@ Be concise but informative. Focus on practical benefits for the customer.`,
   ANALYZE_RATINGS_JSON: `You are a rating analysis expert. Analyze search results for transfer provider ratings and extract structured data.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 Analyze the provided search results and extract rating information. Return ONLY a JSON object in this exact format:
 
@@ -112,6 +115,7 @@ If no ratings found, return:
   ANALYZE_CASHBACK_JSON: `You are a cashback and coupon analysis expert. Analyze search results for transfer provider offers and extract structured data.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 Analyze the provided search results and extract cashback/coupon information. Return ONLY a JSON object in this exact format:
 
@@ -155,17 +159,30 @@ If no offers found, return:
 }`
 };
 
-// Helper function to replace time placeholders in prompts
-export function replaceTimePlaceholders(prompt: string): string {
+// Helper function to replace time and language placeholders in prompts
+export function replaceTimePlaceholders(prompt: string, userLanguage: string = 'en'): string {
   const now = new Date();
   const currentDate = now.toISOString().split('T')[0];
   const currentTime = now.toTimeString().split(' ')[0];
   const currentYear = now.getFullYear();
 
+  const languageMap: { [key: string]: string } = {
+    'en': 'English',
+    'ru': 'Russian',
+    'fr': 'French',
+    'es': 'Spanish',
+    'de': 'German',
+    'it': 'Italian',
+    'zh': 'Chinese'
+  };
+
+  const languageName = languageMap[userLanguage] || 'English';
+
   return prompt
     .replace(/\{\{CURRENT_DATE\}\}/g, currentDate)
     .replace(/\{\{CURRENT_TIME\}\}/g, currentTime)
-    .replace(/\{\{CURRENT_YEAR\}\}/g, currentYear.toString());
+    .replace(/\{\{CURRENT_YEAR\}\}/g, currentYear.toString())
+    .replace(/\{\{USER_LANGUAGE\}\}/g, languageName);
 }
 
 // Функция для генерации промптов с учетом языка
@@ -233,6 +250,7 @@ export function getLanguageSpecificPrompts(userLanguage: string = 'en') {
     ANALYZE_RATINGS_JSON: `You are a rating analysis expert. Analyze search results for transfer provider ratings and extract structured data.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 Analyze the provided search results and extract rating information. Return ONLY a JSON object in this exact format:
 
@@ -274,6 +292,7 @@ If no ratings found, return:
     ANALYZE_CASHBACK_JSON: `You are a cashback and coupon analysis expert. Analyze search results for transfer provider offers and extract structured data.
 
 Current time: {{CURRENT_DATE}} {{CURRENT_TIME}}
+User language: {{USER_LANGUAGE}}
 
 Analyze the provided search results and extract cashback/coupon information. Return ONLY a JSON object in this exact format:
 

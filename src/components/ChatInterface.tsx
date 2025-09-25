@@ -122,13 +122,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     setError('');
     
     try {
-      // Process message through API
+      // Process message through API with user language
       const response = await fetch('/api/process-message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage })
+        body: JSON.stringify({ 
+          message: userMessage,
+          userLanguage: language 
+        })
       });
 
       if (!response.ok) {

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, userLanguage = 'en' } = await request.json();
 
     if (!message) {
       return NextResponse.json(
@@ -15,9 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('🔄 Processing message:', message);
+    console.log('🌍 User language:', userLanguage);
 
     // Process message through LLM service
-    const result = await llmService.processUserMessage(message);
+    const result = await llmService.processUserMessage(message, userLanguage);
 
     console.log('✅ LLM Service result:', result);
 

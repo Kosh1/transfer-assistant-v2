@@ -27,19 +27,20 @@ class LLMService {
     }
   }
 
-  async processUserMessage(message: string): Promise<LLMResponse> {
+  async processUserMessage(message: string, userLanguage: string = 'en'): Promise<LLMResponse> {
     try {
       console.log('🔄 Processing user message through coordinator:', message);
+      console.log('🌍 User language:', userLanguage);
       
       // Add user message to history
       this.addToHistory('user', message);
       
-      // Detect language
-      const language = this.detectLanguage(message);
-      console.log('🌍 Detected user language:', language);
+      // Use provided language or detect from message
+      const language = userLanguage || this.detectLanguage(message);
+      console.log('🌍 Using language:', language);
       
       // Process through transfer data service
-      const result = await transferDataService.extractTransferDetails(message, this.conversationHistory);
+      const result = await transferDataService.extractTransferDetails(message, this.conversationHistory, language);
       
       console.log('🔍 LLM Service result:', JSON.stringify(result, null, 2));
       

@@ -46,17 +46,18 @@ class TransferDataService {
     };
   }
 
-  async extractTransferDetails(message: string, conversationHistory: Array<{ role: string; content: string }> = []): Promise<LLMResponse> {
+  async extractTransferDetails(message: string, conversationHistory: Array<{ role: string; content: string }> = [], userLanguage: string = 'en'): Promise<LLMResponse> {
     try {
       console.log('Processing user message:', message);
+      console.log('🌍 User language:', userLanguage);
       
-      // Detect language from message
-      const detectedLanguage = this.detectLanguage(message);
+      // Use provided language or detect from message
+      const detectedLanguage = userLanguage || this.detectLanguage(message);
       this.currentData.language = detectedLanguage;
-      console.log('🌍 Detected language:', detectedLanguage);
+      console.log('🌍 Using language:', detectedLanguage);
       
-      // Replace placeholders in prompt
-      const prompt = replaceTimePlaceholders(TRANSFER_DATA_PROMPTS.COLLECT_TRANSFER_DATA);
+      // Replace placeholders in prompt with language information
+      const prompt = replaceTimePlaceholders(TRANSFER_DATA_PROMPTS.COLLECT_TRANSFER_DATA, detectedLanguage);
       
       // Prepare messages for LLM
       const messages = [

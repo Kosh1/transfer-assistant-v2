@@ -558,8 +558,8 @@ Language-specific headers:
       // Format search results for LLM analysis
       const markdown = this.formatSupplierRatingsForLLM(supplierName, searchResults);
       
-      const languagePrompts = getLanguageSpecificPrompts(userLanguage);
-      const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_RATINGS_JSON) + `
+        const languagePrompts = getLanguageSpecificPrompts(userLanguage);
+        const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_RATINGS_JSON, userLanguage) + `
 
 Результаты поиска для "${supplierName}":
 ${markdown}
@@ -642,8 +642,8 @@ ${markdown}
       // Format search results for LLM analysis
       const markdown = this.formatSupplierCashbackForLLM(supplierName, searchResults);
       
-      const languagePrompts = getLanguageSpecificPrompts(userLanguage);
-      const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_CASHBACK_JSON) + `
+        const languagePrompts = getLanguageSpecificPrompts(userLanguage);
+        const prompt = replaceTimePlaceholders(languagePrompts.ANALYZE_CASHBACK_JSON, userLanguage) + `
 
 Результаты поиска для "${supplierName}":
 ${markdown}
