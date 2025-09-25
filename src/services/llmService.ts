@@ -160,24 +160,26 @@ Respond in JSON format:
         throw new Error('LLM API key not configured');
       }
 
-      // Convert buffer to base64
-      const base64Audio = audioBuffer.toString('base64');
-      
+      // Create FormData for multipart upload
+      const formData = new FormData();
+      const audioBlob = new Blob([audioBuffer], { type: 'audio/webm' });
+      formData.append('file', audioBlob, 'audio.webm');
+      formData.append('model', 'whisper-1');
+      formData.append('language', 'auto');
+
       const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
+          // Don't set Content-Type, let browser set it with boundary for FormData
         },
-        body: JSON.stringify({
-          model: 'whisper-1',
-          file: `data:audio/wav;base64,${base64Audio}`,
-          language: 'auto'
-        })
+        body: formData
       });
 
       if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('OpenAI Whisper API error:', errorText);
+        throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
