@@ -154,7 +154,7 @@ Respond in JSON format:
     }
   }
 
-  async transcribeAudio(audioBuffer: Buffer): Promise<{ text: string }> {
+  async transcribeAudio(audioBuffer: Buffer, userLanguage: string = 'en'): Promise<{ text: string }> {
     try {
       console.log('🎤 Starting audio transcription...');
       console.log('🔑 API Key exists:', !!this.apiKey);
@@ -174,7 +174,20 @@ Respond in JSON format:
       
       formData.append('file', audioBlob, 'audio.webm');
       formData.append('model', 'whisper-1');
-      formData.append('language', 'auto');
+      
+      // Map language codes to ISO-639-1 format
+      const languageMap: { [key: string]: string } = {
+        'en': 'en',
+        'ru': 'ru', 
+        'de': 'de',
+        'fr': 'fr',
+        'es': 'es',
+        'it': 'it'
+      };
+      
+      const whisperLanguage = languageMap[userLanguage] || 'en';
+      formData.append('language', whisperLanguage);
+      console.log('🌍 Using language for transcription:', whisperLanguage);
 
       console.log('🚀 Sending request to OpenAI Whisper API...');
       const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {

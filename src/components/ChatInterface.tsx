@@ -420,6 +420,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         try {
           const formData = new FormData();
           formData.append('audio', audioBlob, 'audio.webm');
+          formData.append('language', language); // Pass current user language
 
           const response = await fetch('/api/transcribe-audio', {
             method: 'POST',
