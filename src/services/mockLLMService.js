@@ -1,10 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import llmService from '../../../services/llmService';
-import { ChatSessionService } from '../../../services/chatSessionService';
-
-// Мок-сервис для тестирования
-const mockLLMService = {
-  async processUserMessage(message: string, userLanguage: string = 'en') {
+// Мок-версия LLM сервиса для тестирования
+class MockLLMService {
+  async processUserMessage(message, userLanguage = 'en') {
     console.log('🤖 Mock LLM processing message:', message);
     console.log('🌍 User language:', userLanguage);
     
@@ -37,10 +33,10 @@ const mockLLMService = {
         needsClarification: true
       };
     }
-  },
+  }
   
-  extractDataFromMessage(message: string) {
-    const data: any = {};
+  extractDataFromMessage(message) {
+    const data = {};
     
     // Извлекаем количество пассажиров
     const passengerMatch = message.match(/(\d+)\s*(pax|passengers?|people)/i);
@@ -80,48 +76,6 @@ const mockLLMService = {
     
     return data;
   }
-};
-
-export const dynamic = 'force-dynamic';
-
-export async function POST(request: NextRequest) {
-  try {
-    const { message, userLanguage = 'en', sessionId, userId = 'anonymous' } = await request.json();
-
-    if (!message) {
-      return NextResponse.json(
-        { error: 'Message is required' },
-        { status: 400 }
-      );
-    }
-
-    console.log('🔄 Processing message:', message);
-    console.log('🌍 User language:', userLanguage);
-    console.log('👤 User ID:', userId);
-    console.log('💬 Session ID:', sessionId);
-
-    // Process message through LLM service (using mock for testing)
-    const result = await mockLLMService.processUserMessage(message, userLanguage);
-
-    console.log('✅ LLM Service result:', result);
-
-    // Временно отключаем Supabase для тестирования
-    let currentSessionId = sessionId || 'mock-session-id';
-
-    return NextResponse.json({
-      ...result,
-      sessionId: currentSessionId
-    });
-  } catch (error) {
-    console.error('❌ Error processing message:', error);
-    return NextResponse.json(
-      { 
-        error: 'Failed to process message',
-        response: "Sorry, I didn't quite understand your request. Can you clarify the transfer details?",
-        extractedData: {},
-        needsClarification: true
-      },
-      { status: 500 }
-    );
-  }
 }
+
+module.exports = new MockLLMService();

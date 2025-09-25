@@ -139,7 +139,8 @@ class TransferDataService {
 
       // Check for function calls
       if (llmMessage.function_call) {
-        console.log('🔍 Function call:', llmMessage.function_call.name, JSON.parse(llmMessage.function_call.arguments));
+        console.log('🔍 Function call found:', llmMessage.function_call.name);
+        console.log('🔍 Function call arguments:', llmMessage.function_call.arguments);
         
         if (llmMessage.function_call.name === 'extract_transfer_data') {
           const args = JSON.parse(llmMessage.function_call.arguments);
@@ -191,6 +192,7 @@ class TransferDataService {
         }
       } else {
         console.log('❌ No function call found in LLM response');
+        console.log('📝 LLM response content:', llmMessage.content);
         
         // Try to parse function call from text content
         const functionCallMatch = llmMessage.content.match(/\[Call extract_transfer_data with: ([^\]]+)\]/);

@@ -211,6 +211,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       
       // Update extracted data if we have new information
       if (Object.keys(result.extractedData).length > 0) {
+        console.log('📊 Extracted data:', result.extractedData);
         setExtractedData(prev => ({ ...prev, ...result.extractedData }));
         
         // Check if we have enough data to proceed
@@ -219,7 +220,21 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         const hasPassengers = result.extractedData.passengers !== undefined && result.extractedData.passengers !== null;
         const hasLuggage = result.extractedData.luggage !== undefined && result.extractedData.luggage !== null;
         
+        console.log('🔍 Data validation:', {
+          hasRoute,
+          hasTiming,
+          hasPassengers,
+          hasLuggage,
+          from: result.extractedData.from,
+          to: result.extractedData.to,
+          date: result.extractedData.date,
+          time: result.extractedData.time,
+          passengers: result.extractedData.passengers,
+          luggage: result.extractedData.luggage
+        });
+        
         if (hasRoute && hasTiming && hasPassengers && hasLuggage) {
+          console.log('✅ All data available, starting transfer search...');
           // We have enough data, search for transfers
           const transferResults = await searchAndAnalyzeTransfers({
             ...extractedData,
@@ -252,7 +267,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
             // Return the "nothing found" message to chat
             return noDataMessage;
           }
+        } else {
+          console.log('⚠️ Not enough data for transfer search, waiting for more information...');
         }
+      } else {
+        console.log('📝 No extracted data from LLM response');
       }
       
       return result.response;
@@ -266,6 +285,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
 
   const searchAndAnalyzeTransfers = async (transferData: Partial<TransferData>) => {
     try {
+      console.log('🚀 Starting transfer search with data:', transferData);
+      
       const response = await fetch('/api/analyze-transfers', {
         method: 'POST',
         headers: {
@@ -277,14 +298,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         })
       });
 
+      console.log('📡 API response status:', response.status);
+
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
 
       const result = await response.json();
+      console.log('✅ Transfer search result:', result);
       return result;
     } catch (error) {
-      console.error('Error analyzing transfers:', error);
+      console.error('❌ Error analyzing transfers:', error);
       return {
         success: false,
         message: `Ошибка анализа трансферов: ${error}`,
