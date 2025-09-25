@@ -1,15 +1,30 @@
 import { supabase } from '../lib/supabase'
 import { ChatSession, ChatMessage } from '../types/database'
+import { v4 as uuidv4 } from 'uuid'
 
 export class ChatSessionService {
   private userId: string
 
   constructor(userId: string = 'anonymous') {
-    this.userId = userId
+    // Если userId не является UUID, создаем UUID для анонимного пользователя
+    this.userId = this.isValidUUID(userId) ? userId : this.generateAnonymousUserId()
+  }
+
+  private isValidUUID(uuid: string): boolean {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    return uuidRegex.test(uuid)
+  }
+
+  private generateAnonymousUserId(): string {
+    // Создаем детерминированный UUID на основе строки 'anonymous'
+    // Это позволит анонимным пользователям иметь постоянный ID
+    return uuidv4()
   }
 
   // Создание новой сессии
   async createSession(firstMessage?: string): Promise<string> {
+    console.log('🆕 Creating session for user:', this.userId)
+    
     const { data, error } = await supabase
       .from('chat_sessions')
       .insert({
@@ -24,6 +39,7 @@ export class ChatSessionService {
       throw new Error('Failed to create chat session')
     }
 
+    console.log('✅ Session created:', data.id)
     return data.id
   }
 
@@ -61,6 +77,8 @@ export class ChatSessionService {
 
   // Добавление сообщения в сессию
   async addMessage(sessionId: string, content: string, senderType: 'user' | 'assistant'): Promise<string> {
+    console.log('💬 Adding message to session:', sessionId, 'Type:', senderType)
+    
     const { data, error } = await supabase
       .from('chat_messages')
       .insert({
@@ -77,6 +95,7 @@ export class ChatSessionService {
       throw new Error('Failed to add message')
     }
 
+    console.log('✅ Message added:', data.id)
     return data.id
   }
 

@@ -2,86 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import llmService from '../../../services/llmService';
 import { ChatSessionService } from '../../../services/chatSessionService';
 
-// Мок-сервис для тестирования
-const mockLLMService = {
-  async processUserMessage(message: string, userLanguage: string = 'en') {
-    console.log('🤖 Mock LLM processing message:', message);
-    console.log('🌍 User language:', userLanguage);
-    
-    // Простое извлечение данных из сообщения
-    const extractedData = this.extractDataFromMessage(message);
-    
-    console.log('📊 Extracted data:', extractedData);
-    
-    // Проверяем, достаточно ли данных
-    const hasRoute = extractedData.from && extractedData.to;
-    const hasTiming = extractedData.date || extractedData.time;
-    const hasPassengers = extractedData.passengers !== undefined && extractedData.passengers !== null;
-    const hasLuggage = extractedData.luggage !== undefined && extractedData.luggage !== null;
-    
-    if (hasRoute && hasTiming && hasPassengers && hasLuggage) {
-      console.log('✅ All data available, proceeding to search');
-      return {
-        response: "Great! I have all the information I need. Let me search for transfer options for you.",
-        extractedData: {
-          ...extractedData,
-          isComplete: true
-        },
-        needsClarification: false
-      };
-    } else {
-      console.log('⚠️ Missing data, asking for clarification');
-      return {
-        response: "I need a bit more information. Could you please provide your pickup location, destination, number of passengers, and luggage?",
-        extractedData: extractedData,
-        needsClarification: true
-      };
-    }
-  },
-  
-  extractDataFromMessage(message: string) {
-    const data: any = {};
-    
-    // Извлекаем количество пассажиров
-    const passengerMatch = message.match(/(\d+)\s*(pax|passengers?|people)/i);
-    if (passengerMatch) {
-      data.passengers = parseInt(passengerMatch[1]);
-    }
-    
-    // Извлекаем количество багажа
-    const luggageMatch = message.match(/(\d+)\s*(bags?|luggage|suitcases?)/i);
-    if (luggageMatch) {
-      data.luggage = parseInt(luggageMatch[1]);
-    }
-    
-    // Извлекаем время
-    const timeMatch = message.match(/(\d{1,2}):?(\d{2})?/);
-    if (timeMatch) {
-      const hour = timeMatch[1];
-      const minute = timeMatch[2] || '00';
-      data.time = `${hour}:${minute}`;
-    }
-    
-    // Извлекаем дату (завтра)
-    if (message.toLowerCase().includes('tomorrow')) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      data.date = tomorrow.toISOString().split('T')[0];
-    }
-    
-    // Извлекаем маршрут
-    if (message.toLowerCase().includes('vienna') && message.toLowerCase().includes('airport')) {
-      data.from = 'Vienna';
-      data.to = 'Vienna Airport';
-    } else if (message.toLowerCase().includes('vienna airport') && message.toLowerCase().includes('vienna')) {
-      data.from = 'Vienna Airport';
-      data.to = 'Vienna';
-    }
-    
-    return data;
-  }
-};
-
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -100,13 +20,28 @@ export async function POST(request: NextRequest) {
     console.log('👤 User ID:', userId);
     console.log('💬 Session ID:', sessionId);
 
-    // Process message through LLM service (using mock for testing)
-    const result = await mockLLMService.processUserMessage(message, userLanguage);
+    // Инициализация сервиса чат-сессий
+    const chatService = new ChatSessionService(userId);
+    
+    // Создание или получение сессии
+    let currentSessionId = sessionId;
+    if (!currentSessionId) {
+      currentSessionId = await chatService.createSession(message);
+      console.log('🆕 Created new chat session:', currentSessionId);
+    }
+
+    // Сохранение сообщения пользователя
+    await chatService.addMessage(currentSessionId, message, 'user');
+    console.log('💾 Saved user message to database');
+
+    // Process message through LLM service
+    const result = await llmService.processUserMessage(message, userLanguage);
 
     console.log('✅ LLM Service result:', result);
 
-    // Временно отключаем Supabase для тестирования
-    let currentSessionId = sessionId || 'mock-session-id';
+    // Сохранение ответа ассистента
+    await chatService.addMessage(currentSessionId, result.response, 'assistant');
+    console.log('💾 Saved assistant response to database');
 
     return NextResponse.json({
       ...result,
