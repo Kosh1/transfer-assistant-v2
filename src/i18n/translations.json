@@ -38,11 +38,11 @@
       "searchPlaceholder": "Tell me about your transfer needs...",
       "noResults": "No transfer options found",
       "noResultsDescription": "Try adjusting your search criteria or contact us for assistance.",
-      "heroDescription": "Experience the future of travel with our AI-powered Vienna private transfer service. Our intelligent assistant compares prices from all major providers, analyzes the best options for your specific needs, and helps you book the perfect transfer in minutes.",
+      "heroDescription": "Experience the future of travel with Rational Transfer. Our intelligent service compares prices from all major providers, analyzes the best options for your specific needs, and helps you book the perfect transfer in minutes.",
       "features": {
-        "title": "Why Choose Our Vienna Transfer Search Service?",
-        "aiPowered": "AI-Powered Search",
-        "aiPoweredDesc": "Our intelligent AI finds the cheapest transfer providers on your route in just 15 minutes",
+        "title": "Why Choose Rational Transfer?",
+        "aiPowered": "Smart Search",
+        "aiPoweredDesc": "Our intelligent service finds the cheapest transfer providers on your route in just 15 minutes",
         "instantComparison": "Instant Price Comparison",
         "instantComparisonDesc": "Compare prices from multiple Vienna transfer providers instantly and see all available options",
         "providerRatings": "Provider Ratings",
@@ -110,7 +110,7 @@
       "noResults": "I couldn't find any transfer options for your request. Please try adjusting your search criteria."
     },
     "header": {
-      "title": "Transfer Assistant",
+      "title": "Rational Transfer",
       "language": "Language",
       "privacy": "Privacy",
       "support": "Support"
@@ -234,11 +234,11 @@
       "searchPlaceholder": "Расскажите мне о ваших потребностях в трансфере...",
       "noResults": "Варианты трансфера не найдены",
       "noResultsDescription": "Попробуйте изменить критерии поиска или обратитесь к нам за помощью.",
-      "heroDescription": "Окунитесь в будущее путешествий с нашим ИИ-сервисом частных трансферов в Вене. Наш умный помощник сравнивает цены от всех крупных поставщиков, анализирует лучшие варианты для ваших конкретных потребностей и помогает забронировать идеальный трансфер за минуты.",
+      "heroDescription": "Окунитесь в будущее путешествий с Rational Transfer. Наш умный сервис сравнивает цены от всех крупных поставщиков, анализирует лучшие варианты для ваших конкретных потребностей и помогает забронировать идеальный трансфер за минуты.",
       "features": {
-        "title": "Почему выбирают наш сервис поиска трансферов в Вене?",
-        "aiPowered": "ИИ-поиск",
-        "aiPoweredDesc": "Наш умный ИИ находит самых дешевых поставщиков трансферов на вашем маршруте всего за 15 минут",
+        "title": "Почему выбирают Rational Transfer?",
+        "aiPowered": "Умный поиск",
+        "aiPoweredDesc": "Наш умный сервис находит самых дешевых поставщиков трансферов на вашем маршруте всего за 15 минут",
         "instantComparison": "Мгновенное сравнение цен",
         "instantComparisonDesc": "Сравнивайте цены от нескольких поставщиков трансферов в Вене мгновенно и смотрите все доступные варианты",
         "providerRatings": "Рейтинги поставщиков",
@@ -306,7 +306,7 @@
       "noResults": "Я не смог найти варианты трансфера для вашего запроса. Попробуйте изменить критерии поиска."
     },
     "header": {
-      "title": "Помощник по трансферам",
+      "title": "Rational Transfer",
       "language": "Язык",
       "privacy": "Конфиденциальность",
       "support": "Поддержка"
@@ -472,7 +472,7 @@
       "noResults": "Je n'ai pas pu trouver d'options de transfert pour votre demande. Essayez d'ajuster vos critères de recherche."
     },
     "header": {
-      "title": "Assistant Transfert",
+      "title": "Rational Transfer",
       "language": "Langue",
       "privacy": "Confidentialité",
       "support": "Support"
@@ -593,7 +593,7 @@
       "noResults": "No pude encontrar opciones de transfer para tu solicitud. Intenta ajustar tus criterios de búsqueda."
     },
     "header": {
-      "title": "Asistente de Transfer",
+      "title": "Rational Transfer",
       "language": "Idioma",
       "privacy": "Privacidad",
       "support": "Soporte"
@@ -670,11 +670,11 @@
       "searchPlaceholder": "Erzählen Sie mir von Ihren Transfer-Bedürfnissen...",
       "noResults": "Keine Transfer-Optionen gefunden",
       "noResultsDescription": "Versuchen Sie, Ihre Suchkriterien anzupassen oder kontaktieren Sie uns für Hilfe.",
-      "heroDescription": "Erleben Sie die Zukunft des Reisens mit unserem KI-gestützten Wien Privat-Transfer Service. Unser intelligenter Assistent vergleicht Preise von allen großen Anbietern, analysiert die besten Optionen für Ihre spezifischen Bedürfnisse und hilft Ihnen, den perfekten Transfer in Minuten zu buchen.",
+      "heroDescription": "Erleben Sie die Zukunft des Reisens mit Rational Transfer. Unser intelligenter Service vergleicht Preise von allen großen Anbietern, analysiert die besten Optionen für Ihre spezifischen Bedürfnisse und hilft Ihnen, den perfekten Transfer in Minuten zu buchen.",
       "features": {
-        "title": "Warum unseren Wien Transfer Suchservice wählen?",
-        "aiPowered": "KI-gestützte Suche",
-        "aiPoweredDesc": "Unsere intelligente KI findet die günstigsten Transfer-Anbieter auf Ihrer Route in nur 15 Minuten",
+        "title": "Warum Rational Transfer wählen?",
+        "aiPowered": "Intelligente Suche",
+        "aiPoweredDesc": "Unser intelligenter Service findet die günstigsten Transfer-Anbieter auf Ihrer Route in nur 15 Minuten",
         "instantComparison": "Sofortiger Preisvergleich",
         "instantComparisonDesc": "Vergleichen Sie Preise von mehreren Wien Transfer Anbietern sofort und sehen Sie alle verfügbaren Optionen",
         "providerRatings": "Anbieter-Bewertungen",
@@ -742,7 +742,7 @@
       "noResults": "Ich konnte keine Transfer-Optionen für Ihre Anfrage finden. Versuchen Sie, Ihre Suchkriterien anzupassen."
     },
     "header": {
-      "title": "Transfer-Assistent",
+      "title": "Rational Transfer",
       "language": "Sprache",
       "privacy": "Datenschutz",
       "support": "Support"
@@ -908,7 +908,7 @@
       "noResults": "Non sono riuscito a trovare opzioni di transfer per la tua richiesta. Prova ad aggiustare i tuoi criteri di ricerca."
     },
     "header": {
-      "title": "Assistente Transfer",
+      "title": "Rational Transfer",
       "language": "Lingua",
       "privacy": "Privacy",
       "support": "Supporto"
@@ -1031,7 +1031,7 @@
       "noResults": "我无法为您的请求找到接送选项。请尝试调整您的搜索条件。"
     },
     "header": {
-      "title": "接送助手",
+      "title": "Rational Transfer",
       "language": "语言",
       "privacy": "隐私",
       "support": "支持"

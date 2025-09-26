@@ -5,8 +5,8 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
   
   const seoConfig = {
     en: {
-      title: 'Vienna Private Transfer Service | AI-Powered Transfer Assistant | Best Prices & Instant Booking',
-      description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.',
+      title: 'Vienna Private Transfer Service | Rational Transfer | Best Prices & Instant Booking',
+      description: 'Book the best Vienna private transfers with Rational Transfer. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.',
       keywords: [
         'Vienna private transfer',
         'Vienna airport transfer',
@@ -18,15 +18,15 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
         'Vienna chauffeur service',
         'transfer Vienna airport',
         'Vienna transportation',
-        'AI transfer assistant',
+        'Rational Transfer',
         'transfer price comparison',
         'Vienna travel',
         'Austria transfers'
       ]
     },
     de: {
-      title: 'Wien Privater Transfer Service | KI-gestützter Transfer-Assistent | Beste Preise & Sofortbuchung',
-      description: 'Buchen Sie die besten privaten Transfers in Wien mit unserem KI-gestützten Assistenten. Vergleichen Sie sofort Preise von allen Anbietern, erhalten Sie Echtzeit-Analysen und buchen Sie Ihre Fahrt in Minuten. Professionelle Fahrer, Meet & Greet Service, kostenlose Stornierung.',
+      title: 'Wien Privater Transfer Service | Rational Transfer | Beste Preise & Sofortbuchung',
+      description: 'Buchen Sie die besten privaten Transfers in Wien mit Rational Transfer. Vergleichen Sie sofort Preise von allen Anbietern, erhalten Sie Echtzeit-Analysen und buchen Sie Ihre Fahrt in Minuten. Professionelle Fahrer, Meet & Greet Service, kostenlose Stornierung.',
       keywords: [
         'Wien privater Transfer',
         'Wien Flughafen Transfer',
@@ -45,8 +45,8 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
       ]
     },
     ru: {
-      title: 'Частный трансфер Вены | ИИ-помощник трансферов | Лучшие цены и мгновенное бронирование',
-      description: 'Забронируйте лучший частный трансфер в Вене с нашим ИИ-помощником. Сравните цены от всех поставщиков мгновенно, получите анализ в реальном времени и забронируйте поездку за минуты. Профессиональные водители, встреча в аэропорту, бесплатная отмена.',
+      title: 'Частный трансфер Вены | Rational Transfer | Лучшие цены и мгновенное бронирование',
+      description: 'Забронируйте лучший частный трансфер в Вене с Rational Transfer. Сравните цены от всех поставщиков мгновенно, получите анализ в реальном времени и забронируйте поездку за минуты. Профессиональные водители, встреча в аэропорту, бесплатная отмена.',
       keywords: [
         'частный трансфер Вена',
         'трансфер аэропорт Вена',
@@ -72,9 +72,9 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
     title: config.title,
     description: config.description,
     keywords: config.keywords,
-    authors: [{ name: 'Transfer Assistant Team' }],
-    creator: 'Transfer Assistant',
-    publisher: 'Transfer Assistant',
+    authors: [{ name: 'Rational Transfer Team' }],
+    creator: 'Rational Transfer',
+    publisher: 'Rational Transfer',
     formatDetection: {
       email: false,
       address: false,
@@ -97,13 +97,13 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
       title: config.title,
       description: config.description,
       url: baseUrl,
-      siteName: 'Transfer Assistant',
+      siteName: 'Rational Transfer',
       images: [
         {
           url: '/og-image.jpg',
           width: 1200,
           height: 630,
-          alt: 'Vienna Private Transfer Service - AI-Powered Assistant',
+          alt: 'Vienna Private Transfer Service - Rational Transfer',
         },
       ],
       locale: language === 'de' ? 'de_AT' : language === 'ru' ? 'ru_RU' : 'en_US',
@@ -144,7 +144,7 @@ export const generatePageSEOMetadata = (
   const baseUrl = 'https://transfer-assistant.vercel.app';
   
   return {
-    title: `${pageTitle} | Transfer Assistant`,
+    title: `${pageTitle} | Rational Transfer`,
     description: pageDescription,
     keywords: [
       ...keywords,
@@ -154,10 +154,10 @@ export const generatePageSEOMetadata = (
       'Vienna transportation'
     ],
     openGraph: {
-      title: `${pageTitle} | Transfer Assistant`,
+      title: `${pageTitle} | Rational Transfer`,
       description: pageDescription,
       url: baseUrl,
-      siteName: 'Transfer Assistant',
+      siteName: 'Rational Transfer',
       images: [
         {
           url: '/og-image.jpg',
@@ -171,7 +171,7 @@ export const generatePageSEOMetadata = (
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${pageTitle} | Transfer Assistant`,
+      title: `${pageTitle} | Rational Transfer`,
       description: pageDescription,
       images: ['/og-image.jpg'],
     },

@@ -41,7 +41,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     {
       id: '1',
       type: 'assistant',
-      content: 'Hello! I\'m your transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
+      content: 'Hello! I\'m your Rational Transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
       timestamp: new Date()
     }
   ]);
@@ -105,7 +105,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         {
           id: '1',
           type: 'assistant',
-          content: 'Hello! I\'m your transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
+          content: 'Hello! I\'m your Rational Transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
           timestamp: new Date()
         }
       ]);

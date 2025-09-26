@@ -10,8 +10,8 @@ import StructuredData from '../components/StructuredData'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Vienna Private Transfer Service | AI-Powered Transfer Assistant | Best Prices & Instant Booking',
-  description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.',
+  title: 'Vienna Private Transfer Service | Rational Transfer | Best Prices & Instant Booking',
+  description: 'Book the best Vienna private transfers with Rational Transfer. Compare prices from all providers instantly, get real-time analysis, and book your ride in minutes. Professional drivers, meet & greet service, free cancellation.',
   keywords: [
     'Vienna private transfer',
     'Vienna airport transfer',
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     'Vienna chauffeur service',
     'transfer Vienna airport',
     'Vienna transportation',
-    'AI transfer assistant',
+    'Rational Transfer',
     'transfer price comparison',
     'Vienna travel',
     'Austria transfers'
   ],
-  authors: [{ name: 'Transfer Assistant Team' }],
-  creator: 'Transfer Assistant',
-  publisher: 'Transfer Assistant',
+  authors: [{ name: 'Rational Transfer Team' }],
+  creator: 'Rational Transfer',
+  publisher: 'Rational Transfer',
   formatDetection: {
     email: false,
     address: false,
@@ -50,10 +50,10 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Vienna Private Transfer Service | AI-Powered Transfer Assistant',
-    description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices from all providers instantly and book your ride in minutes.',
+    title: 'Vienna Private Transfer Service | Rational Transfer',
+    description: 'Book the best Vienna private transfers with Rational Transfer. Compare prices from all providers instantly and book your ride in minutes.',
     url: 'https://transfer-assistant.vercel.app',
-    siteName: 'Transfer Assistant',
+    siteName: 'Rational Transfer',
     images: [
       {
         url: '/og-image.jpg',
@@ -67,8 +67,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vienna Private Transfer Service | AI-Powered Assistant',
-    description: 'Book the best Vienna private transfers with our AI-powered assistant. Compare prices instantly and book in minutes.',
+    title: 'Vienna Private Transfer Service | Rational Transfer',
+    description: 'Book the best Vienna private transfers with Rational Transfer. Compare prices instantly and book in minutes.',
     images: ['/og-image.jpg'],
   },
   robots: {
