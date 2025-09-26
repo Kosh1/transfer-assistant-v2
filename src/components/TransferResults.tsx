@@ -23,6 +23,7 @@ import {
   Euro,
   Language,
   OpenInNew,
+  Hotel,
 } from '@mui/icons-material';
 import { TransferData, TransferOption } from '../types';
 
@@ -39,9 +40,15 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   transferAnalysis,
   userLanguage
 }) => {
-  const handleBookNow = (option: TransferOption) => {
+  const handleVisitBooking = (option: TransferOption) => {
     if (option.bookingUrl && option.bookingUrl !== '#') {
       window.open(option.bookingUrl, '_blank');
+    }
+  };
+
+  const handleVisitWebsite = (option: TransferOption) => {
+    if (option.website && option.website !== '#') {
+      window.open(option.website, '_blank');
     }
   };
 
@@ -759,23 +766,52 @@ const TransferResults: React.FC<TransferResultsProps> = ({
 
                     <Divider sx={{ my: 2 }} />
 
-                    {/* Book Button */}
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                      onClick={() => handleBookNow(option)}
-                      sx={{
-                        py: 1.5,
-                        fontWeight: 600,
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        '&:hover': {
-                          background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
-                        }
-                      }}
-                    >
-                      Book Now
-                    </Button>
+                    {/* Action Buttons */}
+                    <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+                      {/* Booking.com Button */}
+                      {option.bookingUrl && option.bookingUrl !== '#' && (
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          size="large"
+                          onClick={() => handleVisitBooking(option)}
+                          startIcon={<Hotel />}
+                          sx={{
+                            py: 1.5,
+                            fontWeight: 600,
+                            background: 'linear-gradient(135deg, #003580 0%, #0047ab 100%)',
+                            '&:hover': {
+                              background: 'linear-gradient(135deg, #002a5c 0%, #003d8f 100%)',
+                            }
+                          }}
+                        >
+                          View on Booking.com
+                        </Button>
+                      )}
+                      
+                      {/* Provider Website Button */}
+                      {option.website && option.website !== '#' && (
+                        <Button
+                          variant="outlined"
+                          fullWidth
+                          size="large"
+                          onClick={() => handleVisitWebsite(option)}
+                          startIcon={<OpenInNew />}
+                          sx={{
+                            py: 1.5,
+                            fontWeight: 600,
+                            borderColor: '#667eea',
+                            color: '#667eea',
+                            '&:hover': {
+                              borderColor: '#5a6fd8',
+                              backgroundColor: 'rgba(102, 126, 234, 0.04)',
+                            }
+                          }}
+                        >
+                          Visit Provider Website
+                        </Button>
+                      )}
+                    </Box>
                   </CardContent>
                 </Card>
               </motion.div>
