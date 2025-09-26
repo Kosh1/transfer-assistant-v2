@@ -214,7 +214,7 @@ class TransferAnalysisService {
             url: cashbackCouponData.coupons.url
           })) : undefined,
           website: websiteData?.websiteUrl || null,
-          bookingUrl: (option as any).bookingUrl || '#',
+          bookingUrl: (option as any).selfLink || (option as any).bookingUrl || '#',
           analysis: `${ratingText}${cashbackText}`
         };
         
