@@ -41,9 +41,20 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   userLanguage
 }) => {
   const handleVisitBooking = (option: TransferOption) => {
-    if (option.bookingUrl && option.bookingUrl !== '#') {
-      window.open(option.bookingUrl, '_blank');
-    }
+    // Generate Booking.com search URL with transfer parameters
+    const searchParams = new URLSearchParams({
+      'date': transferData.date,
+      'passengers': transferData.passengers.toString(),
+      'time': transferData.time,
+      'lang': userLanguage || 'en',
+      'aid': '304142',
+      'label': 'gen173nr-10Egp0YXhpLWluZGV4KIICOOgHSAlYBGipAYgBAZgBM7gBB8gBDNgBA-gBAfgBAYgCAagCAbgCna7axgbAAgHSAiQ3OTA4ZGYxNy1mZTQyLTQ3NjQtYTBjOS1iNDI5ZTRlNTU2ZjjYAgHgAgE'
+    });
+    
+    // Note: We need Google Place IDs for pickup and dropoff locations
+    // For now, we'll use a generic search URL
+    const bookingSearchUrl = `https://taxis.booking.com/search/?${searchParams.toString()}`;
+    window.open(bookingSearchUrl, '_blank');
   };
 
   const handleVisitWebsite = (option: TransferOption) => {
@@ -773,20 +784,21 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       {option.bookingUrl && option.bookingUrl !== '#' && (
                         <Button
                           variant="contained"
-                          fullWidth
-                          size="large"
+                          size="small"
                           onClick={() => handleVisitBooking(option)}
                           startIcon={<Hotel />}
                           sx={{
-                            py: 1.5,
-                            fontWeight: 600,
+                            py: 0.5,
+                            px: 2,
+                            fontWeight: 500,
+                            fontSize: '0.875rem',
                             background: 'linear-gradient(135deg, #003580 0%, #0047ab 100%)',
                             '&:hover': {
                               background: 'linear-gradient(135deg, #002a5c 0%, #003d8f 100%)',
                             }
                           }}
                         >
-                          View on Booking.com
+                          Booking.com
                         </Button>
                       )}
                       
@@ -794,13 +806,14 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                       {option.website && option.website !== '#' && (
                         <Button
                           variant="outlined"
-                          fullWidth
-                          size="large"
+                          size="small"
                           onClick={() => handleVisitWebsite(option)}
                           startIcon={<OpenInNew />}
                           sx={{
-                            py: 1.5,
-                            fontWeight: 600,
+                            py: 0.5,
+                            px: 2,
+                            fontWeight: 500,
+                            fontSize: '0.875rem',
                             borderColor: '#667eea',
                             color: '#667eea',
                             '&:hover': {
@@ -809,7 +822,7 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                             }
                           }}
                         >
-                          Visit Provider Website
+                          Provider Site
                         </Button>
                       )}
                     </Box>
