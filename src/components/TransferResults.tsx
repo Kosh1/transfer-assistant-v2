@@ -40,19 +40,114 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   transferAnalysis,
   userLanguage
 }) => {
+  // Get Google Place ID for location
+  const getLocationId = (location: string): string => {
+    if (!location) return '';
+    
+    const locationLower = location.toLowerCase().trim();
+    
+    const locationMap: Record<string, string> = {
+      // Major Airports
+      'vienna airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'vienna international airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'schwechat airport': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'венский аэропорт': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'аэропорт вены': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      'аэропорт': 'ChIJm74aR6tVbEcRS5vSjRBSeiQ',
+      
+      'geneva airport': 'ChIJN5MjroBkjEcRMKa4TvKpEeU',
+      'gva': 'ChIJN5MjroBkjEcRMKa4TvKpEeU',
+      
+      'innsbruck airport': 'ChIJRdBNVHVrnUcRGT-I40h8Q1k',
+      'inn': 'ChIJRdBNVHVrnUcRGT-I40h8Q1k',
+      
+      'salzburg airport': 'ChIJMUEWmiSQdkcRb5nIVkNvPB4',
+      'szg': 'ChIJMUEWmiSQdkcRb5nIVkNvPB4',
+      
+      'basel airport': 'ChIJQ3OaSAO8kUcRVCoHgGyXib8',
+      'bsl': 'ChIJQ3OaSAO8kUcRVCoHgGyXib8',
+      
+      'grenoble airport': 'ChIJf1xyMojaikcRwz1R6tX-knU',
+      'gnb': 'ChIJf1xyMojaikcRwz1R6tX-knU',
+      
+      // Major Cities
+      'vienna city center': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'vienna city': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'vienna': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'вена': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'венна': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      'wien': 'ChIJn8o2UZ4HbUcRRluiUYrlwv0',
+      
+      'geneva city': 'ChIJ6-LQkwZljEcRObwLezWVtqA',
+      'innsbruck city': 'ChIJc8r44c9unUcRDZsdKH0cIJ0',
+      'salzburg city': 'ChIJsdQIqd2adkcRPfcqQaGD4cE',
+      'basel city': 'ChIJQ3OaSAO8kUcRVCoHgGyXib8',
+      'grenoble city': 'ChIJf1xyMojaikcRwz1R6tX-knU',
+      
+      // Train Stations
+      'vienna hauptbahnhof': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'vienna main station': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'hauptbahnhof': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'вокзал вены': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'железнодорожный вокзал': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      
+      'geneva train station': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'innsbruck train station': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'salzburg train station': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'basel train station': 'ChIJUU071tupbUcRyFdx20Nwgqg',
+      'grenoble train station': 'ChIJUU071tupbUcRyFdx20Nwgqg'
+    };
+    
+    return locationMap[locationLower] || '';
+  };
+
+  // Get location type (airport, train_station, city)
+  const getLocationType = (location: string): string => {
+    const locationLower = location.toLowerCase().trim();
+    
+    if (locationLower.includes('airport') || locationLower.includes('аэропорт')) {
+      return 'airport';
+    }
+    if (locationLower.includes('station') || locationLower.includes('hauptbahnhof') || locationLower.includes('вокзал')) {
+      return 'train_station';
+    }
+    return 'city';
+  };
+
   const handleVisitBooking = (option: TransferOption) => {
-    // Generate Booking.com search URL with transfer parameters
+    // Get Google Place IDs for pickup and dropoff
+    const pickupId = getLocationId(transferData.from);
+    const dropoffId = getLocationId(transferData.to);
+    
+    // Get location types
+    const pickupType = getLocationType(transferData.from);
+    const dropoffType = getLocationType(transferData.to);
+    
+    // Generate Booking.com search URL with all parameters
     const searchParams = new URLSearchParams({
       'date': transferData.date,
       'passengers': transferData.passengers.toString(),
       'time': transferData.time,
-      'lang': userLanguage || 'en',
+      'lang': transferData.language || userLanguage || 'en',
+      'currency': 'EUR',
       'aid': '304142',
       'label': 'gen173nr-10Egp0YXhpLWluZGV4KIICOOgHSAlYBGipAYgBAZgBM7gBB8gBDNgBA-gBAfgBAYgCAagCAbgCna7axgbAAgHSAiQ3OTA4ZGYxNy1mZTQyLTQ3NjQtYTBjOS1iNDI5ZTRlNTU2ZjjYAgHgAgE'
     });
     
-    // Note: We need Google Place IDs for pickup and dropoff locations
-    // For now, we'll use a generic search URL
+    // Add pickup and dropoff if we have valid Place IDs
+    if (pickupId) {
+      searchParams.set('pickup', pickupId);
+      searchParams.set('pickupType', pickupType);
+    }
+    if (dropoffId) {
+      searchParams.set('dropoff', dropoffId);
+      searchParams.set('dropoffType', dropoffType);
+    }
+    
+    // Add additional parameters
+    searchParams.set('comments', 'p2OLplgP6kqBccWQK722tg');
+    searchParams.set('preSelectedResultReference', '1');
+    
     const bookingSearchUrl = `https://taxis.booking.com/search/?${searchParams.toString()}`;
     window.open(bookingSearchUrl, '_blank');
   };
