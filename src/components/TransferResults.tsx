@@ -90,6 +90,15 @@ const TransferResults: React.FC<TransferResultsProps> = ({
         'it': 'Clicca per visitare la fonte',
         'zh': '点击访问来源'
       },
+      'visitSource': {
+        'en': 'Visit source',
+        'ru': 'Перейти к источнику',
+        'fr': 'Visiter la source',
+        'es': 'Visitar fuente',
+        'de': 'Quelle besuchen',
+        'it': 'Visita fonte',
+        'zh': '访问来源'
+      },
       'source': {
         'en': `Source: ${params.source}`,
         'ru': `Источник: ${params.source}`,
@@ -260,6 +269,18 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   const handleRatingClick = (rating: any) => {
     if (rating?.url) {
       window.open(rating.url, '_blank');
+    }
+  };
+
+  const handleCouponClick = (coupon: any) => {
+    if (coupon?.url) {
+      window.open(coupon.url, '_blank');
+    }
+  };
+
+  const handleCashbackClick = (cashback: any) => {
+    if (cashback?.url) {
+      window.open(cashback.url, '_blank');
     }
   };
 
@@ -571,9 +592,26 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                 {option.allCashback && option.allCashback.length > 0 ? (
                                   option.allCashback.map((cashback, index) => (
                                     <Box key={index} sx={{ mb: 1 }}>
-                                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                        {cashback.percentage} {getTranslation('cashback')}
-                                      </Typography>
+                                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                          {cashback.percentage} {getTranslation('cashback')}
+                                        </Typography>
+                                        {cashback.url && (
+                                          <Button
+                                            size="small"
+                                            startIcon={<OpenInNew />}
+                                            onClick={() => window.open(cashback.url, '_blank')}
+                                            sx={{ 
+                                              minWidth: 'auto', 
+                                              p: 0.5,
+                                              color: 'primary.light',
+                                              '&:hover': { color: 'primary.main' }
+                                            }}
+                                          >
+                                            {getTranslation('visitSource')}
+                                          </Button>
+                                        )}
+                                      </Box>
                                       {cashback.description && (
                                         <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
                                           {cashback.description}
@@ -612,6 +650,13 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                               color="success" 
                               variant="outlined"
                               sx={{ mr: 1 }}
+                              clickable
+                              onClick={() => {
+                                // Если есть URL у первого кэшбека, открываем его
+                                if (option.allCashback && option.allCashback.length > 0 && option.allCashback[0].url) {
+                                  handleCashbackClick(option.allCashback[0]);
+                                }
+                              }}
                             />
                           </Tooltip>
                         </Box>
@@ -633,9 +678,26 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                                 {option.allCoupons && option.allCoupons.length > 0 ? (
                                   option.allCoupons.map((coupon, index) => (
                                     <Box key={index} sx={{ mb: 1 }}>
-                                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                        {coupon.code}: {coupon.discount}
-                                      </Typography>
+                                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                          {coupon.code}: {coupon.discount}
+                                        </Typography>
+                                        {coupon.url && (
+                                          <Button
+                                            size="small"
+                                            startIcon={<OpenInNew />}
+                                            onClick={() => window.open(coupon.url, '_blank')}
+                                            sx={{ 
+                                              minWidth: 'auto', 
+                                              p: 0.5,
+                                              color: 'primary.light',
+                                              '&:hover': { color: 'primary.main' }
+                                            }}
+                                          >
+                                            {getTranslation('visitSource')}
+                                          </Button>
+                                        )}
+                                      </Box>
                                       {coupon.description && (
                                         <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
                                           {coupon.description}
@@ -678,6 +740,13 @@ const TransferResults: React.FC<TransferResultsProps> = ({
                               size="small" 
                               color="info" 
                               variant="outlined"
+                              clickable
+                              onClick={() => {
+                                // Если есть URL у первого купона, открываем его
+                                if (option.allCoupons && option.allCoupons.length > 0 && option.allCoupons[0].url) {
+                                  handleCouponClick(option.allCoupons[0]);
+                                }
+                              }}
                             />
                           </Tooltip>
                         </Box>

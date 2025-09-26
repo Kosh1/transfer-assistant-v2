@@ -304,6 +304,7 @@ Analyze the provided search results and extract cashback/coupon information. Ret
     "amount": 2.5,
     "currency": "EUR",
     "conditions": "for new users",
+    "url": "https://...",
     "description": "Brief description"
   },
   "coupons": {

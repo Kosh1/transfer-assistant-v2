@@ -50,6 +50,7 @@ export interface TransferOption {
     currency: string;
     percentage: number;
     description?: string;
+    url?: string; // URL источника кэшбека
   }[]; // Все найденные кэшбек предложения
   coupons?: string[];
   allCoupons?: {
@@ -57,6 +58,7 @@ export interface TransferOption {
     discount: string;
     description?: string;
     conditions?: string;
+    url?: string; // URL источника купона
   }[]; // Все найденные купоны с деталями
   website?: string;
   bookingUrl: string;

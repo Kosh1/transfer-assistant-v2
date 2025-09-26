@@ -202,14 +202,16 @@ class TransferAnalysisService {
             amount: cashbackCouponData.cashback.amount,
             currency: cashbackCouponData.cashback.currency,
             percentage: cashbackCouponData.cashback.percentage,
-            description: cashbackCouponData.cashback.description
+            description: cashbackCouponData.cashback.description,
+            url: cashbackCouponData.cashback.url
           }] : undefined,
           coupons: cashbackCouponData?.coupons?.codes || undefined,
           allCoupons: cashbackCouponData?.coupons?.codes ? cashbackCouponData.coupons.codes.map((code: string) => ({
             code: code,
             discount: cashbackCouponData.coupons.discount,
             description: cashbackCouponData.coupons.description,
-            conditions: cashbackCouponData.coupons.conditions
+            conditions: cashbackCouponData.coupons.conditions,
+            url: cashbackCouponData.coupons.url
           })) : undefined,
           website: websiteData?.websiteUrl || null,
           bookingUrl: (option as any).bookingUrl || '#',
