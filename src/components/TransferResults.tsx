@@ -26,6 +26,7 @@ import {
   Hotel,
 } from '@mui/icons-material';
 import { TransferData, TransferOption } from '../types';
+import { trackEvent, ANALYTICS_EVENTS } from '../lib/analytics';
 
 interface TransferResultsProps {
   transferData: TransferData;
@@ -115,6 +116,14 @@ const TransferResults: React.FC<TransferResultsProps> = ({
   };
 
   const handleVisitBooking = (option: TransferOption) => {
+    // Track analytics event
+    trackEvent(ANALYTICS_EVENTS.TRANSFER_BOOKING_CLICK, {
+      provider: option.provider,
+      price: option.price.amount,
+      currency: option.price.currency,
+      route: `${transferData.from} → ${transferData.to}`
+    });
+    
     // Get Google Place IDs for pickup and dropoff
     const pickupId = getLocationId(transferData.from);
     const dropoffId = getLocationId(transferData.to);
@@ -154,6 +163,14 @@ const TransferResults: React.FC<TransferResultsProps> = ({
 
   const handleVisitWebsite = (option: TransferOption) => {
     if (option.website && option.website !== '#') {
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.TRANSFER_PROVIDER_CLICK, {
+        provider: option.provider,
+        price: option.price.amount,
+        currency: option.price.currency,
+        route: `${transferData.from} → ${transferData.to}`
+      });
+      
       window.open(option.website, '_blank');
     }
   };
@@ -382,18 +399,37 @@ const TransferResults: React.FC<TransferResultsProps> = ({
 
   const handleRatingClick = (rating: any) => {
     if (rating?.url) {
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.TRANSFER_RATING_VIEW, {
+        rating_source: rating.source,
+        rating_score: rating.score,
+        rating_count: rating.count
+      });
+      
       window.open(rating.url, '_blank');
     }
   };
 
   const handleCouponClick = (coupon: any) => {
     if (coupon?.url) {
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.TRANSFER_COUPON_VIEW, {
+        coupon_code: coupon.code,
+        coupon_discount: coupon.discount
+      });
+      
       window.open(coupon.url, '_blank');
     }
   };
 
   const handleCashbackClick = (cashback: any) => {
     if (cashback?.url) {
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.TRANSFER_CASHBACK_VIEW, {
+        cashback_percentage: cashback.percentage,
+        cashback_description: cashback.description
+      });
+      
       window.open(cashback.url, '_blank');
     }
   };

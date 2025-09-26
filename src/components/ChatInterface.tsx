@@ -19,6 +19,7 @@ import { Send, SmartToy, Person, Mic } from '@mui/icons-material';
 import { ChatMessage, TransferData, TransferOption } from '../types';
 import { useTranslation } from '../hooks/useTranslation';
 import { ChatSessionService } from '../services/chatSessionService';
+import { trackEvent, ANALYTICS_EVENTS } from '../lib/analytics';
 
 interface ChatInterfaceProps {
   onDataReceived: (data: {
@@ -331,6 +332,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     const userMessage = inputText.trim();
     setInputText('');
     
+    // Track analytics event
+    trackEvent(ANALYTICS_EVENTS.CHAT_MESSAGE_SEND, {
+      message_length: userMessage.length,
+      has_session: !!sessionId
+    });
+    
     try {
       // Save user message to chat
       await addUserMessage(userMessage);
@@ -360,6 +367,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
     try {
       setError('');
       setAudioChunks([]);
+      
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.CHAT_VOICE_START);
       
       // Check if MediaRecorder is supported
       if (!window.MediaRecorder) {
@@ -462,6 +472,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
 
   const stopRecording = () => {
     if (mediaRecorder && mediaRecorder.state === 'recording') {
+      // Track analytics event
+      trackEvent(ANALYTICS_EVENTS.CHAT_VOICE_STOP);
+      
       mediaRecorder.stop();
       setIsRecording(false);
       setShowVoiceInterface(false);
@@ -618,7 +631,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
                         multiline
                         maxRows={3}
                         value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
+                        onChange={(e) => {
+                          setInputText(e.target.value);
+                          trackEvent(ANALYTICS_EVENTS.CHAT_INPUT_CHANGE);
+                        }}
+                        onFocus={() => trackEvent(ANALYTICS_EVENTS.CHAT_INPUT_FOCUS)}
                         onKeyPress={handleKeyPress}
                         placeholder="Tell me about your transfer needs..."
                         disabled={isProcessing}

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { Language as LanguageIcon } from '@mui/icons-material';
 import { useLanguage, useTranslation, availableLanguages } from '../hooks/useTranslation';
+import { trackEvent, ANALYTICS_EVENTS } from '../lib/analytics';
 
 const LanguageSwitcher: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
@@ -20,6 +21,8 @@ const LanguageSwitcher: React.FC = () => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    // Track analytics event
+    trackEvent(ANALYTICS_EVENTS.LANGUAGE_SWITCHER_OPEN);
     setAnchorEl(event.currentTarget);
   };
 
@@ -28,6 +31,12 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   const handleLanguageChange = (newLanguage: string) => {
+    // Track analytics event
+    trackEvent(ANALYTICS_EVENTS.LANGUAGE_CHANGE, {
+      from_language: language,
+      to_language: newLanguage
+    });
+    
     changeLanguage(newLanguage);
     handleClose();
   };

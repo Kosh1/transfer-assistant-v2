@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { useTranslation } from '../hooks/useTranslation';
 import LanguageSwitcher from './LanguageSwitcher';
+import { trackEvent, ANALYTICS_EVENTS } from '../lib/analytics';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -40,6 +41,7 @@ const Header = () => {
                 variant="h6"
                 component="a"
                 href="/"
+                onClick={() => trackEvent(ANALYTICS_EVENTS.NAV_LOGO_CLICK)}
                 sx={{
                   color: 'text.primary',
                   textDecoration: 'none',
@@ -49,7 +51,7 @@ const Header = () => {
                   },
                 }}
               >
-{t('header.title')}
+                {t('header.title')}
               </Typography>
             </Box>
           </motion.div>
@@ -63,6 +65,7 @@ const Header = () => {
               <Button
                 component="a"
                 href="/privacy"
+                onClick={() => trackEvent(ANALYTICS_EVENTS.NAV_PRIVACY_CLICK)}
                 sx={{
                   color: 'text.primary',
                   '&:hover': {
@@ -74,6 +77,7 @@ const Header = () => {
               </Button>
               <Button
                 variant="outlined"
+                onClick={() => trackEvent(ANALYTICS_EVENTS.NAV_SUPPORT_CLICK)}
                 sx={{
                   color: 'text.primary',
                   borderColor: 'text.primary',

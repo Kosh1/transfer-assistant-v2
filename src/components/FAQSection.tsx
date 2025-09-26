@@ -12,6 +12,7 @@ import {
 import { motion } from 'framer-motion';
 import { ExpandMore } from '@mui/icons-material';
 import { useTranslation } from '../hooks/useTranslation';
+import { trackEvent, ANALYTICS_EVENTS } from '../lib/analytics';
 
 const FAQSection: React.FC = () => {
   const { t } = useTranslation();
@@ -23,6 +24,17 @@ const FAQSection: React.FC = () => {
   }, []);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    if (isExpanded) {
+      // Track analytics event for expanding
+      trackEvent(ANALYTICS_EVENTS.FAQ_ITEM_EXPAND, {
+        faq_id: panel
+      });
+    } else {
+      // Track analytics event for collapsing
+      trackEvent(ANALYTICS_EVENTS.FAQ_ITEM_COLLAPSE, {
+        faq_id: panel
+      });
+    }
     setExpanded(isExpanded ? panel : false);
   };
 
