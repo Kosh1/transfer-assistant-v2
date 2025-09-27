@@ -17,19 +17,7 @@ function getLocale(request: NextRequest): string {
     ) || defaultLocale;
   }
 
-  // Check Accept-Language header
-  const acceptLanguage = request.headers.get('accept-language');
-  if (acceptLanguage) {
-    const preferredLocale = acceptLanguage
-      .split(',')
-      .map(lang => lang.split(';')[0].split('-')[0])
-      .find(lang => locales.includes(lang));
-    
-    if (preferredLocale) {
-      return preferredLocale;
-    }
-  }
-
+  // Always return default locale (English) for root path
   return defaultLocale;
 }
 
