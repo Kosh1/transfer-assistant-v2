@@ -13,16 +13,19 @@ const TranslationContext = createContext<TranslationContextType | undefined>(und
 
 interface LanguageProviderProps {
   children: ReactNode;
+  initialLocale?: string;
 }
 
-export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<string>(() => {
-    // Get language from localStorage or default to 'en'
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('language') || 'en';
-    }
-    return 'en';
-  });
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({ 
+  children, 
+  initialLocale = 'en' 
+}) => {
+  const [language, setLanguage] = useState<string>(initialLocale);
+
+  useEffect(() => {
+    // Update language when initialLocale changes (for SSR)
+    setLanguage(initialLocale);
+  }, [initialLocale]);
 
   useEffect(() => {
     // Save language to localStorage when it changes
@@ -33,6 +36,12 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   const changeLanguage = (newLanguage: string) => {
     setLanguage(newLanguage);
+    // Redirect to new locale URL
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      const pathWithoutLocale = currentPath.replace(/^\/[a-z]{2}/, '');
+      window.location.href = `/${newLanguage}${pathWithoutLocale}`;
+    }
   };
 
   const t = (key: string, params: Record<string, string> = {}): string => {

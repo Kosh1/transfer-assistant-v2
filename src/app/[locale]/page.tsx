@@ -7,20 +7,24 @@ import {
   Container,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import ChatInterface from '../components/ChatInterface';
-import TransferResults from '../components/TransferResults';
-import FAQSection from '../components/FAQSection';
-import SEOContent from '../components/SEOContent';
-import StructuredData from '../components/StructuredData';
-import { useTranslation } from '../hooks/useTranslation';
-import { TransferData, TransferOption } from '../types';
+import ChatInterface from '../../components/ChatInterface';
+import TransferResults from '../../components/TransferResults';
+import FAQSection from '../../components/FAQSection';
+import SEOContent from '../../components/SEOContent';
+import StructuredData from '../../components/StructuredData';
+import { useTranslation } from '../../hooks/useTranslation';
+import { TransferData, TransferOption } from '../../types';
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  params: { locale: string };
+}
+
+const HomePage: React.FC<HomePageProps> = ({ params }) => {
   const { t } = useTranslation();
   const [transferData, setTransferData] = useState<TransferData | null>(null);
   const [transferOptions, setTransferOptions] = useState<TransferOption[] | null>(null);
   const [transferAnalysis, setTransferAnalysis] = useState<string | null>(null);
-  const [userLanguage, setUserLanguage] = useState('en');
+  const [userLanguage, setUserLanguage] = useState(params.locale || 'en');
   const resultsRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to results when they appear
@@ -55,7 +59,7 @@ const HomePage: React.FC = () => {
       luggage: data.luggage,
       date: data.date,
       time: data.time,
-      language: data.userLanguage || 'en',
+      language: data.userLanguage || params.locale || 'en',
       isComplete: true
     });
 

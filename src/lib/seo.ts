@@ -82,7 +82,7 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
     },
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: '/',
+      canonical: `/${language}`,
       languages: {
         'en': '/en',
         'de': '/de',
@@ -96,7 +96,7 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
     openGraph: {
       title: config.title,
       description: config.description,
-      url: baseUrl,
+      url: `${baseUrl}/${language}`,
       siteName: 'Rational Transfer',
       images: [
         {
@@ -156,7 +156,7 @@ export const generatePageSEOMetadata = (
     openGraph: {
       title: `${pageTitle} | Rational Transfer`,
       description: pageDescription,
-      url: baseUrl,
+      url: `${baseUrl}/${language}`,
       siteName: 'Rational Transfer',
       images: [
         {
