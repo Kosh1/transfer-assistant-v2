@@ -107,7 +107,9 @@
       "send": "Send",
       "thinking": "Thinking...",
       "error": "Sorry, something went wrong. Please try again.",
-      "noResults": "I couldn't find any transfer options for your request. Please try adjusting your search criteria."
+      "noResults": "I couldn't find any transfer options for your request. Please try adjusting your search criteria.",
+      "welcomeMessage": "Hello! I'm your Rational Transfer assistant. Tell me about your transfer needs - where you're going, when, how many people, etc. I'll help you find the best options! You can also use voice input for faster communication - just click the microphone button.",
+      "voiceSuggestion": "You can also use voice input for faster communication - just click the microphone button."
     },
     "header": {
       "title": "Rational Transfer",
@@ -302,7 +304,9 @@
       "send": "Отправить",
       "thinking": "Думаю...",
       "error": "Извините, что-то пошло не так. Попробуйте еще раз.",
-      "noResults": "Я не смог найти варианты трансфера для вашего запроса. Попробуйте изменить критерии поиска."
+      "noResults": "Я не смог найти варианты трансфера для вашего запроса. Попробуйте изменить критерии поиска.",
+      "welcomeMessage": "Привет! Я ваш помощник Rational Transfer. Расскажите мне о ваших потребностях в трансфере - куда едете, когда, сколько человек и т.д. Я помогу найти лучшие варианты! Также можете использовать голосовой ввод для более быстрого общения - просто нажмите кнопку микрофона.",
+      "voiceSuggestion": "Также можете использовать голосовой ввод для более быстрого общения - просто нажмите кнопку микрофона."
     },
     "header": {
       "title": "Rational Transfer",
@@ -467,7 +471,9 @@
       "send": "Envoyer",
       "thinking": "Réflexion...",
       "error": "Désolé, quelque chose s'est mal passé. Veuillez réessayer.",
-      "noResults": "Je n'ai pas pu trouver d'options de transfert pour votre demande. Essayez d'ajuster vos critères de recherche."
+      "noResults": "Je n'ai pas pu trouver d'options de transfert pour votre demande. Essayez d'ajuster vos critères de recherche.",
+      "welcomeMessage": "Bonjour ! Je suis votre assistant Rational Transfer. Parlez-moi de vos besoins de transfert - où vous allez, quand, combien de personnes, etc. Je vous aiderai à trouver les meilleures options ! Vous pouvez également utiliser la saisie vocale pour une communication plus rapide - cliquez simplement sur le bouton microphone.",
+      "voiceSuggestion": "Vous pouvez également utiliser la saisie vocale pour une communication plus rapide - cliquez simplement sur le bouton microphone."
     },
     "header": {
       "title": "Rational Transfer",
@@ -587,7 +593,9 @@
       "send": "Enviar",
       "thinking": "Pensando...",
       "error": "Lo siento, algo salió mal. Por favor, inténtalo de nuevo.",
-      "noResults": "No pude encontrar opciones de transfer para tu solicitud. Intenta ajustar tus criterios de búsqueda."
+      "noResults": "No pude encontrar opciones de transfer para tu solicitud. Intenta ajustar tus criterios de búsqueda.",
+      "welcomeMessage": "¡Hola! Soy tu asistente Rational Transfer. Cuéntame sobre tus necesidades de transfer - a dónde vas, cuándo, cuántas personas, etc. ¡Te ayudaré a encontrar las mejores opciones! También puedes usar entrada de voz para una comunicación más rápida - simplemente haz clic en el botón del micrófono.",
+      "voiceSuggestion": "También puedes usar entrada de voz para una comunicación más rápida - simplemente haz clic en el botón del micrófono."
     },
     "header": {
       "title": "Rational Transfer",
@@ -735,7 +743,9 @@
       "send": "Senden",
       "thinking": "Denke...",
       "error": "Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
-      "noResults": "Ich konnte keine Transfer-Optionen für Ihre Anfrage finden. Versuchen Sie, Ihre Suchkriterien anzupassen."
+      "noResults": "Ich konnte keine Transfer-Optionen für Ihre Anfrage finden. Versuchen Sie, Ihre Suchkriterien anzupassen.",
+      "welcomeMessage": "Hallo! Ich bin Ihr Rational Transfer Assistent. Erzählen Sie mir von Ihren Transfer-Bedürfnissen - wohin Sie fahren, wann, wie viele Personen, etc. Ich helfe Ihnen, die besten Optionen zu finden! Sie können auch Spracheingabe für schnellere Kommunikation verwenden - klicken Sie einfach auf den Mikrofon-Button.",
+      "voiceSuggestion": "Sie können auch Spracheingabe für schnellere Kommunikation verwenden - klicken Sie einfach auf den Mikrofon-Button."
     },
     "header": {
       "title": "Rational Transfer",
@@ -900,7 +910,9 @@
       "send": "Invia",
       "thinking": "Pensando...",
       "error": "Spiacenti, qualcosa è andato storto. Riprova.",
-      "noResults": "Non sono riuscito a trovare opzioni di transfer per la tua richiesta. Prova ad aggiustare i tuoi criteri di ricerca."
+      "noResults": "Non sono riuscito a trovare opzioni di transfer per la tua richiesta. Prova ad aggiustare i tuoi criteri di ricerca.",
+      "welcomeMessage": "Ciao! Sono il tuo assistente Rational Transfer. Raccontami delle tue esigenze di transfer - dove vai, quando, quante persone, ecc. Ti aiuterò a trovare le migliori opzioni! Puoi anche usare l'input vocale per una comunicazione più veloce - clicca semplicemente sul pulsante del microfono.",
+      "voiceSuggestion": "Puoi anche usare l'input vocale per una comunicazione più veloce - clicca semplicemente sul pulsante del microfono."
     },
     "header": {
       "title": "Rational Transfer",
@@ -1022,7 +1034,9 @@
       "send": "发送",
       "thinking": "思考中...",
       "error": "抱歉，出了点问题。请重试。",
-      "noResults": "我无法为您的请求找到接送选项。请尝试调整您的搜索条件。"
+      "noResults": "我无法为您的请求找到接送选项。请尝试调整您的搜索条件。",
+      "welcomeMessage": "您好！我是您的Rational Transfer助手。告诉我您的接送需求 - 您要去哪里，什么时候，多少人等等。我会帮您找到最佳选择！您也可以使用语音输入进行更快的交流 - 只需点击麦克风按钮。",
+      "voiceSuggestion": "您也可以使用语音输入进行更快的交流 - 只需点击麦克风按钮。"
     },
     "header": {
       "title": "Rational Transfer",

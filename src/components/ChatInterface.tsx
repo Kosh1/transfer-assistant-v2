@@ -36,15 +36,8 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
-  const { language } = useTranslation();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: '1',
-      type: 'assistant',
-      content: 'Hello! I\'m your Rational Transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
-      timestamp: new Date()
-    }
-  ]);
+  const { language, t } = useTranslation();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
@@ -105,7 +98,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
         {
           id: '1',
           type: 'assistant',
-          content: 'Hello! I\'m your Rational Transfer assistant. Tell me about your transfer needs - where you\'re going, when, how many people, etc. I\'ll help you find the best options!',
+          content: t('chat.welcomeMessage'),
           timestamp: new Date()
         }
       ]);
@@ -127,6 +120,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
       scrollToBottom();
     }
   }, [messages.length, isInitialized]);
+
+  // Initialize welcome message with translation
+  useEffect(() => {
+    if (t && messages.length === 0) {
+      setMessages([
+        {
+          id: '1',
+          type: 'assistant',
+          content: t('chat.welcomeMessage'),
+          timestamp: new Date()
+        }
+      ]);
+    }
+  }, [t, messages.length]);
 
   // Set initialized flag after component mounts
   useEffect(() => {
@@ -637,7 +644,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
                         }}
                         onFocus={() => trackEvent(ANALYTICS_EVENTS.CHAT_INPUT_FOCUS)}
                         onKeyPress={handleKeyPress}
-                        placeholder="Tell me about your transfer needs..."
+                        placeholder={t('chat.placeholder')}
                         disabled={isProcessing}
                         sx={{
                           '& .MuiOutlinedInput-root': {
