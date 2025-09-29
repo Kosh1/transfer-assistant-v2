@@ -22,7 +22,6 @@ export const ANALYTICS_EVENTS = {
   // Navigation events
   NAV_LOGO_CLICK: 'nav_logo_click',
   NAV_PRIVACY_CLICK: 'nav_privacy_click',
-  NAV_SUPPORT_CLICK: 'nav_support_click',
   
   // Chat events
   CHAT_MESSAGE_SEND: 'chat_message_send',

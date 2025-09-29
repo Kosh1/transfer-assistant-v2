@@ -75,20 +75,6 @@ const Header = () => {
               >
                 {t('header.privacy')}
               </Button>
-              <Button
-                variant="outlined"
-                onClick={() => trackEvent(ANALYTICS_EVENTS.NAV_SUPPORT_CLICK)}
-                sx={{
-                  color: 'text.primary',
-                  borderColor: 'text.primary',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.04)',
-                    borderColor: 'primary.main',
-                  },
-                }}
-              >
-                {t('header.support')}
-              </Button>
               <LanguageSwitcher />
             </Box>
           </motion.div>
