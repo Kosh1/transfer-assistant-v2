@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL('https://transfer-assistant.vercel.app'),
   alternates: {
-    canonical: '/',
+    canonical: 'https://transfer-assistant.vercel.app',
     languages: {
       'en': '/en',
       'de': '/de',
@@ -47,6 +47,7 @@ export const metadata: Metadata = {
       'es': '/es',
       'it': '/it',
       'zh': '/zh',
+      'x-default': '/en',
     },
   },
   openGraph: {
@@ -97,7 +98,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
+      <body className={inter.className}>
         <StructuredData type="Organization" data={{}} />
         <StructuredData type="Service" data={{}} />
         <StructuredData type="WebSite" data={{}} />
@@ -128,8 +129,7 @@ export default function RootLayout({
           </div>
         </noscript>
         {/* /Yandex.Metrika counter */}
-      </head>
-      <body className={inter.className}>
+        
         <ThemeProvider>
           <LanguageProvider>
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>

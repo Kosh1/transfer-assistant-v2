@@ -82,7 +82,7 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
     },
     metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: `/${language}`,
+      canonical: `${baseUrl}/${language}`,
       languages: {
         'en': '/en',
         'de': '/de',
@@ -91,6 +91,7 @@ export const generateSEOMetadata = (language: string = 'en'): Metadata => {
         'es': '/es',
         'it': '/it',
         'zh': '/zh',
+        'x-default': '/en',
       },
     },
     openGraph: {

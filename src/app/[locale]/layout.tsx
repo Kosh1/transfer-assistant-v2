@@ -48,7 +48,7 @@ export default function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <head>
+      <body className={inter.className}>
         <StructuredData type="Organization" data={{}} />
         <StructuredData type="Service" data={{}} />
         <StructuredData type="WebSite" data={{}} />
@@ -79,8 +79,7 @@ export default function LocaleLayout({
           </div>
         </noscript>
         {/* /Yandex.Metrika counter */}
-      </head>
-      <body className={inter.className}>
+        
         <ThemeProvider>
           <LanguageProvider initialLocale={locale}>
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
