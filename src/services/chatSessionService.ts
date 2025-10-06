@@ -25,22 +25,33 @@ export class ChatSessionService {
   async createSession(firstMessage?: string): Promise<string> {
     console.log('🆕 Creating session for user:', this.userId)
     
-    const { data, error } = await supabase
-      .from('chat_sessions')
-      .insert({
-        user_id: this.userId,
-        first_message: firstMessage || null
-      })
-      .select('id')
-      .single()
-
-    if (error) {
-      console.error('Error creating chat session:', error)
-      throw new Error('Failed to create chat session')
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, using fallback session ID')
+      return `fallback-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     }
+    
+    try {
+      const { data, error } = await supabase
+        .from('chat_sessions')
+        .insert({
+          user_id: this.userId,
+          first_message: firstMessage || null
+        })
+        .select('id')
+        .single()
 
-    console.log('✅ Session created:', data.id)
-    return data.id
+      if (error) {
+        console.error('Error creating chat session:', error)
+        throw new Error('Failed to create chat session')
+      }
+
+      console.log('✅ Session created:', data.id)
+      return data.id
+    } catch (err) {
+      console.error('❌ Supabase connection error, using fallback session ID:', err)
+      // Return a fallback session ID if Supabase is not available
+      return `fallback-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }
   }
 
   // Получение сессии по ID
@@ -81,6 +92,11 @@ export class ChatSessionService {
     console.log('👤 User ID:', this.userId)
     console.log('📝 Content length:', content.length)
     
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, using fallback message ID')
+      return `fallback-message-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }
+    
     try {
       const insertData = {
         session_id: sessionId,
@@ -106,8 +122,9 @@ export class ChatSessionService {
       console.log('✅ Message added successfully:', data.id)
       return data.id
     } catch (err) {
-      console.error('❌ Exception in addMessage:', err)
-      throw err
+      console.error('❌ Exception in addMessage, using fallback message ID:', err)
+      // Return a fallback message ID if Supabase is not available
+      return `fallback-message-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     }
   }
 
