@@ -57,6 +57,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   const [userId] = useState('anonymous'); // В реальном приложении получать из auth
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const messageIdCounter = useRef(0);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -94,9 +95,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   // Clear conversation history
   const clearHistory = async () => {
     try {
+      messageIdCounter.current = 1;
       setMessages([
         {
-          id: '1',
+          id: 'assistant-1',
           type: 'assistant',
           content: t('chat.welcomeMessage'),
           timestamp: new Date()
@@ -124,9 +126,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   // Initialize welcome message with translation
   useEffect(() => {
     if (t && messages.length === 0) {
+      messageIdCounter.current = 1;
       setMessages([
         {
-          id: '1',
+          id: 'assistant-1',
           type: 'assistant',
           content: t('chat.welcomeMessage'),
           timestamp: new Date()
@@ -145,8 +148,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
 
   // Очистка localStorage при загрузке страницы для предотвращения восстановления сессии
   useEffect(() => {
-    // Очищаем localStorage при загрузке страницы
-    localStorage.removeItem('chatSessionId');
+    // Очищаем localStorage при загрузке страницы только на клиенте
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('chatSessionId');
+    }
     // Сбрасываем все состояние к начальным значениям
     setSessionId(null);
     setExtractedData({});
@@ -314,8 +319,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   };
 
   const addUserMessage = async (content: string) => {
+    messageIdCounter.current += 1;
     const newMessage: ChatMessage = {
-      id: Date.now().toString(),
+      id: `user-${messageIdCounter.current}`,
       type: 'user',
       content,
       timestamp: new Date()
@@ -324,8 +330,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
   };
 
   const addAssistantMessage = async (content: string) => {
+    messageIdCounter.current += 1;
     const newMessage: ChatMessage = {
-      id: Date.now().toString(),
+      id: `assistant-${messageIdCounter.current}`,
       type: 'assistant',
       content,
       timestamp: new Date()
@@ -733,3 +740,4 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onDataReceived }) => {
 };
 
 export default ChatInterface;
+

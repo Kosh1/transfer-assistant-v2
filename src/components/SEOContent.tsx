@@ -107,13 +107,14 @@ const SEOContent: React.FC = () => {
           viewport={{ once: true }}
         >
           <Typography
-            variant="h2"
+            variant="h3"
             component="h2"
             textAlign="center"
             gutterBottom
             sx={{
               fontWeight: 700,
               mb: 6,
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
@@ -183,13 +184,14 @@ const SEOContent: React.FC = () => {
             viewport={{ once: true }}
           >
           <Typography
-            variant="h2"
+            variant="h3"
             component="h2"
             textAlign="center"
             gutterBottom
             sx={{
               fontWeight: 700,
               mb: 2,
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
@@ -199,10 +201,13 @@ const SEOContent: React.FC = () => {
             {t('landing.benefits.title')}
           </Typography>
           <Typography
-            variant="h5"
+            variant="h6"
             textAlign="center"
             color="text.secondary"
-            sx={{ mb: 6 }}
+            sx={{ 
+              mb: 6,
+              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+            }}
           >
             {t('landing.benefits.subtitle')}
           </Typography>
@@ -246,13 +251,14 @@ const SEOContent: React.FC = () => {
             viewport={{ once: true }}
           >
           <Typography
-            variant="h2"
+            variant="h3"
             component="h2"
             textAlign="center"
             gutterBottom
             sx={{
               fontWeight: 700,
               mb: 6,
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
@@ -327,13 +333,14 @@ const SEOContent: React.FC = () => {
             viewport={{ once: true }}
           >
           <Typography
-            variant="h2"
+            variant="h3"
             component="h2"
             textAlign="center"
             gutterBottom
             sx={{
               fontWeight: 700,
               mb: 6,
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',

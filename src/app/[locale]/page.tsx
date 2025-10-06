@@ -95,18 +95,24 @@ const HomePage: React.FC<HomePageProps> = ({ params }) => {
           }}
         >
           <Typography 
-            variant="h2" 
+            variant="h3" 
             component="h1" 
             id="hero-title"
             gutterBottom 
-            sx={{ fontWeight: 700 }}
+            sx={{ 
+              fontWeight: 700,
+              fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' }
+            }}
           >
             {t('landing.title')}
           </Typography>
           <Typography 
-            variant="h5" 
+            variant="h6" 
             color="text.secondary" 
-            sx={{ mb: 4 }}
+            sx={{ 
+              mb: 4,
+              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+            }}
             component="p"
           >
             {t('landing.subtitle')}
