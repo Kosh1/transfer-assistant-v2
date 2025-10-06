@@ -56,6 +56,11 @@ export class ChatSessionService {
 
   // Получение сессии по ID
   async getSession(sessionId: string): Promise<ChatSession | null> {
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, returning null')
+      return null
+    }
+
     const { data, error } = await supabase
       .from('chat_sessions')
       .select('*')
@@ -72,6 +77,11 @@ export class ChatSessionService {
 
   // Получение всех сессий пользователя
   async getUserSessions(): Promise<ChatSession[]> {
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, returning empty array')
+      return []
+    }
+
     const { data, error } = await supabase
       .from('chat_sessions')
       .select('*')
@@ -130,6 +140,11 @@ export class ChatSessionService {
 
   // Получение сообщений сессии
   async getSessionMessages(sessionId: string): Promise<ChatMessage[]> {
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, returning empty array')
+      return []
+    }
+
     const { data, error } = await supabase
       .from('chat_messages')
       .select('*')
@@ -146,6 +161,11 @@ export class ChatSessionService {
 
   // Обновление сессии
   async updateSession(sessionId: string, updates: Partial<ChatSession>): Promise<void> {
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, skipping update')
+      return
+    }
+
     const { error } = await supabase
       .from('chat_sessions')
       .update(updates)
@@ -159,6 +179,11 @@ export class ChatSessionService {
 
   // Удаление сессии и всех связанных сообщений
   async deleteSession(sessionId: string): Promise<void> {
+    if (!supabase) {
+      console.warn('⚠️ Supabase not configured, skipping deletion')
+      return
+    }
+
     const { error } = await supabase
       .from('chat_sessions')
       .delete()
